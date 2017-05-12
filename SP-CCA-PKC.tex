@@ -1,0 +1,1454 @@
+\documentclass[10pt]{llncs}
+
+%\input{preamble.tex}
+
+%%%%%%%%%%%%%%%%%% macros %%%%%%%%%%%%%%%%%%
+
+\usepackage{cite}
+\usepackage{amssymb}
+%\bibliography{main}
+
+%\usepackage{fullpage}
+
+
+%\usepackage[top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+  
+%\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[onelanguage,boxed]{algorithm2e}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\usepackage{amsthm}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[toc,page]{appendix}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{subfigure}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\hypersetup{colorlinks,linkcolor=black,urlcolor=blue}
+\usepackage[font=small,labelfont=bf]{caption}
+%\newtheorem {myDef} {Definition}
+%\newtheorem {myTh}{Theorem}
+
+\lstset
+{
+  emph={Stack},
+  emphstyle={\color{DarkOrchid}}
+}
+
+
+\newcommand{\OTS}{\mathcal{OTS}}
+\newcommand{\TC}{\mathcal{TC}}
+\newcommand{\Adv}{\mathbf{Adv}}
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\PR}{\operatorname{Pr}}
+\newcommand{\PP}{\mathsf{P}}  
+\newcommand{\VV}{\mathsf{V}}  
+\newcommand{\K}{\mathsf{K}}  
+\newcommand{\SIM}{\mathsf{S}}  
+\newcommand{\lbl}{\mathsf{lbl}} 
+\newcommand{\PPE}{\mathrm{PPE}} 
+\newcommand{\SK}{\mathsf{SK}}
+\newcommand{\PK}{\mathsf{PK}}
+\newcommand{\VK}{\mathsf{VK}}
+\newcommand{\SSK}{\mathsf{SSK}}
+\newcommand{\SVK}{\mathsf{SVK}}
+\newcommand{\sk}{\mathsf{sk}}
+\newcommand{\ck}{\mathsf{ck}}
+\newcommand{\tk}{\mathsf{tk}}
+\newcommand{\msk}{\mathsf{msk}}
+\newcommand{\vk}{\mathsf{vk}}
+\newcommand{\ovk}{\mathsf{ovk}}
+\newcommand{\pk}{\mathsf{pk}}
+\newcommand{\opk}{\mathsf{opk}}
+\newcommand{\osk}{\mathsf{osk}}
+\newcommand{\com}{\hat{\mathsf{com}}}
+\newcommand{\open}{\mathsf{open}}
+\newcommand{\True}{\mathsf{True}}
+\newcommand{\False}{\mathsf{False}}
+\newcommand{\BF}{\mathbf}
+\newcommand{\sample}{\stackrel{{\scriptscriptstyle \mkern4mu R}}{\gets}}
+\newcommand{\etal}{\textit{el. al.}}
+\newcommand{\eg}{\textrm{e.g.} }
+\newcommand{\ie}{\textrm{i.e.} }
+\newcommand{\wrt}{\textrm{w.r.t.} }
+\newcommand{\st}{\textrm{s.t.} }
+\newcommand{\resp}{\textrm{resp.} }
+\providecommand{\tprod}{{\textstyle\prod}}
+\newcommand{\Setup}{{\mathsf{Setup}}}
+\newcommand{\KeyGen}{{\mathsf{KeyGen}}}
+\newcommand{\OKeyGen}{{\mathsf{OKeyGen}}}
+\newcommand{\Enc}{{\mathsf{Encrypt}}}
+\newcommand{\Dec}{{\mathsf{Decrypt}}}
+\newcommand{\Rerand}{{\mathsf{ReRand}}}
+\newcommand{\Sig}{{\mathsf{Sign}}}
+\newcommand{\Verif}{{\mathsf{Verify}}}
+\newcommand{\Prove}{{\mathsf{Prove}}}
+\newcommand{\Com}{{\mathsf{Commit}}}
+\newcommand{\PPP}{\mathsf{PP}}
+\newcommand{\Forge}{\mathsf{Forge}}
+%\newcommand{\Adv}{\mathcal{A}}
+
+
+%%--- Page settings
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection {paragraph}{4}{0pt}{-12pt \@plus -4pt \@minus -4pt}%
+  {-0.5em \@plus -0.22em \@minus -0.1em}{\normalfont\normalsize\scshape }}
+\makeatother
+% \usepackage{enumitem} 
+% \setlist[description]{itemsep=2pt}
+ 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\usepackage{comment}
+
+
+
+
+\begin{document}
+
+\pagestyle{plain}
+
+%\title{Shorter Publicly Verifiable Ciphertexts in Structure-Preserving Chosen-Ciphertext-Secure Public-Key Encryption}
+
+
+\title{Structure-Preserving Chosen-Ciphertext Security With   Shorter Verifiable Ciphertexts}
+
+\author{}
+ 
+\institute{}
+
+
+\maketitle
+
+\begin{abstract} 
+ 
+ 
+Structure-preserving cryptography is a world where messages, signatures, ciphertexts and public keys are entirely made of 
+elements of a group over which a bilinear map is efficiently computable. While structure-preserving signatures have received 
+much attention   the last $6$ years, structure-preserving encryption schemes have undergone slower development. 
+In particular, the best known  structure-preserving cryptosystems with chosen-ciphertext (IND-CCA2) security either rely on 
+symmetric pairings or require 
+long ciphertexts comprised of hundred of group elements or do not provide publicly verifiable ciphertexts. We provide a publicly verifiable construction based on the SXDH assumption in asymmetric bilinear groups
+ $e : \G \times \hat{\G} \rightarrow \G_T$, 
+which features relatively short ciphertexts.   For typical parameters, our ciphertext size amounts to less than $40$ elements of $\G$. 
+As a second contribution, we provide a structure-preserving encryption scheme with perfectly randomizable ciphertexts and replayable 
+chosen-ciphertext security. Our new RCCA-secure system significantly improves upon the best known system featuring similar properties in terms 
+of ciphertext size. \smallskip \smallskip 
+
+\noindent \textbf{Keywords.} Structure-preserving encryption,   chosen-ciphertext security, RCCA security, public ciphertext verifiability.    
+ 
+
+\end{abstract}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \input{intro.tex} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background and Definitions} \label{background}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input{prelim}
+
+\subsection{Hardness Assumptions}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+We consider groups $(\G,\hat{\G},\G_T)$ of prime-order $p$ endowed
+with a bilinear map $e:\G \times \hat{\G} \to \G_T$. 
+
+\begin{comment}
+In this setting,
+we rely on the standard Decision Linear assumption, which is a special case of the $K$-linear assumption (see Definition \ref{k-lin-def} in Appendix \ref{k-lin-ext}))
+ for $K=2$.
+  	
+\begin{definition}[\cite{DBLP:conf/crypto/BonehBS04}] \label{DLIN-def} The \emph{Decision
+    Linear Problem} (DLIN) in $\G$, is to distinguish the
+  distributions $(g,g^{a},g^b,g^{ac},g^{bd},g^{c+d})$ and
+  $(g,g^{a},g^b,g^{ac},g^{bd},g^{z})$, with $a,b,c,d \sample \Z_p$,
+  $z\sample \Z_p $.  The Decision Linear assumption asserts the
+  intractability of DLIN for any PPT distinguisher.
+\end{definition}  
+ 
+It will sometimes be convenient to use the following assumption, which
+is weaker than DLIN. As noted in \cite{DBLP:conf/asiacrypt/CathaloLY09}, any algorithm solving
+SDP immediately yields a DLIN distinguisher.
+      
+\begin{definition} \label{SDP-def} The \emph{Simultaneous Double
+    Pairing problem} (SDP) in $(\G,\hat{\G}, \G_T)$ is, given a tuple of group
+  elements $( \hat{g}_z, \hat{g}_r, \hat{h}_{z}, \hat{h}_{u}) \in
+  \hat{\G}^4 $, to find a non-trivial triple $(z,r,u) \in \G^3
+  \backslash \{(1_{\G},1_{\G},1_{\G})\}$ such that $e( z, \hat{g_z})
+  \cdot e(r,\hat{g_{r}})=1_{\G_T}$ and $e(z,\hat{h}_z ) \cdot e(u,
+  \hat{h}_{u})=1_{\G_T}$.
+\end{definition}
+
+\end{comment}
+
+\begin{definition} \label{DDH-def} The {\bf Diffie-Hellman problem} (DDH) in $\G$,
+ is to distinguish the distributions $(g, g^a, g^b, g^{ab})$ and $(g, g^a, g^b, g^c)$ with $a, b, c \sample \Z_p$.
+ The Diffie-Hellman assumption asserts the intractability of DDH for any PPT distinguisher.
+
+ In the asymmetric setting $(\G,\hat{\G}, \G_T)$, we consider the SXDH  assumption,
+ which posits that the DDH assumption holds in both $\G$ and $\hat{\G}$.
+\end{definition}
+
+\begin{definition} \label{DP-def} The {\bf Double Pairing problem} (DP) in $(\G, \hat{\G}, \G_T)$ is,
+  given a pair of group elements $(\hat{g}_z, \hat{g_r}) \in \hat{\G}^2$,
+  to find a non-trivial triple $(z, r) \in \G^2\backslash \{(1_{\G}, 1_{\G})\}$ such that $e(z, \hat{g}_z) \cdot e(r, \hat{g}_r) = 1_{\G_T}$.
+\end{definition}
+
+
+It is known \cite{DBLP:journals/iacr/AbeHO10} that the DP assumption is   implied by the   DDH assumption in $\G$. By exchanging the roles of $\G$ and 
+$\hat{\G}$ 
+in the definition of DP, we obtain a variant of the assumption which implies the hardness of DDH in $\hat{\G}$. 
+
+
+\subsection{One-Time Structure-Preserving Signatures}\label{ot-sig}    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+Structure-preserving signatures (SPS) \cite{DBLP:conf/crypto/AbeFGHO10,DBLP:journals/iacr/AbeHO10} are signature
+schemes where messages and public keys all consist of elements of a group
+over which a bilinear map $e: \G \times \hat{\G} \to \G_T$ is
+efficiently computable. Constructions based on simple assumptions were
+put forth in \cite{DBLP:conf/asiacrypt/AbeCDKNO12,DBLP:conf/pkc/AbeDKNO13}. 
+
+In the forthcoming sections, we will rely on  one-time SPS schemes.
+\begin{definition}
+  A one-time signature scheme is a tuple of efficient algorithms $\OTS = (\Setup, \KeyGen, \Sig, \Verif)$ where:
+  \begin{description}
+  \item[\textsf{Setup}$({\lambda}) :$] This algorithm takes as input a security parameter $\lambda$ and generates the public parameters $\PPP$ for the scheme.
+ \item[\textsf{KeyGen} $(\PPP):$] This algorithm takes as input $\PPP$ and generates a one-time secret key $\osk$ and a one-time verification key $\ovk$.
+  \item[\textsf{Sign}$(\PPP, \osk, \vec{M})  :$] Given  as input $(\PPP, \osk)$ and a message $\vec{M}$, this algorithm produces a signature $\sigma$ for  $\vec{M}$.
+  \item[\textsf{Verify}$(\PPP, \ovk, \vec{M}, \sigma) :$] The verification algorithm takes $(\PPP, \ovk, \vec{M}, \sigma)$ and returns $1$ or $0$.
+  \end{description}
+\end{definition}
+
+Correctness  mandates that, for any $\lambda \in \mathbb{N}$,  any $\PPP \leftarrow \mathsf{Setup}(\lambda)$,  any pair $(\osk,\ovk) \leftarrow \mathsf{KeyGen}(\PPP)$, we have $\Verif(\PPP, \ovk, \vec{M}, \Sig(\PPP, \osk, \vec{M})) =1$ for any message $\vec{M}$.\\
+\indent In addition, a one-time signature is said {\it structure-preserving} if the components of $\ovk$, $\vec{M}$ and $\sigma$ all live in 
+the source groups $(\G,\hat{\G})$ of a configuration $(\G,\hat{\G},\G_T)$ of bilinear groups. 
+
+ 
+\begin{definition}
+  A one-time signature scheme  $\OTS = (\Setup, \KeyGen, \Sig, \Verif)$ is strongly unforgeable against  chosen
+	message attack $(SUF\textrm{-}CMA)$ if the advantage
+  \begin{align*}
+    \Adv_{OTS,\A}^{SUF\textrm{-}CMA} &= \Pr \left[
+			\begin{array}{l}
+      (m^\star, \sigma^\star) \not \in Q_{\Sig^{OT}} \wedge\\
+      \Verif(\ovk, m^\star, \sigma^\star) =1
+    \end{array}
+				    \middle| 
+	                              \begin{array}{l}
+                                \PPP \gets \Setup(1^{\lambda})\\
+                                (\ovk,\osk) \gets \KeyGen(\PPP)\\
+                                (m^\star,\sigma^\star) \gets \A^{\Sig^{OT}_{\osk}(\cdot)}(\ovk)
+                              \end{array}  
+    \right]
+  \end{align*}
+  is negligible against any PPT adversary $\mathcal{A}$. Here, $\Sig^{OT}_{\osk}(\cdot)$ is a signing oracle which  allows the adversary to obtain a  signature $\sigma_m$ of only one message $m$ for which $(m, \sigma_m)$ is stored in $Q_{\Sig^{OT}}$. 
+\end{definition}
+
+
+
+We recall a construction of the one-time Structure-Preserving Signature scheme which was proposed in~\cite{DBLP:conf/pkc/AbeDKNO13}.
+
+
+\begin{description}
+\item[\textsf{Setup}$(\lambda):$]  Choose asymmetric bilinear groups $(\G, \hat{\G}, \G_T)$ of prime order $p>2^\lambda $ and output 
+$\PPP =(\G, \hat{\G}, \G_T)$.
+\item[\textsf{KeyGen}$(\PPP):$]   Generates the signing key $\osk$ and the verification key $\ovk$ using the security parameter $\lambda$ and  the number $n$ of messages to be signed.
+  \begin{enumerate}
+  \item Choose $\hat{g}_z, \hat{g}_r, g \sample \hat{\G}$.
+  \item For $i = 1$ to $n$, pick $(\chi_i, \gamma_i) \sample \mathbb{Z}_p^2$
+    and compute $\hat g_i=\hat{g}_z^{\chi_i}\hat{g}_r^{\gamma_i}$.
+  \item Pick $(\zeta, \rho) \sample \mathbb{Z}_p^2$ and compute $\hat{A} = g_z^{\zeta} \cdot g_r^{\rho}$.
+  \item Set $\osk = (\{(\chi_i, \gamma_i)\}_{i = 1}^n, \zeta, \rho) \in \G^{2n+2}$ and 
+	$$\ovk = (\hat{g}_z, \hat{g}_r, \{\hat{g}_i\}_{i=1}^n, \hat{A}) \in \hat{\G}^{n+3}.$$
+  \end{enumerate}
+\item[\textsf{Sign}$(\osk, \vec{M} = (M_1, \dots, M_n)):$] In order to sign   $\vec{M} = (M_1, \dots, M_n) \in \G^n$, 
+    compute $z = g^{\zeta}\prod_{i = 1}^n M_i^{\chi_i}$ and $r = g^{\rho}\prod_{i=1}^n M_i^{\gamma_i}$.
+Output the signature $\sigma = (z,r)$.
+\item[\textsf{Verify}$(\ovk, \vec{M} = (M_1, \dots, M_n), \sigma = (z, r)):$] Return $1$ if and only if the following equations are satisfied:
+  \begin{align}\label{OT-validity}
+    e(z, \hat{g}_z) \cdot e(r, \hat{g}_r) &= e(g, \hat{A}) \cdot \prod_{i=1}^ne(M_i, \hat{g}_i)
+  \end{align}
+  %This algorithm returns $\True$ if and only if $\vec{M} \neq (1,\dots, 1)$ and the previous equation is verified.
+\end{description}
+
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Partial  One-time Signature}\label{pots}    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A special case of the one-time signature presented in   Section~\ref{ot-sig} 
+is called Partial One-Time Signature (POTS)~\cite{DBLP:conf/pkc/BellareS07}.
+In a such scheme,  part of the verification key can be re-used in multiple signatures  and 
+ the remaining part  must be refreshed at  every  signature generation.
+
+\begin{definition}
+  A partial one-time signature (POTS) scheme is a tuple of algorithms $POTS = (\mathsf{Setup}, \mathsf{KeyGen}, \mathsf{OKeyGen}, \mathsf{Sign}, \mathsf{Verify})$.
+  \begin{description}
+  \item[\boldmath$\mathsf{Setup}(\lambda):$] 
+    The setup algorithm takes as input a security parameter $\lambda$ and generates the public parameters $\PPP$ for the scheme.
+  \item[\boldmath$\mathsf{KeyGen}(\PPP) :$]
+    The key generation algorithm takes the public parameter $\PPP$ and generates the long-term signing key $\sk$ and long-term verification key $\vk$.
+  \item[\boldmath$\mathsf{OKeyGen}(\PPP) :$] 
+    The key generation algorithm takes $\PPP$ and generates the one-time signing key $\osk$ and the one-time verification key $\ovk$.
+  \item[\boldmath$\mathsf{Sign}(\PPP, \sk, \osk, \vec{M}) :$] 
+    The signature algorithm uses the $(\PPP, \osk)$ to produce a valid signature $\sigma$ for the message vector $\vec{M}$.
+  \item[\boldmath$\mathsf{Verify}(\PPP, \vk, \ovk, \vec{M}, \sigma) :$] 
+    The verification algorithm takes $(\PPP, \vk, \ovk, \vec{M}, \sigma)$ and returns $1$ or $0$.
+  \end{description}
+\end{definition}
+
+Correctness requires that, for any $\PPP \gets \mathsf{Setup}(\lambda)$, $(\sk, \vk) \gets \mathsf{KeyGen}(\PPP)$ and $(\osk, \ovk) \gets \mathsf{OKeyGen}(\PPP)$,
+the partial one-time signature scheme is correct if and only if  $\Verif(\PPP, \vk, \ovk, \vec{M}, \mathsf{Sign}(\PPP, \sk, \osk, \vec{M})) = 1$.
+%\begin{align*}
+   %\Verif(\PPP, \vk, \ovk, \vec{M}, \mathsf{Sign}(\PPP, \sk, \osk, \vec{M})) &= 1
+%\end{align*}
+
+We focus on the strong unforgeability against one-time chosen-message attack of our POTS.
+\begin{definition}
+  A POTS scheme $POTS = (\mathsf{Setup}, \mathsf{KeyGen}, \mathsf{OKeyGen}, \mathsf{Sign}, \mathsf{Verify})$ is strongly unforgeable against   one-time chosen-message attack (or OT-CMA secure) if:
+  \begin{multline*}
+    \Adv_{POTS, \A}^{OT\textrm{-}SU\textrm{-}CMA}(\lambda) \\ = \Pr \left[
+                                            \begin{array}{l}
+                                              \exists ~(m',\sigma') ~\mathrm{s.t.}~ (\ovk^\star, \sigma', m')  \in Q \\ \wedge ~ (\ovk^\star, \sigma^\star, m^\star) \not \in Q \\
+                                           \wedge  ~    \Verif(\vk, \ovk^\star, m^\star, \sigma^\star) = 1
+                                            \end{array}
+    \middle|
+    \begin{array}{l}
+      \PPP \gets \Setup(1^\lambda)\\
+      (\vk, \sk) \gets \KeyGen(\PPP)\\
+      (\ovk^\star, \sigma^\star, m^\star) \gets \A^{\mathcal{O}_{\sk}} (\PPP,\vk)
+    \end{array}
+    \right]
+  \end{multline*}
+  is negligible for any PPT adversary $\A$. Here, the signing oracle inputs a message $m$, 
+  generates $(\ovk, \osk) \gets \mathsf{OKeyGen}(\PPP)$, $\sigma \gets \mathsf{Sign}(\sk, \osk, m)$.
+  Then, it records $(\ovk, m)$ to $Q$ and returns $(\sigma, \ovk)$.
+  
+\end{definition}
+	
+	
+Here, we recall an instantiation of the POTS scheme~\cite{DBLP:conf/asiacrypt/AbeCDKNO12},
+which is strongly unforgeable against the one-time chosen-message attack (SU-OTCMA) under the DP assumption.  % (Definition \ref{DP-def}) 
+%in $\G$.
+%
+\begin{description}
+\item[\boldmath$\Setup(\lambda, \ell):$] On input of a security parameter $\lambda$ and an integer $\ell \in poly(\lambda)$, 
+  the setup algorithm chooses a large prime $p > 2^\lambda$, 
+  asymmetric groups $(\G, \hat{\G}, \G_T)$ of prime order $p$, with a bilinear map $e : \G \times \hat{\G} \to \G_T$
+  and the corresponding  generators $(g, \hat{g} ) \in \G \times \hat{\G}$.
+  The algorithm outputs
+  \begin{align*}
+  \PPP & = (p, \G, \hat{\G}, \G_T, e, g, \hat{g}, \ell).
+  \end{align*}
+
+\item[\boldmath$\KeyGen(\PPP):$] Parse $\PPP$ as 
+  $(p, \G, \hat{\G}, \G_T, e, g, \hat{g}, \ell)$. 
+  Choose $w_z \sample \mathbb{Z}_p^*$ and compute $g_z \gets g^{w_z}$.
+  For $i \in \{1, \dots, \ell\}$, choose $\chi_i \sample \mathbb{Z}_p$ 
+  and compute $g_i \gets g^{\chi_i}$.
+ Return 
+  \begin{align*}
+    \vk &= (g_z, g_1, \dots, g_\ell) \in \G^{\ell+1} &
+    \sk &= (w_z, \chi_1, \dots, \chi_\ell) \in\mathbb{Z}_p^{\ell+1}
+  \end{align*}
+\item[\boldmath$\OKeyGen(\PPP):$] Parse $\PPP$, choose $a \gets \mathbb{Z}_p$, 
+  compute $A \gets g^a$ and output
+  \begin{align*}
+    \ovk &= A & \osk &= a
+  \end{align*}
+\item[\boldmath$\mathsf{Sign}(\sk, \osk, \vec{\hat{M}}):$] Parse $\vec{\hat{M}}$ as  
+  $(\hat{M}_1, \dots, \hat{M}_{\ell}) \in \hat{\G}^{\ell}$.
+  Parse $\sk$ and $\osk$, choose $\zeta \sample \mathbb{Z}_p^*$,then 
+  compute and output
+  \begin{align*}
+    \hat{Z} &= \hat{g}^\zeta & 
+    \hat{R} &= \hat{g}^{a - \zeta w_z} 
+               \mbox{$\prod_{i=1}^\ell$} \hat{M_i}^{-\chi_i}.
+  \end{align*}
+\item[\boldmath$\mathsf{Verify}(\vk, \ovk, \vec{\hat{M}}, \sigma):$] 
+  Parse $\sigma$ as $(\hat{Z}, \hat{R}) \in \hat{\G}^2$, 
+  $\vec{\hat{M}}$ as $(\hat{M}_1, \dots, \hat{M}_\ell) \in \hat{\G}^\ell$ 
+  and $\ovk$ as $A \in \G$.
+  The algorithm returns $1$ if the following equation holds:
+  \begin{align*}
+    e(A, \hat{g}) &= e(g_z, \hat{Z}) \cdot e(g, \hat{R}) 
+                     \cdot \prod_{i = 1}^{\ell} e(g_i, \hat{M}_i)
+  \end{align*}
+  otherwise the algorithm returns $0$.
+
+\end{description}
+	
+	
+\subsection{One-Time Linearly Homomorphic Structure-Preserving Signatures}
+\label{H-SPS}  
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+Libert \etal\  \cite{DBLP:conf/crypto/LibertPJY13} considered structure-preserving with
+linear homomorphic properties (see Appendix \ref{hom-sig-sec-defs} for formal definitions). This section recalls the one-time
+ linearly  homomorphic structure-preserving signature (LHSPS) of \cite{DBLP:conf/crypto/LibertPJY13}.
+  
+	\begin{comment}
+	
+\begin{description}
+\item[\boldmath$\mathsf{Keygen}(\lambda,n)$:] Given a security
+  parameter $\lambda$ and the dimension $n \in \mathbb{N}$ of the
+  subspace to be signed, choose bilinear group $(\G,\hat{\G},\G_T)$ of
+  prime order $p$. % >2^{\lambda}$.
+  Then, choose $\hat{g_z},\hat{g_r},\hat{h_z},\hat{h_u} \sample
+  \hat{\G}$.  For $i=1$ to $n$, pick $\chi_i,\gamma_i,\delta_i \sample
+  \Z_p$ and compute $\hat{g}_i=\hat{g_z}^{\chi_i}
+  \hat{g_r}^{\gamma_i}$, $\hat{h}_i=\hat{h_z}^{\chi_i}
+  \hat{h_u}^{\delta_i}$.  The private key is defined to be $\sk = \{ (\chi_i,
+  \gamma_i,\delta_i ) \}_{i=1}^n $ while the public key is $ \pk=\big(
+  \hat{g_z},~\hat{g_r},~\hat{h_z},~ \hat{h_u},~\{ (\hat{g}_i,\hat{h}_i
+  ) \}_{i=1}^n \big) \in \hat{\G}^{2n+4}$.
+ 
+\item[\boldmath$\mathsf{Sign}(\sk, (M_1,\dotsc,M_n))$:] To sign a
+  vector $(M_1,\dotsc,M_n) \in \G^n$ using $\sk= \{ (\chi_i,
+  \gamma_i,\delta_i ) \}_{i=1}^n $, output $\sigma=(z,r,u ) \in \G^3
+  $, where $z = \prod_{i=1}^n M_i^{\chi_i} $, $r = \prod_{i=1}^n,
+  M_i^{\gamma_i} $ and $ u = \prod_{i=1}^n M_i^{\delta_i}
+  $.
+  % The signature consists of $\sigma=(z,r,u,v) \in \G^4 $.
+
+\item[\boldmath$\mathsf{SignDerive}(\pk, \{(\omega_i,
+  \sigma^{(i)})\}_{i=1}^\ell)$:] Given   $\pk$ as well as
+  $\ell$ tuples $(\omega_i,\sigma^{(i)}) $, parse $\sigma^{(i)}$ as
+  $\sigma^{(i)}=\big( z_i,r_i,u_i \big)  $ for $i=1$ to
+  $\ell$.  Compute and return $\sigma=(z,r,u )$, where $z =
+  \prod_{i=1}^\ell z_{i}^{\omega_i}$, $r=\prod_{i=1}^{\ell}
+  r_i^{\omega_i}$, $u=\prod_{i=1}^{\ell} u_i^{\omega_i} $.
+
+\item[\boldmath$\mathsf{Verify}(\pk,\sigma, (M_1,\dotsc,M_n))$:] Given
+  a signature $\sigma=(z,r,u ) \in \G^3$ and a vector
+  $(M_1,\dotsc,M_n)$, return $1$ if and only if $(M_1,\dotsc,M_n)\neq
+  (1_{\G},\dotsc,1_{\G})$ and $(z,r,u )$ satisfy
+  \begin{align*}
+    e(z,\hat{g}_z) \cdot e(r,\hat{g}_r) & = \prod_{i=1}^n e(M_i,\hat{g}_i) \thinspace, & 
+		e(z,\hat{h}_z) \cdot e(u,\hat{h}_u) & = \prod_{i=1}^n e(M_i,\hat{h}_i) \enspace.
+  \end{align*}
+\end{description}
+
+\end{comment}
+
+
+
+
+%Under the SDP assumption in asymmetric pairings, the scheme can be simplified as follows.
+
+
+\begin{description}
+
+\item[\boldmath$\mathsf{Keygen}(\lambda,n)$:] Given a security
+  parameter $\lambda$ and the dimension $n \in \mathbb{N}$ of the
+  subspace to be signed, choose bilinear group $(\G,\hat{\G},\G_T)$ of
+  prime order $p$. % >2^{\lambda}$.
+  Then, choose $\hat{g_z},\hat{g_r}  \sample
+  \hat{\G}$.  For $i=1$ to $n$, pick $\chi_i,\gamma_i  \sample
+  \Z_p$ and compute $\hat{g}_i=\hat{g_z}^{\chi_i}
+  \hat{g_r}^{\gamma_i}$.  The private key is defined to be $\sk = \{ (\chi_i,
+  \gamma_i  ) \}_{i=1}^n $ while the public key is $ \pk=\big(
+  \hat{g_z},~\hat{g_r}, ~\{  \hat{g}_i 
+    \}_{i=1}^n \big) \in \hat{\G}^{ n+2}$.
+ 
+\item[\boldmath$\mathsf{Sign}(\sk, (M_1,\dotsc,M_n))$:] To sign a
+   $(M_1,\dotsc,M_n) \in \G^n$ using $\sk= \{ (\chi_i,
+  \gamma_i  ) \}_{i=1}^n $, output $\sigma=(z,r  ) \in \G^2
+  $, where $z = \prod_{i=1}^n M_i^{\chi_i} $, $r = \prod_{i=1}^n,
+  M_i^{\gamma_i} $.
+  % The signature consists of $\sigma=(z,r,u,v) \in \G^4 $.
+
+\item[\boldmath$\mathsf{SignDerive}(\pk, \{(\omega_i,
+  \sigma^{(i)})\}_{i=1}^\ell)$:] given   $\pk$ as well as
+  $\ell$ tuples $(\omega_i,\sigma^{(i)}) $, parse $\sigma^{(i)}$ as
+  $\sigma^{(i)}=\big( z_i,r_i \big)  $ for $i=1$ to
+  $\ell$.  Compute and return $\sigma=(z,r  )$, where $z =
+  \prod_{i=1}^\ell z_{i}^{\omega_i}$, $r=\prod_{i=1}^{\ell}
+  r_i^{\omega_i}$.
+
+\item[\boldmath$\mathsf{Verify}(\pk,\sigma, (M_1,\dotsc,M_n))$:] Given
+  a signature $\sigma=(z,r  ) \in \G^2$ and a vector
+  $(M_1,\dotsc,M_n)$, return $1$ if and only if $(M_1,\dotsc,M_n)\neq
+  (1_{\G},\dotsc,1_{\G})$ and $(z,r  )$ satisfy
+  \begin{align*}
+    e(z,\hat{g_z}) \cdot e(r,\hat{g_r}) & = \prod_{i=1}^n e(M_i,\hat{g}_i) .
+  \end{align*}
+	
+\end{description}
+
+
+
+The one-time security of the scheme (in the sense of Definition
+\ref{hncs-def} in Appendix \ref{hom-sig-sec-defs}) was proved
+\cite{DBLP:conf/crypto/LibertPJY13} under the DP assumption. In
+short, the security notion implies the infeasibility of deriving a
+signature on a vector outside the subspace spanned by the vectors
+authenticated by the signer.  Here, ``one-time'' security means that a
+given public key allows signing only one subspace.
+
+
+
+
+We remark that the one-time structure-preserving signature of Section \ref{ot-sig} can be seen  as a special case of the above LHSPS scheme,
+in which we fix the first element of the vector to be signed.
+The one-time security of this signature scheme can be directly deduced from the security of the LHSPS scheme.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Structure-Preserving Replayable Chosen-Ciphertext Attack secure Encryption} \label{RCCA}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input{RCCA}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Strictly Structure-Preserving Trapdoor Commitments} \label{TC}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{TC}
+
+In this section, we recall the notion of  Chosen-Message Target Collision Trapdoor Commitment as it was defined by 
+Abe~\etal \cite{DBLP:conf/eurocrypt/AbeKOT15}.
+
+\begin{definition}
+  A trapdoor commitment scheme $TC$ is a tuple of polynomial-time algorithms $TC = \{\Setup, \KeyGen, \Com, \Verif\}$ that:
+  \begin{description}
+  \item[\textsf{Setup}$({\lambda}) $:] The parameter generation algorithm takes the security parameter $\lambda$ and outputs a public parameter $\PPP$.
+  \item[\textsf{KeyGen}$(\PPP)$:] The key generation algorithm takes $\PPP$ and outputs the commitment key $\ck$.
+  \item[\textsf{Com}$(\PPP, \ck, m) $:] The commitment algorithm takes $(\PPP, \ck)$ and a message $m$, then it outputs a commitment $\mathsf{com}$ and an opening information $\open$.
+  \item[\textsf{Verify}$(\PPP, \mathsf{com}, m, \open):$] The verification algorithm takes $(\PPP, \mathsf{com}, m, \open)$ and outputs $1$ or $0$.
+  \end{description}
+\end{definition}
+
+In our construction, we need a trapdoor commitment scheme which satisfies a stronger notion of  Chosen-Message Target Collision Resistance (CM-TCR) than the one considered in \cite[Definition 10]{DBLP:conf/eurocrypt/AbeKOT15}.
+%
+\begin{definition} \label{ecm-tcr-def}
+  A Trapdoor Commitment Scheme $TC$ provides {\bf enhanced chosen-message 
+  target collision-resistance} (ECM-TCR) if the advantage
+  \begin{multline*}
+    \Adv_{TC,\A}^{ECM \textrm{-}TCR}(\lambda) \\ = \Pr \left[                                  
+    \begin{array}{l}
+      \exists (m^\dagger,\open^\dagger) ~\mathrm{ s.t. }~ (\com^\star, m^\dagger, \open^\dagger) \in Q  \\
+    ~ \wedge~ (\mathsf{com}^\star, m^\star, \open^\star) \not \in Q   \\
+     ~ \wedge~ \mathsf{Verify}(\ck, \mathsf{com}^\star, m^\star, \open^\star) = 1
+    \end{array}
+		 \middle|
+		  \begin{array}{l}
+                                        \PPP \gets \Setup(1^\lambda)\\
+                                        \ck \gets \KeyGen(\PPP)\\
+                                        (\mathsf{com}^\star, m^\star, \open^\star) \gets \A^{\mathcal{O}_{\ck}  } (\ck) 
+                                      \end{array}   
+    \right]
+  \end{multline*}
+  is negligible for any PPT adversary $\A$. 
+  Here, $\mathcal{O}_{\ck}$ is an oracle that, 
+  given a message $m$,  executes $(\mathsf{com}, \open) \gets \mathsf{Com}(\PPP,\ck, m)$, 
+  records $(\mathsf{com}, m, \open)$ in $Q$ and returns $(\mathsf{com}, \open)$.
+\end{definition}
+We note that Definition \ref{ecm-tcr-def} captures a stronger requirement than the original definition 
+\cite[Definition 10]{DBLP:conf/eurocrypt/AbeKOT15} in that the latter only requires that the adversary be unable to open a target 
+commitment $\mathsf{com}^\star$ to a different message than the one queried to the oracle $\mathcal{O}_{\ck}$. Here, the adversary is 
+also considered successful if it provides a different opening  $\open^\star \neq \open'$ of $\mathsf{com}^\star$ to the same message $m^\star=m^\dagger$ 
+as the one queried to $\mathcal{O}_{\ck}$. 
+ 
+
+We now recall  the Strictly Structure-Preserving  Trapdoor Commitment of Abe~\etal \cite{DBLP:conf/eurocrypt/AbeKOT15} and show that it 
+actually satisfies our stronger notion of ECM-TCR security. 
+
+\begin{description}
+\item[\boldmath{$TC.\Setup({\lambda},\ell)$}]: On input of a security parameter $\lambda$ and an integer $\ell \in \mathsf{poly}(\lambda)$, 
+  the public parameters are generated by choosing    a large prime $p> 2^{\lambda}$,  asymmetric  groups $(\G, \hat{\G}, \G_T)$ of prime order $p$, with a bilinear map $e : \G \times \hat{\G} \to \G_T$ and  group generators $(g, \hat{g}) \in \G \times \hat{\G}$. The algorithm outputs 	
+   $$\PPP = (p, \G, \hat{\G}, \G_T, e, g, \hat{g},\ell).$$
+  
+
+\item[\boldmath{$TC.\KeyGen(\PPP)$}]:  For $i = 1, \ldots, \ell+2$, choose  $\rho_i \sample \mathbb{Z}_p^*$ and compute 
+$$\hat{X}_i \gets \hat{g}^{\rho_i} \qquad \forall i \in \{1,\ldots,\ell+2 \}.$$
+   Define the commitment key  $\ck := \{\hat{X}_i\}_{i = 1}^{\ell+2}$ and the trapdoor $tk := \{\rho_i\}_i^{\ell+2}$.
+\smallskip   
+
+
+\item[\boldmath{$TC.\Com(\PPP, \ck, \vec{M})$}]: To commit to  $\vec{\hat{M}} = (\hat{M}_1, \dots, \hat{M}_\ell) \in \hat{\G}^\ell$, conduct the 
+following step. \smallskip  \smallskip 
+  \begin{enumerate}
+  \item[1.] Choose  $w_z \in \mathbb{Z}_p^*$ and compute $g_z = g^{w_z}$.
+  \item[2.] For $i = 1, \dots, \ell$, pick $\chi_i \sample \mathbb{Z}_p$ and compute $g_i = g^{\chi_i}$.
+  \item[3.] Generate a key pair $(\vk_{pots},\sk_{pots})$ for the partial one-time signature of Section \ref{pots} . Namely, choose 
+	$\sk_{pots} \sample (w_z,\chi_1, \dots, \chi_\ell) \in \Z_p^{\ell+1}$ and set 
+ 	$$\vk_{pots} = (g_z, g_1, \dots, g_\ell) =( g^{w_z},g^{\chi_1},\ldots, g^{\chi_{\ell}} ) \in \G^{\ell+1}.$$
+  \item[4.] Choose  $a \sample \mathbb{Z}_p$ and compute $\ovk_{pots} =A = g^{a}$ and $\osk_{pots} = a$.
+  \item[5.] Using $\sk_{pots}$,  generate a partial one-time signature  on the message $\vec{\hat{M}}$ \wrt to the one-time  secret key $\osk_{pots}$.
+	 To this end, \smallskip 
+	    \begin{enumerate}
+    \item[a.] Pick $\zeta_1 \in \mathbb{Z}_p$.
+    \item[b.] Compute  $(\hat{Z}, \hat{R}) \in \hat{\G}^2$ as a partial one-time signature of $\vec{\hat{M}}$ as
+      \begin{align*}
+	\hat{Z} &= \hat{g}^{\zeta_1} & \hat{R} = \hat{g}^{a-\zeta_1 w_z}\prod_{i=1}^{\ell} \hat{M}_i^{\chi_i} 
+      \end{align*}
+    \end{enumerate}
+  \item[6.] Generate a commitment to the message.
+    \begin{enumerate}
+    \item[a.] Set $(m_1, \dots, m_{\ell+2}) \gets (\chi_1, \dots, \chi_\ell, w_z, a)$ 
+    \item[b.] Parse $\vec{\ck}$ as $(\hat{X}_1, \dots, \hat{X}_{\ell+2})$.
+    \item[c.] Generate a random value $\zeta_2 \gets \mathbb{Z}_p^*$ and compute:
+      \begin{align*}
+	\hat{C} &= \hat{g}^{\zeta_2}\prod_{i = 1}^{\ell+2}\hat{X}_i^{m_i} & D &= g^{\zeta_2}
+      \end{align*}
+    \end{enumerate}
+  \item[7.] Output the commitment  $\com  = \hat{C}$ as well as the opening information
+	\begin{eqnarray} \label{open}
+	\open = \big( D, g_z, g_1, \dots, g_\ell, A = g^a, \hat{Z}, \hat{R} \big) \in \G^{\ell+3} \times \hat{\G}^{2}.   
+	\end{eqnarray}
+	\smallskip 
+  \end{enumerate}
+  
+\item[\boldmath{$TC.\Verif(\ck, \com, \vec{\hat{M}}, \open)$}:] Given  $\com = \hat{C} \in \hat{\G}$, parse 
+  $\vec{\hat{M}}$ as $(\hat{M}_1, \dots, \hat{M}_\ell)$ and $\open$ as in (\ref{open}). \smallskip \smallskip   
+  \begin{enumerate}
+	%$(D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R})$.
+  \item Set $\vec{N} = (N_1, \dots, N_{\ell+2}) = (g_1, \dots, g_\ell, g_z, A )$
+  \item Using $\ovk_{pots} = A \in \G$, return $1$ if the following equalities hold:
+    \begin{align} \label{ver-eq-spc}
+      e(g, \hat{C}) &= e(D, \hat{g}) \cdot \prod_{i = 1}^{\ell+2} e(N_i, \hat{X}_i) \\ \nonumber e(A, \hat{g}) &= e(g_z, \hat{Z}) \cdot e(g, \hat{R}) \cdot \prod_{i = 1}^\ell e(g_i, \hat{M}_i) .
+    \end{align}
+		Otherwise, return $0$. 
+  \end{enumerate}
+\end{description}
+
+We now prove that the above commitment does not only provide CM-TCR security as defined in  \cite{DBLP:conf/eurocrypt/AbeKOT15}, but also  ECM-TCR security. The proof builds on the same ideas as that of  \cite{DBLP:conf/eurocrypt/AbeKOT15} but also  takes advantage of the strong 
+unforgeability\footnote{Note that, while \cite{DBLP:conf/asiacrypt/AbeCDKNO12}  only considered the standard notion of unforgeability, it is 
+straightforward that their scheme also provides strong unforgeability.}  
+of the underlying 
+partial one-time signature. 
+
+\begin{theorem} \label{ecm-ctr-sec}
+The scheme provides ECM-CTR security under the SXDH assumption.
+\end{theorem}
+\begin{proof}
+For the sake of contradiction, let us assume that a PPT adversary $\A$ can win the game Definition \ref{ecm-tcr-def} with noticeable 
+probability. 
+We observe that the adversary can only wins in in two mutually exclusive cases.
+\begin{itemize}
+\item[I.] $\A$ outputs a commitment $\hat{C}^\star \in \hat{\G}$  for which it provides an opening information   
+\begin{eqnarray*}
+\vec{M}^\star &=& (M_1^\star, \ldots , M_n^\star) \\ 
+\open^\star  &=& \big( D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star , \hat{Z}^\star , \hat{R}^\star \big) ,
+\end{eqnarray*}
+ where $(D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star )$ differs from  
+the tuple   $(D^\dagger, g_z^\dagger, g_1^\dagger, \ldots, g_\ell^\dagger, A^\dagger )$ returned by $\mathcal{O}_{\ck}$ as part of the opening 
+\begin{eqnarray*}
+\open^\dagger  &=& \big( D^\dagger, g_z^\dagger, g_1^\dagger, \ldots, g_\ell^\dagger, A^\dagger , \hat{Z}^\dagger , \hat{R}^\dagger \big) ,
+\end{eqnarray*}
+of $\hat{C}^\star  $ when $\A$ queried $\mathcal{O}_{\ck}$   to obtain a commitment to  $\hat{\vec{M}}^\dagger=(\hat{M}_1^\dagger,\ldots,\hat{M}_{\ell}^\dagger) $.  
+
+\item[II.] $\A$ outputs a commitment $\hat{C}^\star \in \hat{\G}$    which it opens by revealing a pair   
+\begin{eqnarray*}
+\vec{M}^\star &=& (M_1^\star, \ldots , M_n^\star) \\ 
+\open^\star  &=& \big( D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star , \hat{Z}^\star , \hat{R}^\star \big) ,
+\end{eqnarray*}
+such that 
+ $(D^\dagger, g_z^\dagger, g_1^\dagger, \ldots, g_\ell^\dagger, A^\dagger )=  (D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star ) $.
+In this case, we must have either $\vec{M}^\star \neq \vec{M}^\dagger$ or $(\hat{Z}^\star,\hat{R}^\star) \neq (\hat{Z}^\dagger,\hat{R}^\dagger)$.   
+\end{itemize}
+\medskip 
+
+Let us first assuming that situation I occurs with noticeable probability. We show that $\A$ can be turned into an algorithm $\B_I$ that breaks the DDH 
+assumption in $\hat{G}$ by finding a pair $(Z,R)$ such that $e(Z,\hat{g}) \cdot e(R,\hat{h}) = 1_{\G_T}$ for a given pair 
+$(\hat{g},\hat{h}) \in \hat{\G}^2$.  This algorithm $\B_I$ proceeds in the same way as in 
+\cite{DBLP:conf/eurocrypt/AbeKOT15}. Namely, it creates the commitment key $\ck$ by choosing $\rho_i,\theta_i \sample \Z_p$ 
+and setting $\hat{X}_i=\hat{g}^{\rho_i} \cdot \hat{h}^{\theta_i}$ for each $i \in \{1,\ldots , \ell+2 \}$.  It faithfully answers all queries 
+made by $\A$ to $\mathcal{O}_{\ck}$. By hypothesis, $\A$ outputs a commitment $\hat{C}^\star \in \hat{\G}$ as well as an opening $(\vec{M}^\star,\open^\star)$ 
+which satisfy the conditions of situation I.  In particular, $\open^\star  = \big( D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star , \hat{Z}^\star , \hat{R}^\star \big)$ satisfies 
+\begin{eqnarray} \label{eq-un}
+   e(g, \hat{C}^\star)  = e(D^\star, \hat{g}) \cdot \prod_{i = 1}^{\ell} e(g_i^\star, \hat{X}_i) \cdot 
+e(g_z^\star, \hat{X}_{\ell+1}) \cdot e(A^\star ,\hat{X}_{\ell+2}) 
+\end{eqnarray}
+and the set $Q$ must contain $\open^\dagger  = \big( D^\dagger, g_z^\dagger, g_1^\dagger, \ldots, g_\ell^\dagger, A^\dagger , \hat{Z}^\dagger, \hat{R}^\dagger \big)$ such that 
+\begin{eqnarray} \label{eq-deux}
+   e(g, \hat{C}^\star)  = e(D^\dagger, \hat{g}) \cdot \prod_{i = 1}^{\ell} e(g_i^\dagger, \hat{X}_i) \cdot 
+e(g_z^\dagger, \hat{X}_{\ell+1}) \cdot e(A^\dagger ,\hat{X}_{\ell+2}) .
+\end{eqnarray}
+Dividing (\ref{eq-deux}) from (\ref{eq-un}), we find that the pair 
+\begin{eqnarray*}
+Z &=& \Bigl( \frac{D^\star }{D^\dagger}   \Bigr) \cdot 
+ \Bigl( \frac{g_{z}^\star }{g_{z}^\dagger } \Bigr)^{ \rho_{\ell+1}} \cdot   \Bigl( \frac{A^\star }{A^\dagger } \Bigr)^{ \rho_{\ell+2}} \cdot \prod_{i=1}^\ell \Bigl( \frac{g_i^\star }{g_i^\dagger} \Bigr)^{ \rho_i}  \\
+R &=& \Bigl( \frac{D^\star }{D^\dagger}   \Bigr) \cdot 
+ \Bigl( \frac{g_{z}^\star }{g_{z}^\dagger } \Bigr)^{ \theta_{\ell+1}} \cdot   \Bigl( \frac{A^\star }{A^\dagger } \Bigr)^{ \theta_{\ell+2}} \cdot \prod_{i=1}^\ell \Bigl( \frac{g_i^\star }{g_i^\dagger} \Bigr)^{ \theta_i}  \\
+\end{eqnarray*}
+satisfies  $e(Z,\hat{g}) \cdot e(R,\hat{h}) = 1_{\G_T}$. Moreover, we  have $Z \neq 1_\G$ with all but negligible probability since 
+$\{\rho_i\}_{i=1}^\ell$ are completely independent of $\A$'s view.  \medskip 
+
+We now turn to situation II and show that it implies an algorithm $\B_{II}$ that defeats  the strong unforgeability of the partial one-time signature scheme. Algorithm $\B_{II}$ takes as input a POTS verification key $\vk_{pots}=(g_z^\dagger,g_1^\dagger,\ldots,g_{\ell}^\dagger)$ supplied by its own challenger 
+in the POTS security game. It generates $\ck = \{ \hat{X}_i \}_{i=1}^{\ell+2}$ by picking $\rho_i \sample \Z_p$ and 
+defining $\hat{X}_i=\hat{g}^{\rho_i}$  for each $i \in \{1,\ldots, \ell+2\}$. Letting $Q_c \in \mathsf{poly}(\lambda)$ denote the number of 
+queries made by $\A$ to $\mathcal{O}_{\ck}$, $\B_{II}$ draws a random 
+index $k^\star \sample \{1,\ldots, Q_c \}$ as a guess that $\A$ will choose to equivocate the commitment $\hat{C}^\dagger$ returned as the 
+output of the $k^\star$-th query. It answers all queries to $\mathcal{O}_\ck$ as follows. For each $k \in \{1,\ldots ,Q_c \} \backslash 
+\{k^\star \}$, the $k$-th query is answered by faithfully running the commitment algorithm. When the $k^\star$-th query occurs, 
+$\B_{II}$ embeds $\vk_{pots}=(g_z^\dagger,g_1^\dagger,\ldots,g_{\ell}^\dagger)$ into the opening of the $k^\star$-th commitment. To this end, it chooses 
+ $\zeta \sample \Z_p$ and 
+computes 
+\begin{eqnarray*}
+\hat{C}^\dagger &=& \hat{g}^{\zeta} 
+\end{eqnarray*}
+Next, $\B_{II}$ queries its own POTS challenger to obtain a signature $(A^\dagger,(\hat{Z},\hat{R}))$ on  the message 
+$\hat{\vec{M}}=(\hat{M}_1,\ldots,\hat{M}_{\ell})
+ \in \hat{\G}^{\ell}$ queried by $\A$ at this $k^\star$-th query. Upon receiving a partial one-time signature 
+$(A^\dagger,(\hat{Z}^\dagger,\hat{R}^\dagger))$ from its POTS challenger, $\B_{II}$ defines
+ $(N_1,\ldots,N_{\ell},N_{\ell+1},N_{\ell+2})=(g_1^\dagger,\ldots, g_{\ell}^\dagger ,g_z^\dagger , A^\dagger)$ 
+and computes 
+\begin{eqnarray*}
+ D^\dagger = g^\zeta \cdot \prod_{i=1}^{\ell+2} N_i^{-\rho_i} \in \G,
+\end{eqnarray*}
+which satisfies $e(g,\hat{C}^\dagger) = e(D^\dagger,\hat{g}) \cdot \prod_{i=1}^{\ell+2} e(N_i,\hat{X}_i) $.  Given that $(A^\dagger,(\hat{Z}^\dagger,\hat{R}^\dagger))$ satisfies 
+the second verification equation of (\ref{ver-eq-spc}) by construction, we observe that
+$$ \open^\dagger =   \big( D^\dagger, g_z^\dagger , g_1^\dagger, \ldots, g_\ell^\dagger , A^\dagger , \hat{Z}^\dagger , \hat{R}^\dagger \big) $$
+forms a valid opening of $\hat{C}^\dagger$. When $\A$ halts, we know that, with probability $1/Q_c$, it chooses to output  a pair 
+$(\vec{M}^\star,\open^\star)$ which   opens $\hat{C}^\star = \hat{C}^\dagger$. Given that   
+ $(D^\star, g_z^\star, g_1^\star, \ldots, g_\ell^\star, A^\star )=(D^\dagger, g_z^\dagger, g_1^\dagger, \ldots, g_\ell^\dagger, A^\dagger )$ 
+  and since we must have
+$(\vec{M}^\star,\open^\star) \neq (\vec{M}^\dagger , \open^\dagger) $ by the definition of ECM-TCR security,  we know that  $(\vec{M}^\star,(\hat{Z}^\star,\hat{R}^\star)) \neq 
+(\vec{M}^\dagger,(\hat{Z}^\dagger,\hat{R}^\dagger)) $. This  means that $\B_{II}$ can win the game against its POTS challenger by outputting 
+  $(\vec{M}^\star,(A^\star,\hat{Z}^\star,\hat{R}^\star)) $. In turn, the result of \cite{DBLP:conf/asiacrypt/AbeCDKNO12} implies that 
+	$\B_{II}$ would contradict the DDH assumption in $\G$. \qed 
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A  Structure-Preserving CCA2-Secure Public-Key  Cryptosystem With Shorter Publicly Verifiable Ciphertexts } \label{SPCCA}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{SPCCA}
+
+
+
+In this section, we use the all-but-one hash proof techniques of~\cite{DBLP:conf/tcc/LibertY12} and combine them with the   structure-preserving commitment scheme of Section \ref{TC} and a strongly unforgeable signature scheme. We show that the ECMTCR property of the commitment scheme suffices
+to construct the sought-after 
+ CCA-2 structure preserving   encryption scheme with publicly verifiable ciphertexts.
+
+\begin{description}
+
+\item[\boldmath{$\KeyGen(\lambda)$}]: \smallskip 
+  \begin{enumerate}
+  %\item Choose an asymmetric pairing group system $(\G, \hat{\G}, \G_T)$, groups of prime order $p > 2^\lambda$.
+  \item %Set $\PPP$ as $(\G, \hat{\G}, \G_T)$.
+	 Run the setup algorithm of the commitment scheme in Section \ref{TC} 
+	 to obtain $\PPP_{TC} = (p, \G, \hat{\G}, \G_T, e, g, \hat{g},\ell=6) 
+	 \leftarrow TC.\Setup({\lambda},6) $, which will be used to commit to messages in $\hat{\G}^6$. 
+  \item Generate $(\ck,\tk)\gets TC.\KeyGen(\PPP)$, where 
+    ${\ck} \in \hat{\G}^8$ is the commitment key and 
+    ${\tk} \in \mathbb{Z}_p^8$ is the trapdoor key which can be erased.
+  \item \label{it:SPCCA-key} Choose also group generators $g_1, g_2 \sample \G$ and random values $x_1, x_2 \sample \mathbb{Z}_p$ and set $X = g_1^{x_1}g_2^{x_2}$.
+  \item Choose random  $\rho_u,\rho_u' \sample \Z_p$ and a random  $\hat{h} \sample \hat{\G}^2$.
+  \item Define $(\hat{\vec{u}}_1, \hat{\vec{u}}_2) $ with $\hat{\vec{u}}_1 = (\hat{g}, \hat{h}) \in \hat{\G}^2$ and $\hat{\vec{u}}_2 =  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2$. 
+    Note that $\hat{\vec{u}}_1$ and $\hat{\vec{u}}_2$ are linearly independent with overwhelming probability.
+  \item \label{it:SPCCA-end} Define $\SK = (x_1, x_2)$ and $$\PK = (g_1, g_2, \hat{\vec{u}}_1, \hat{\vec{u}}_2, X, \PPP_{TC}, {\ck}).$$ 
+  \end{enumerate}
+  
+\item[\boldmath{$\Enc(M,\PK)$}]: To encrypt $M \in \G$, 
+conduct the following steps. \smallskip  \smallskip 
+  \begin{enumerate}
+  \item Generate a  key pair $(\SSK, \SVK) \gets OT1.\KeyGen(\PPP,5)$ 
+    for the one-time SPS of Section \ref{ot-sig} so as to sign messages 
+    in $\G^5$. Let the resulting key pair consist of $\SSK = \big( \{\chi_i, 
+    \gamma_i\}_{i=1}^5, \zeta, \rho \big) \in \mathbb{Z}_p^{14}$ 
+	and $ \SVK = \big( \{\hat{g}_i\}_{i =1}^5, \hat{A}  \big) \in \hat{\G}^6,$
+    where  $\hat{g}_i=\hat{g}_z^{\chi_i} \cdot \hat{g}_r^{\delta_i}$ and 
+    $\hat{A}=\hat{g}_z^{\zeta} \cdot \hat{g}_r^{\rho}$.
+  \item Choose $\theta \sample \mathbb{Z}_p$ and compute
+    \begin{align*}
+      C_0 &= M\cdot X^{\theta}, & C_1 &= g_1^{\theta}, & C_2 &= g_2^{\theta}.
+    \end{align*}
+  \item \label{it:SPCCA-com} Generate a commitment to 
+    $\SVK = (\{\hat{g}_i\}_{i =1}^5, \hat{A})$ and let $$(\com, \open) \gets 
+    TC.\Com(\PPP_{TC}, {ck}, \SVK) \in \hat{\G} \times (\G^9 \times \hat{\G}^2)$$
+    be the resulting commitment/opening pair.
+  \item Define vector $\hat{\vec{u}}_{\com} = \hat{\vec{u}}_2\cdot (1, \com) 
+    \in \hat{\G}^2$ as well as the Groth-Sahai CRS $\hat{\mathbf{u}}_{\com}
+    =(\hat{\vec{u}}_{\com},\hat{\vec{u}}_1) \in \hat{\G}^2$. 
+  \item Pick $r \sample \mathbb{Z}_p$. Compute $\hat{\vec{C}}_{\theta} 
+    = \hat{\vec{u}}_{\com}^{\theta} \cdot \hat{\vec{u}}_1^r$.
+  \item Using the randomness of the commitment $\vec{C}_{\theta}$, generate  
+    proof elements $\vec{\pi}=(\pi_1,\pi_2)=(g_1^r,g_2^r) \in \G^2$ showing 
+    that the committed $\theta \in \Z_p$ satisfies the multi-exponentiation 
+    equations
+    \begin{align*}
+      C_1 &= g_1^{\theta} & C_2 &= g_2^{\theta}
+    \end{align*}
+  \item Output the ciphertext
+    \begin{align} \label{SPS-CT} 
+      \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, 
+                \vec{\pi}, \vec{\sigma}) \in \G^{16} \times \hat{\G}^{11}
+    \end{align}
+    where $\vec{\sigma} \leftarrow OT1.\Sig(\SSK, (C_0, C_1, C_2, {\pi}_1,\pi_2)) 
+    \in \G^2$.  \medskip  \smallskip
+
+%     Notice that we don't sign the commitments because in the Groth-Sahai proof system and in this very special case, there is only one valid 
+% commitment for given proofs.
+    
+  \end{enumerate}
+  
+\item[\boldmath{$\Dec(\PK, \vec{C}, \SK)$}]: Parse the ciphertext $\vec{C}$ as in (\ref{SPS-CT}). Then, conduct the following steps. \smallskip  \smallskip   
+  \begin{enumerate}
+  \item Parse $\PK$ as $({g}_1, {g}_2, X, \PPP_{TC}, \ck)$ and $\SK$ as $(x_1, x_2)$.
+ % \item Parse $\vec{C}$ as $ (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})$.
+  \item Return $\perp$ if $OT1.\Verif(\PPP,  (C_0, C_1, C_2, \pi_1,\pi_2), \sigma) = 0$.
+  \item Return $\perp$ if  $TC.\Verif(\ck, \com, \SVK, \open) = 0$.
+  \item Verify that $\vec{\pi}=(\pi_1,\pi_2)$ is a valid Groth-Sahai proof \wrt  $(C_1, C_2, \vec{C}_{\theta}, \com)$. Namely, 
+    it should satisfy 
+    \begin{eqnarray} \label{ver-eq} 
+      E(g_1,\hat{\vec{C}}_{\theta}) &=& E(C_1 , \hat{\vec{u}}_{\com}) \cdot E(\pi_1,\hat{\vec{u}}_1) \\ \nonumber
+      E(g_2,\hat{\vec{C}}_{\theta}) &=& E(C_2 , \hat{\vec{u}}_{\com}) \cdot E(\pi_2,\hat{\vec{u}}_1)
+    \end{eqnarray}
+  \item If  the above verifications all succeed, output $M=C_0/(C_1^{x_1}\cdot C_2^{x_2})$. \medskip \smallskip \smallskip 
+  \end{enumerate}
+  
+\end{description}
+
+\medskip 
+
+\begin{theorem} \label{thm-SXDH}
+  The scheme provides IND-CCA2 security under the SXDH assumption.
+  More precisely,
+  $\Adv^{\mathsf{CCA}}(\lambda)\leq 4\times\Adv^{\mathsf{SXDH}}(\lambda)
+  + q_d \times 2^{-\lambda}$.
+\end{theorem}
+
+\begin{proof}
+  The proof proceeds with a sequence of games that begins with the real game 
+  and ends with a game where no advantage is left to the adversary whatsoever. 
+  In each game, we call $W_i$ the event that the experiment outputs $1$. 
+  The security parameter $\lambda$ is implicitly given in all the games.
+  Let $q_d$ denotes the number of decryption queries made by the adversary.
+
+  \begin{description}
+  \item[\textsf{Game} $0$:] This is the real game. The adversary is given the public key $\PK$ which contains 
+    vectors 
+    $(\hat{\vec{u}}_1, \hat{\vec{u}}_2)$ such that
+    \begin{align} \label{vec-PK} 
+      \hat{\vec{u}}_1 &= (\hat{g}, \hat{h}) \in \hat{\G}^2  &
+      \hat{\vec{u}}_2 &=  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2,
+    \end{align}
+    where $\hat{g},\hat{h} \sample \hat{\G}$,  $\rho_u,\rho_u' \sample \Z_p$.
+    In the challenge phase, 
+    it chooses two messages $M_0,M_1 \in \G$ and obtains a challenge ciphertexts 
+    $$  \vec{C}^\star = (\SVK^\star, \com^\star, \open^\star, C_0^\star, C_1^\star, C_2^\star, \hat{\vec{C}}_{\theta}^\star, \vec{\pi}^\star, \vec{\sigma}^\star)  $$
+    where, for some random bit $\beta \sample \{0,1\}$,
+    \begin{align*}
+      C_0^\star &= M_{\beta} \cdot X^{\theta^\star}, & C_1^\star &= g_1^{\theta^\star}, & C_2^\star &= g_2^{\theta^\star},
+    \end{align*}
+     as well as $(\com, \open) \gets TC.\Com(\PPP_{TC}, {ck}, \SVK)$,
+     $\hat{\vec{C}}_{\theta}^\star=\hat{\vec{u}}_{\com^\star}^{\theta^\star}
+     \cdot \hat{\vec{u}}_1^{r^\star}$
+     and $\vec{\pi}^\star=(\pi_1^\star,\pi_2^\star) =(g_1^{r^\star},g_2^{r^\star})$,
+    %
+%    \begin{eqnarray*}
+%%      \com^\star  &=& \hat{C}^\star  = \hat{g}^{\zeta_2^\star} \cdot \prod_{i = 1}^{\ell }\hat{X}_i^{\chi_i^\star } \cdot \hat{X}_{\ell+1}^{w_z^\star} \cdot \hat{X}_{\ell+2}^{a^\star}  \\
+%%      \open^\star &=& \big( D^\star , g_z^\star, g_1^\star, \dots, g_\ell^\star, A^\star  , \hat{Z}^\star, \hat{R}^\star \big)  \\ 
+%%                  & =& \big(  g^{\zeta_2^\star },~ g^{w_z^\star}, ~ g^{\chi_1^\star}, ~\ldots , ~ g^{\chi_\ell^\star} , ~ g^{\chi_z^\star} , ~ g^{a^\star}, ~ 		 
+%%                       \hat{g}^{\zeta_1^\star} ,  ~\hat{g}^{a^\star-\zeta_1^\star w_z^\star }  \cdot  \prod_{i=1}^{6} {\hat{M}_i^\star~ }^{\chi_i^\star} 
+%%                       \big), \\
+%      \hat{\vec{C}}_{\theta}^\star &=& \hat{\vec{u}}_{\com^\star}^{\theta^\star} \cdot \hat{\vec{u}}_1^{r^\star}\\
+%      \vec{\pi}^\star &=& (\pi_1^\star,\pi_2^\star) =(g_1^{r^\star},g_2^{r^\star}) 
+%    \end{eqnarray*}
+%    %
+%    with $(\hat{M}_1^\star,\ldots,\hat{M}_\ell^\star)=(\hat{g}_1^\star,\ldots,\hat{g}_5^\star,\hat{A}^\star) $
+     where 
+    $\hat{\vec{u}}_{\com^\star} = \hat{\vec{u}}_2\cdot (1, \com^\star)$.
+   
+   The adversary's decryption queries are always faithfully answered by the challenger. When the adversary halts, it outputs   
+    $\beta' \in \{0,1\}$ and wins if $\beta' =\beta$. In this case, the experiment outputs $1$. Otherwise, it outputs $0$.  
+    The adversary's advantage is thus $|\Pr[W_0]-1/2|$. \smallskip \smallskip 
+
+  \item[\textsf{Game} $1$:] In this game, we modify the generation of the public key and define
+    \begin{eqnarray} \label{vec-PK-sim} 
+      \hat{\vec{u}}_1 &=& (\hat{g}, \hat{h}) \in \hat{\G}^2  \\ \nonumber 
+      \hat{\vec{u}}_2 &=&  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \cdot (1,({\hat{C}^\star})^{-1})  \in \hat{\G}^2.
+    \end{eqnarray}
+    instead of computing $(\hat{\vec{u}}_1,\hat{\vec{u}}_2)$ as in (\ref{vec-PK}) (note that we may assume w.l.o.g. that $\SVK^\star$ and $\com^\star=\hat{C}^\star$ are 
+    generated 
+    at the outset of the game).  However, this modification does not affect the adversary's view since $\hat{\vec{u}}_2$ remains uniformly distributed 
+    over $\hat{\G}^2$. We have $\Pr[W_1]=\Pr[W_0]$.   \smallskip \smallskip 
+
+  \item[\textsf{Game} $2$:] This game is like Game $1$ except that, if the adversary makes a pre-challenge decryption query 
+    $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that $\com=\com^\star$, the experiment halts and 
+    outputs a random bit. Since Game $2$ is identical to Game $1$ until this event $F_2$ occurs, we have the inequality 
+    $|\Pr[W_2]-\Pr[W_1]| \leq \Pr[F_2]$. Moreover, since $\com^\star$ was chosen uniformly in $\hat{\G}$ and remains independent of $\A$'s view until 
+    the challenge phase, we have $ |\Pr[W_2]-\Pr[W_1]| \leq \Pr[F_2] \leq q_d/p$. \smallskip \smallskip 
+
+
+  \item[\textsf{Game} $3$:] This game is like Game $2$ but we modify the decryption oracle. Namely, if the adversary makes a post-challenge decryption query 
+    for a valid ciphertext
+    $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $
+    such that $\com=\com^\star$ but $(\SVK,\open) \neq (\SVK^\star,\open^\star)$, the experiment halts and outputs a random bit. If we call $F_3$ the latter event, 
+    we have $|\Pr[W_3]-\Pr[W_2]| \leq \Pr[F_3]$. As shown by Lemma  \ref{lemma-game3},   event $F_3$   implies an adversary $\B_3$ against the ECM-TCR property (as formalized 
+		by Definition \ref{ecm-tcr-def}) of the 
+     trapdoor commitment in Section \ref{TC}, which contradicts the SXDH assumption. We thus have    
+    $|\Pr[W_3]-\Pr[W_2]| 
+      \leq \mathbf{Adv}_{TC,\B_3}^{\mathsf{ECM}\textsf{-}\mathsf{TCR}}(\lambda) 
+      \leq   \mathbf{Adv}_{\B_3}^{\mathrm{SXDH}}(\lambda)$.   
+    \smallskip \smallskip 
+
+
+  \item[\textsf{Game} $4$:] We modify again the decryption oracle in  post-challenge decryption queries. After the challenge phase, if the adversary $\A$  queries the decryption of a ciphertext 
+    $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that we have $(\com,\open)=(\com^\star,\open^\star)$
+    but $(C_0,C_1,C_2,\pi_1,\pi_2) \neq (C_0^\star,C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$, the experiment halts and outputs a random 
+    bit. If we call $F_4$ this event, we have the inequality  $|\Pr[W_4]-\Pr[W_3]| \leq \Pr[F_4]$ since Game $4$ is identical to Game $3$ until $F_4$ occurs.
+    Moreover,   $F_4$ would contradict the strong unforgeability of the one-time structure-preserving signature  and thus the DP assumption. This implies  
+    $|\Pr[W_4]-\Pr[W_3]| \leq \mathbf{Adv}_\B^{\mathsf{SUF}\textsf{-}\mathsf{OTS}}(\lambda)   \leq   \mathbf{Adv}_\B^{\mathrm{DP}}(\lambda)$.
+    \smallskip 
+
+  \item[\textsf{Game} $5$:] We introduce another modification in the decryption oracle.  We  reject all ciphertexts $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $ 
+    such that
+    \begin{multline} \label{event-F5}
+      (\com,\open)=(\com^\star,\open^\star)  \quad \wedge \quad \\ (C_0,C_1,C_2,\pi_1,\pi_2) = (C_0^\star,C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star) 
+      \quad  \wedge \quad \hat{\vec{C}}_{\theta} \neq \hat{\vec{C}}_{\theta}^\star .
+    \end{multline}  
+    Let $F_5$ be the event that the decryption oracle rejects a ciphertext that would not have been rejected in Game $4$.   
+    We argue that $\Pr[W_5] = \Pr[W_4]$ since Game $5$ is identical to Game $4$ until event $F_5$ occurs and we have $\Pr[F_5]=0$. 
+    Indeed, 
+    % since the vectors $\vec{u}_{\com^\star}$ and $\vec{u}_1$ are linearly independent, they span the entire vector space $\hat{\G}^2$ which 
+    % means that, 
+    for a given $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star) \in \G^4$, there exists only one commitment $\hat{\vec{C}}_{\theta}^\star \in \hat{\G}^2$ that satisfies the equalities (\ref{ver-eq}). This follows from the fact that, since  
+    $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)=(g_1^{\theta^\star},g_2^{\theta^\star},g_1^{r^\star},g_2^{r^\star})$, relations 
+    (\ref{ver-eq}) can be written
+    \begin{eqnarray*}  
+      E(g_1,\hat{\vec{C}}_{\theta}^\star) &=& E(g_1^{\theta^\star} , \hat{\vec{u}}_{\com}) \cdot E(g_1^{r^\star},\hat{\vec{u}}_1) = E(g_1 , \hat{\vec{u}}_{\com}^{\theta^\star}) \cdot E(g_1,\hat{\vec{u}}_1^{r^\star}) \\ \nonumber
+      E(g_2,\hat{\vec{C}}_{\theta}^\star) &=& E(g_2^{\theta^\star} , \hat{\vec{u}}_{\com}) \cdot E(g_2^{r^\star},\hat{\vec{u}}_1) =E(g_2 , \hat{\vec{u}}_{\com}^{\theta^\star}) \cdot E(g_2, \hat{\vec{u}}_1^{r^\star})
+    \end{eqnarray*}
+    which uniquely determines the  only commitment $\hat{\vec{C}}_{\theta}^\star= \hat{\vec{u}}_{\com}^{\theta^\star} \cdot \hat{\vec{u}}_1^{r^\star} \in \hat{\G}^2$ that satisfies (\ref{ver-eq}). 
+    This shows that $\Pr[F_5] = 0$, as claimed. 
+    \smallskip \smallskip 
+
+
+
+
+
+  \item[\textsf{Game} $6$:] In this game, we modify the distribution of the public key.  Namely, instead of generating 
+    the vectors $(\hat{\vec{u}}_1, \hat{\vec{u}}_2)$ as in (\ref{vec-PK-sim}), we 
+    set 
+    \begin{align} \label{vec-PK-sim-bis} 
+      \hat{\vec{u}}_1 & = (\hat{g}, \hat{h}) \in \hat{\G}^2  &
+      \hat{\vec{u}}_2 & = (\hat{g}^{\rho_u}, \hat{h}^{\rho_u}) 
+                          \cdot (1,{\hat{C}^{\star{-1}}})  \in \hat{\G}^2.
+    \end{align}
+    Said otherwise,  $\hat{\vec{u}}_2$ is now the product of two terms, the first one of which lives in the 
+    one-dimensional subspace spanned by $\hat{\vec{u}}_1$. Under the DDH assumption in $\hat{\G}$, this modified  
+    distribution of $\PK$ should have not noticeable impact on the adversary's behavior.  
+    A straightforward reduction shows 
+    that $|\Pr[W_6]-\Pr[W_5] | \leq \mathbf{Adv}^{\mathrm{DDH}}_\B (\lambda)$. Note that, although the vectors $(\hat{\vec{u}}_{\com^\star},\hat{\vec{u}}_1) \in \hat{\G}^2$ are 
+    no longer linearly independent, $\hat{\vec{C}}_{\theta}^\star = \hat{\vec{u}}_1^{\rho_u \cdot \theta^\star +r^\star}$ remains the only commitment 
+    that satisfies the verification equations  for a given tuple $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$.
+    
+
+    \smallskip \smallskip 
+
+  \item[\textsf{Game} $7$:] In this game, we  modify the challenge ciphertext and replace the NIZK proof $\vec{\pi}^\star=(\pi_1^\star,\pi_2^\star) \in \G^2$ by a simulated proof which is produced 
+    using $\rho_u \in \Z_p$ as a simulation trapdoor. Namely, $(\hat{\vec{C}}_\theta^\star,\vec{\pi}^\star)$ is obtained by picking $r \sample \Z_p$ and  computing
+    \begin{eqnarray*}
+      \hat{\vec{C}}_{\theta}^\star &=& \vec{u}_1^{r},   \qquad \qquad \quad
+                                 \pi_1^\star  =  g_1^{r} \cdot {C_1^\star }^{-\rho_u} , \qquad \qquad \quad 
+                                 \pi_2^\star  =  g_2^{r} \cdot {C_2^\star }^{-\rho_u}
+    \end{eqnarray*}
+    Observe that, although $(\hat{\vec{C}}_\theta^\star,\pi_1^\star,\pi_2^\star)$ are generated without using the 
+		witness $\theta^\star = \log_{g_1}(C_1^\star) =
+    \log_{g_2}(C_2^\star)$,  the NIZK property of 
+    GS proofs ensures that 
+    their distribution remains exactly as in Game $6$: indeed, if we define $\tilde{r} =r -\rho_u \cdot \theta^\star$, we have
+    \begin{eqnarray*}
+      \hat{\vec{C}}_{\theta}^\star &=& \hat{\vec{u}}_{\com^\star}^{\theta^\star} \cdot \hat{\vec{u}}_1^{\tilde{r}},   \qquad \qquad \quad
+                                 \pi_1^\star  =  g_1^{\tilde{r}} , \qquad \qquad \quad 
+                                 \pi_2^\star  =  g_2^{\tilde{r}} ,
+    \end{eqnarray*}
+    which implies $\Pr[W_7]=\Pr[W_6]$.  
+    \smallskip \smallskip
+
+
+  \item[\textsf{Game} $8$:]  We modify the generation of the challenge ciphertext, which is generated using the private key $\SK=(x_1,x_2)$ instead
+    of the public key: Namely, the challenger computes 
+    \begin{align*}
+      C_1^\star &= g_1^{\theta^\star}, & C_2^\star &= g_2^{\theta^\star},    &  C_0^\star &= M_{\beta} \cdot {C_1^\star}^{x_1} \cdot  {C_2^\star}^{x_2} , 
+    \end{align*} 
+    while $(\hat{\vec{C}}_\theta^\star,\pi_1^\star,\pi_2^\star)$ are computed using the NIZK simulation trapdoor $\rho_u \in \Z_p$ as in Game $7$. 
+    This modification does not affect the adversary's view since the ciphertext retains exactly the same distribution as in Game $7$. 
+    We have $\Pr[W_8]=\Pr[W_7]$.  \smallskip \smallskip
+
+  \item[\textsf{Game} $9$:] We modify again the distribution of the challenge ciphertext which is obtained as 
+    \begin{align*}
+      C_1^\star &= g_1^{\theta_1^\star}, & C_2^\star &= g_2^{\theta_2^\star},    &  C_0^\star &= M_{\beta} \cdot {C_1^\star}^{x_1} \cdot  {C_2^\star}^{x_2} , 
+    \end{align*} 
+    for random and independent $\theta_1^\star,\theta_2^\star \sample \Z_p$, 
+    while the NIZK proof $(\hat{\vec{C}}_\theta^\star,\pi_1^\star,\pi_2^\star)$ is simulated using $\rho_u \in \Z_p$ as in Game $8$.  Since 
+    the witness $\theta^\star \in \Z_p$ was not used anymore in Game $8$, a straightforward reduction shows that  any noticeable change in $\A$'s output distribution implies a DDH distinguisher in $\G$. We have 
+    $|\Pr[W_9]-\Pr[W_8]| \leq   \mathbf{Adv}_{\B,\G}^{\mathrm{DDH}}(\lambda)$.  \smallskip \smallskip
+
+    
+
+  \end{description}
+
+  In the final game, it is easy to see that $\Pr[W_9]=1/2$ since the challenge ciphertext does not carry any information about $\beta \in \{0,1\}$. 
+  Indeed, we have 
+  \begin{align*}
+    C_1^\star &= g_1^{\theta_1^\star}, & C_2^\star &= g_2^{\theta_1^\star + \theta_1'},    &  C_0^\star &= M_{\beta} \cdot X^{\theta_1^\star} 
+                                                                                                          \cdot  {g_2}^{\theta_1' \cdot x_2} , 
+  \end{align*} 
+  for some random $\theta_1' \in_R \Z_p$, which implies that 		the term ${g_2}^{\theta_1' \cdot x_2}$ perfectly hides $M_\beta$ in the expression of $C_0^\star$. This follows from the fact
+  that $x_2 \in \Z_p$ is perfectly independent of the adversary's view.	Indeed, the public key leaves $x_2 \in \Z_p$ completely undetermined as it only reveals $X=g_1^{x_1} g_2^{x_2}$. During the game, decryption queries are guaranteed not to reveal anything about $x_2$ since all 
+  NIZK proofs $(\hat{\vec{C}}_{\theta},\pi_1,\pi_2)$ take place on   Groth-Sahai CRSes $(\hat{\vec{u}}_{\com},\hat{\vec{u}}_1)$ which are perfectly sound (as 
+  they span the entire vector space $\hat{\G}^2$)
+  whenever $\com \neq \com^\star$. This implies that, although the adversary can see a simulated NIZK proof $(\hat{\vec{C}}_\theta^\star,\pi_1^\star,\pi_2^\star)$ for 
+  a false statement in the challenge phase, it remains  unable to trick the decryption oracle into accepting a  ciphertext 
+  $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that $\log_{g_1}(C_1) \neq \log_{g_2}(C_2)$. 
+  As a consequence, the adversary does not learn anything about $x_2$ from responses of the decryption oracle. 
+  \qed
+\end{proof}
+
+
+
+\begin{lemma}\label{lemma-game3}
+  In Game 3, % of the proof of Theorem~\ref{thm-SXDH}, 
+   % equal to the probability of computing an enhanced chosen message target 
+  %collison againt 
+	there exists an ECM-TCR adversary with  advantage $\epsilon \geq \Pr[F_3]$ against  the  trapdoor commitment scheme of Section~\ref{TC} and which 
+	runs in about the same time as $\A$.
+%  If there exists an PPT adversary $\Adv_{2,3}$ which can produce the evenement $F_3$ with non-negligible probability $Adv_{F_3}$, then there exists an PPT adversary $\Adv_{ECM-CTR}$ which can win with a non-negligible probability against the enhanced chosen-message target collision-resistance of the underlying trapdoor commitment. 
+\end{lemma}
+\begin{proof}
+  Let $\A$ be an adversary against the SP-CCA encryption scheme as in the proof of
+  Theorem~\ref{thm-SXDH} and let the event $F_3$ be defined as in Game 3. Then, we 
+  build an adversary $\B_3$ against the ECM-CTR security of the 
+  structure-preserving trapdoor commitment defined in Section~\ref{TC}
+  which efficiently runs $\A$.
+  
+  The challenger $\B_3$ is given the public parameter $\PPP_{TC}$ and a 
+  commitment key $\ck$ generated as in the trapdoor commitment scheme 
+  as well as an access to a commit-open oracle $\mathcal{O}_{\ck}$ as
+  defined in Definition~\ref{ecm-tcr-def}. 
+  Then, $\B_3$ runs step~\ref{it:SPCCA-key} to step~\ref{it:SPCCA-end}
+  of the key generation algorithm of the encryption scheme to get $\PK$
+  and $\SK=(x_1,x_2)$ as specified in Game 2 and Game 3.
+  
+  The adversary $\A$ is given $\PK$ and $\B_3$ is easily able to answer to 
+  $\A$'s decryption queries as described in Game 2 and Game 3 thanks to 
+  $\SK$. In order to compute the challenge ciphertext given $\{m_0,m_1\}$, 
+  $\B_3$ picks $\beta\sample\{0,1\}$, runs all the steps of the encryption
+  algorithm with $m_\beta$ except for step~\ref{it:SPCCA-com} for which 
+  $\B_3$ queries $\mathcal{O}_{\ck}$ on $\SVK^\star$ to get 
+  $(\com^\star, \open^\star)$. The computed ciphertext $\vec{C}^\star$
+  is then given to $\A$.
+  
+  Assuming that $F_3$ occurs, which means that $\A$ makes a post-challenge 
+  decryption query for a valid ciphertext $ \vec{C} = (\SVK, \com, \open, 
+  C_0, C_1, C_2, \hat{\vec{C}}_{\theta}, \vec{\pi}, \vec{\sigma})  $
+  such that $\com=\com^\star$ but $(\SVK,\open) \neq (\SVK^\star,\open^\star)$,
+  the challenger simply outputs $(\com^\star,\SVK,\open)$.
+  
+  Obviously, we have $TC.\Verif(\ck, \com^\star, \SVK, \open) = 1$ since 
+  $\vec{C}$ is valid. However, during the ECM-TR experiment $\B_3$ only 
+  chose a single message $\SVK^\star$ so that there is only one target in
+  $Q=\{(\com^\star,\SVK^\star,\open^\star)\}$. Moreover, since we also have
+  $(\com^\star,\SVK,\open)\not\in Q$, we find
+  $\Pr[F_3]=\Adv_{TC,\B_3}^{ECM\textrm{-}TCR}(\lambda)$.
+  \qed
+%  
+%   is so that 
+%  \\
+%  
+%  
+%  
+%  \begin{enumerate}
+%  \item $\exists(m^\dagger, \open^\dagger) ~\mathrm{ s.t. }~ (\com^*, m^\dagger, \open^\dagger) \in Q$.
+%  \item $(\com^*, m^*, \open^*) \not \in Q$.
+%  \item $\Verif(\PP, \com^\star, m^\star, \open^\star) = \True$
+%  \end{enumerate}
+%
+%  We simulate the encryption scheme for $\Adv_{F_3}$.
+%  We run the key generation algorithm $SPCCA.\KeyGen(1^\lambda)$ in our construction, 
+%  but instead of generate new public parameter for the underlying trapdoor commitment, we use $\PPP_{TC}$.
+%  In the encryption algorithm during the challenge phase, 
+%  instead of use $\ck$ we require the commit oracle to generate the commitment $(\com^\star, \open^\star)$ of $\SVK^\star$.
+%  Thus we have $(\com^\star, \SVK^\star, \open^\star) \in Q$ and it is the only element in $Q$.
+%  The decryption algorithm remains the same.
+%
+%  Since the modification of the ciphertext generation in the challenge phase does not change the view of the adversary $\Adv_{F_3}$,
+%  it will still output with non-negligible probability $\vec{C} = (\SVK, \com, \open, C_0, C_1, \vec{\hat{C}}_{\theta}, \vec{\pi}, \vec{\sigma})$ such that
+%  $\com = \com^\star$ but $\open \neq \open^\star$.
+%  We submit $(\com, \SVK, \open)$ as an challenge text for the enhanced chosen-message target collision-resistance (ECM-TCR) of the commitment scheme.
+%  
+%  Since $(\com^\star, m^\star, \open^\star)$ is the only element in the hash table $Q$.
+%  $\com = \com^\star$ implies that $(\com, \SVK^\star, \open^\star) \in Q$ and 
+%  $\open \neq \open^\star$ implies that $(\com, \SVK, \open) \not \in Q$.
+%  And as $\vec{C} = (\SVK, \com, \open, C_0, C_1, \vec{\hat{C}}_{\theta}, \vec{\pi}, \vec{\sigma})$ is a valid ciphertext which means $\Verif(\PPP_{TC}, \com, \SVK, \open) = \True$.
+%  Thus $(\com, \SVK, \open)$ is a success chanllenge commitment for the ECM-TCR security of the commitment scheme.
+\end{proof}
+
+
+
+\section{A Randomizable RCCA-Secure Construction} \label{RCCA-scheme}
+
+\input{RCCA-SXDH.tex}
+
+\input{RCCA-SXDH-proof.tex}
+
+\bibliographystyle{abbrv}
+\bibliography{main-SPCCA}
+
+
+\newpage 
+
+\appendix 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Groth-Sahai Proofs}\label{GS-proofs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ Our constructions use Groth-Sahai proofs for pairing
+product equations (PPE) of the form:
+$$\prod_{j=1}^n e(\mathcal{A}_j,\mathcal{Y}_j) \prod_{j=1}^n e(\mathcal{X}_i,\mathcal{B}_i)
+\prod_{i=1}^m \prod_{j=1}^n
+e(\mathcal{X}_i,\mathcal{Y}_j)^{\gamma_{i,j}} = t_T,$$ where
+$\mathcal{X}_i, \mathcal{Y}_j$ are variables in $\G_1$ and $\G_2$,
+respectively,
+ and $\mathcal{A}_j \in\G,\mathcal{B}_i\in \hat{\G}$ and $t_T\in\G_T$ are constants for $i\in \{1,\ldots,m \}$ and $j\in \{1,\ldots,n \}$.
+
+A non-interactive witness indistinguishable (NIWI) proof system is a tuple of four algorithms
+$(\mathsf{Setup},\mathsf{Prove},\mathsf{VerifyProof})$. 
+$\mathsf{Setup}$ outputs a common reference string (CRS) $crs$,
+$\mathsf{Prove}$ first generates commitments of variables and
+constructs proofs that these variables satisfy the statement, and
+$\mathsf{VerifyProof}$ verifies the proof. Such a proof system should satisfy correctness,
+soundness and witness-indistinguishability. \emph{Correctness}
+requires that honestly generated proofs
+for  true statements be always accepted by the verifier. \emph{Soundness} guarantees that cheating
+provers can only prove true statements with all but negligible probability.
+\emph{Witness-indistinguishability} requires the existence of   an efficient
+simulator $\mathsf{GSSimSetup}$  that produces a common
+reference string (CRS) $crs'$ which is computationally
+indistinguishable from a normal $crs$. When commitments are computed
+using $crs'$, they are perfectly hiding and the corresponding
+proofs are witness indistinguishable:  i.e., so long as a statement as several witnesses, the proof 
+ leaks no information on which specific witness is used to generate it.
+\emph{Zero-knowledge} additionally requires the existence of an
+algorithm $\mathsf{GSSimProve}$ that, given a simulated CRS $crs'$
+and some trapdoor information $\tau$, generates a simulated proof of
+the statement without using the witnesses and in such a way that the
+proof is indistinguishable from a real proof. 
+
+
+In the perfect soundness setting, a  CRS  $(\vec{u_1},\vec{u_2},\vec{\hat{u}_1},\vec{\hat{u}_2})$ consists of vectors $\vec{u_1}=(g,u_{12})$, $\vec{u_2}=(h,u_{22}) \in \G^2$ and 
+$\vec{\hat{u}_1}=(\hat{g},\hat{u}_{12})$, $\vec{\hat{u}_2}=(\hat{h},\hat{u}_{22}) \in \hat{\G}^2$ that are linearly dependent. Namely,  there exist $\zeta,\hat{\zeta} \in \Z_p$ for which $\vec{u_2}=\vec{u_1}^\zeta$ and $\vec{\hat{u}_2} =\vec{\hat{u}_1}^{\hat{\zeta}}$. Moreover, NIWI proofs for pairing product equations are perfectly sound (meaning that proofs for false
+statements do not exist)
+and the pair $(x,y)=(\log_g(u_{12}),\log_{\hat{g}}(\hat{u}_{12})) \in \Z_p^2$ can 
+serve as an extraction trapdoor to extract committed group elements $X \in \G$ and $\hat{X} \in \hat{\G}$ from their commitments 
+$\vec{C}_X=(1,X) \cdot \vec{u_1}^{\theta_1} \cdot \vec{u_2}^{\theta_2}$, $\vec{\hat{C}}_X=(1,\hat{X}) \cdot \vec{\hat{u}_1}^{\theta_3} \cdot \vec{\hat{u}_2}^{\theta_4}$.   
+In the perfect witness indistinguishability setting, $(\vec{u_1},\vec{u_2})$ are linearly independent vectors, just like $(\vec{\hat{u}_1},\vec{\hat{u}_2})$. In this case,
+$\vec{C}_X=(1,X) \cdot \vec{u_1}^{\theta_1} \cdot \vec{u_2}^{\theta_2}$ and $\vec{\hat{C}}_X=(1,\hat{X}) \cdot \vec{\hat{u}_1}^{\theta_3} \cdot \vec{\hat{u}_2}^{\theta_4}$ are 
+perfectly hiding commitments to $X$ and $\hat{X}$, respectively, and non-interactive proofs for pairing product equations are perfectly witness indistinguishable. Under the SXDH
+assumption, no PPT adversary can distinguish a perfectly sound  CRS from a perfectly hiding CRS.  
+
+Regardless of which kind of CRS is used, linear pairing product equations (i.e., where $\gamma_{ij}=0$ for all $i,j$) have proofs in $\G^2 \times \hat{\G}^2$ when they involve witnesses in both $\G$ and $\hat{\G}$. When 
+all witnesses are in $\G$, proofs live in $\hat{\G}^2$. 
+For quadratic statement (i.e., where $\gamma_{ij}\neq 0$ for some $i,j$)
+the proof are in $\G^4 \times \hat{\G}^4$. 
+ 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definitions for Involved Primitives} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%------------------------------------------------------------------------------
+\subsection{Definitions for Linearly Homomorphic Structure-Preserving
+  Signatures}\label{hom-sig-sec-defs}    
+%------------------------------------------------------------------------------
+
+Let $(\G,\G_T)$ be groups of prime order $p$ such that a bilinear map
+$e:\G \times {\G} \rightarrow \G_T$ can be efficiently computed.
+
+A signature scheme is \emph{structure-preserving} \cite{DBLP:journals/iacr/AbeHO10,DBLP:conf/crypto/AbeFGHO10}
+if messages, signatures and public keys all live in the group $\G$.
+In linearly homomorphic structure-preserving signatures, the message
+space $\mathcal{M}$ consists of pairs $\mathcal{M} := \mathcal{T}
+\times \G^n$, for some $n \in \mathbb{N}$, where $\mathcal{T}$ is a
+tag space.  Depending on the application, one may want the tags to be
+group elements or not. In this paper, they can be arbitrary strings.
+    
+\begin{definition}\label{hncs-def}  
+  A \emph{linearly homomorphic structure-preserving signature scheme
+    over $(\G,\G_T)$} is a tuple of efficient algorithms
+  $\Sigma=(\mathsf{Keygen},\mathsf{Sign},\mathsf{SignDerive},\mathsf{Verify})$
+  for which the message space consists of $\mathcal{M} := \mathcal{T}
+  \times \G^n$, for some integer $n \in \mathsf{poly}(\lambda)$ and
+  some set $\mathcal{T}$, and with the following specifications.
+  \begin{description}  
+  \item[\boldmath$\mathsf{Keygen}(\lambda,n)$] is a randomized  
+    algorithm that takes in a security parameter $\lambda \in  
+    \mathbb{N}$ and an integer $n \in \mathsf{poly}(\lambda)$ denoting  
+    the dimension of vectors to be signed. It outputs a key pair  
+    $(\pk,\sk)$, where $\pk$ includes  the description of a tag   
+    space $\mathcal{T}$, where each tag serves as a file identifier.   
+  \item[\boldmath$\mathsf{Sign}(\mathsf{sk},\tau,\vec{M} )$] takes as
+    input a private key $\sk$, a file identifier $\tau \in
+    \mathcal{T}$ and a vector of group elements
+    $\vec{M}=(M_1,\dotsc,M_n) \in \G^n$. It outputs a signature
+    $\sigma \in \G^{n_{s}}$, for some $n_s \in
+    \mathsf{poly}(\lambda)$.
+  \item[\boldmath$\mathsf{SignDerive}(\mathsf{pk},\tau,\{(\omega_i,
+    \sigma^{(i)})\}_{i=1}^\ell )$] is a homomorphic signature 
+    derivation algorithm.  It inputs a public key $\mathsf{pk}$, a
+    file identifier $\tau$ as well as $\ell$ pairs
+    $(\omega_i,\sigma^{(i)}) $, each of which consists of a
+    coefficient $\omega_i \in \Z_p$ and a signature $\sigma^{(i)} \in
+    \G^{n_{s}}$. It outputs a signature $\sigma \in \G^{n_{s}}$ on the
+    vector $\vec{M}=\prod_{i=1}^{\ell} \vec{M}_i^{~ \omega_i }$, where
+    $\sigma^{(i)}$ is a signature on $\vec{M}_i$.
+  \item[\boldmath$\mathsf{Verify}(\mathsf{pk},\tau,\sigma,\vec{M})$]
+    is a  verification algorithm that takes as input a
+    public key $\pk$, a file identifier $\tau \in \mathcal{T}$, a
+    signature $\sigma$ and a vector $\vec{M}=(M_1,\dotsc,M_n)$. It
+    outputs $0$ or $1$. 
+		%depending on whether $\sigma$ is deemed valid
+    %or not.
+  \end{description}  
+\end{definition}  
+  
+In a \emph{one-time} linearly homomorphic SPS, the tag $\tau$ can be
+omitted in the specification as a given key pair $(\pk,\sk)$ only
+allows signing one linear subspace.
+
+As in all linearly homomorphic signatures, the desired security notion
+mandates the adversary's inability to come up with a valid triple
+$(\tau^\star,\vec{M}^\star,\sigma^\star)$ for a new file identifier
+$\tau^\star$ or, if $\tau^\star$ appeared in signatures generated by
+the signing oracle, for a vector $\vec{M}^\star$ outside the linear
+span of the vectors that have been legitimately signed for the tag
+$\tau^\star$.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Quasi-Adaptive NIZK Arguments}  \label{QA-NIZK}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Quasi-Adaptive NIZK (QA-NIZK) proofs \cite{DBLP:conf/asiacrypt/JutlaR13} are NIZK proofs where the CRS is
+allowed to depend on the specific language for which proofs have to be
+generated. The CRS is divided into a fixed part $\Gamma$, produced by
+an algorithm $\K_0$, and a language-dependent part $\psi$. However,
+there should be a single simulator for the entire class of languages.
+
+Let $\lambda$ be a security parameter. For public parameters $\Gamma$
+produced by $\K_0$, let $\mathcal{\D}_{\Gamma}$ be a probability
+distribution over a collection of relations $\mathcal{R}=\{R_{\rho}\}$
+parametrized by a string $\rho$ with an associated language
+$$\mathcal{L}_{\rho}=\{x \mid \exists w : R_{\rho}(x,w)=1\}.$$
+
+A tuple
+of algorithms $(\K_0,\K_1,\PP,\VV)$ is a QA-NIZK proof system for
+$\mathcal{R}$ if there exists a PPT simulator $(\SIM_1,\SIM_2)$ such
+that, for any PPT adversaries $\A_1,\A_2$ and $\A_3$, we have the
+ properties hereunder. \\
+\indent 
+We assume that the CRS $\psi$ contains an encoding of $\rho$, which is
+thus available to $\VV$.  The definition of Quasi-Adaptive
+Zero-Knowledge requires a single simulator for the entire family of
+relations $\mathcal{R}$.
+	  
+\begin{description}  
+\item[Quasi-Adaptive Completeness:]   
+  \begin{multline*}   
+    \Pr[\Gamma \leftarrow \K_0(\lambda); ~\rho \leftarrow
+    \D_{\Gamma};~\psi \leftarrow \K_1(\Gamma,\rho);\\ ~(x,w)
+    \leftarrow \A_1(\Gamma,\psi);~\pi \leftarrow
+    \PP(\psi,x,w): \VV(\psi,x,\pi)=1 ~\textrm{ if }
+    R_{\rho}(x,w)=1]=1\enspace.   
+  \end{multline*}   
+\item[Quasi-Adaptive Soundness:]   
+  \begin{multline*}   
+    \Pr[\Gamma \leftarrow \K_0(\lambda); ~\rho \leftarrow
+    \D_{\Gamma};~\psi \leftarrow \K_1(\Gamma,\rho); ~(x,\pi)
+    \leftarrow \A_2(\Gamma,\psi):\\ \VV(\psi,x,\pi)=1
+    ~\wedge~ \neg (\exists w : R_{\rho}(x,w)=1)] \in
+    \mathsf{negl}(\lambda)\enspace.   
+  \end{multline*}   
+\item[Quasi-Adaptive Zero-Knowledge:]     
+  \begin{multline*}   
+    \Pr[\Gamma \leftarrow \K_0(\lambda); ~\rho \leftarrow
+    \D_{\Gamma};~\psi \leftarrow \K_1(\Gamma,\rho)~:~
+    \A_3^{\PP(\psi,.,.)}(\Gamma,\psi) =1] \\ \approx \Pr[\Gamma
+    \leftarrow \K_0(\lambda); ~\rho \leftarrow
+    \D_{\Gamma};~(\psi,\tau_{sim}) \leftarrow \SIM_1(\Gamma,\rho)~:~
+    \A_3^{\SIM(\psi,\tau_{sim},.,.)}(\Gamma,\psi) =1]\thinspace,
+  \end{multline*}  
+  where  
+  \begin{itemize}  
+  \item $\PP(\psi,.,.)$ % is an oracle that
+    emulates the actual prover. It takes as input a pair $(x,w) $ 
+    and outputs a proof $\pi$ if $(x,w) \in R_{\rho}$. Otherwise, it
+    outputs $\perp$.
+  \item $\SIM(\psi,\tau_{sim},.,.)$ is an oracle that takes as input
+    $(x,w)$. It outputs a simulated proof
+    $\SIM_2(\psi,\tau_{sim},x)$ if $(x,w) \in R_{\rho}$ and
+    $\perp$ if $(x,w) \not\in R_{\rho}$.
+  \end{itemize}  
+\end{description}   
+
+
+\subsection{Definitions of Re-Randomizable Encryption and RCCA Security } \label{RCCA-def}
+
+A public-key encryption (PKE) scheme is defined as follows.
+
+  \begin{definition}{(PKE)} A public-key encryption (PKE) scheme is tuple of algorithms $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec)$ that:
+    \begin{description}
+    \item[$\boldmath{\Setup(\lambda)  }:$] This is a setup algorithm that takes the security parameter $\lambda$ and generates the public parameter $\PPP$.
+    \item[$\boldmath{\KeyGen(\PPP) }:$] is key generation algorithm which takes in $\PPP$ and outputs the public key $\PK$ as well as a secret key $\SK$.
+    \item[$\boldmath{\Enc(\PPP, \PK, m)}:$] is a randomized algorithm that takes as input a pair $(\PK, m)$ made of a public key and a plaintext. It outputs a ciphertext $c$.
+    \item[$\boldmath{\Dec(\PPP, \SK, c) }:$]  takes in a secret key $\SK$ and a ciphertext $C$. It outputs either a plaintext $m \in \mathcal{M}$ or $\bot$.
+    \end{description}
+
+We assume that valid ciphertexts (i.e., which are in the range of the encryption algorithm) are publicly recognizable.
+
+    The correctness  and public verifiability are defined as follows:
+    \begin{enumerate}
+    \item (Correctness) For any ciphertext $c$ computed by $c \gets \Enc(\SK, m)$, we have always $m=\Dec(\PK, c) $.
+  %  \item (Structure-preserving) The message, the ciphertext and the public keys produced by the encryption scheme are all group elements.
+  %    And there is not hash function in the scheme.
+    \item (Public Verifiability) There exists a  PPT algorithm $\Verif(\PPP, \PK, c) \to \{0,1\}$ which returns false if and only if $\Dec(\PK, c)$ outputs $\bot$. 
+    \end{enumerate}
+  \end{definition}
+
+
+\begin{definition} A PKE scheme $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec)$ is secure against \emph{adaptive chosen-ciphertext attack (IND-CCA2)} if   no PPT adversary $\A$ has non-negligible advantage in the experiment below:
+
+  \begin{align*}
+    \Adv_{\A, \mathcal{E}}^{IND\textrm{-}CCA2} (\lambda) := \Pr \left[
+    \beta = \beta'
+    \middle|
+    \begin{array}{l}
+      \PPP \gets \Setup(\lambda)\\
+      (\PK, \SK) \gets \KeyGen(\PPP)\\
+      (m_0, m_1) \gets \A^{\Dec^1(\SK, \cdot)}(\PPP, \PK)\\
+      \beta \sample \{0,1\}\\
+      c^\star \gets \Enc(\PK, m_\beta  )\\
+      \beta ' \gets \A^{\Dec^2_{c^\star}(\SK, \cdot)}(\PPP, \PK, c^\star)
+    \end{array}
+    \right] - \frac{1}{2}
+  \end{align*}
+    In the above experiment, $\Dec^1(\SK, \cdot)$ is an oracle which   decrypts any arbitrary ciphertext and $\Dec^2_{c^\star }(\SK, \cdot)$ is a restricted oracle which allows the adversary to decrypt any ciphertext except $c^\star$.
+   
+  \end{definition}
+   
+  We also recall the notion of Replayable Chosen-Ciphertext Security (RCCA) \cite{DBLP:conf/crypto/CanettiKN03}, which is defined via a similar security game   except that, 
+	at each decryption query occurring after the challenge phase,   if the ciphertext decrypts to one the messages $\{m_0,m_1\}$, the oracle
+	returns $Replay$.
+
+  \begin{definition} A \emph{re-randomizable encryption} scheme is tuple of efficient algorithms $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec, \Rerand)$ that:
+    \begin{description}
+    \item[$\boldmath{\Setup(\lambda)  }:$] The setup algorithm takes the security parameter $\lambda$ and generates the public parameter $\PPP$.
+    \item[$\boldmath{\KeyGen(\PPP)  }:$] The key generation algorithm takes $\PPP$, outputs the public key $\PK$ and the secret key $\SK$.
+    \item[$\boldmath{\Enc(\PPP, \PK, m)  }:$] is a randomized  encryption algorithm that   inputs $(\PPP, \PK, m)$. It generates a ciphertext $c$.
+    \item[$\boldmath{\Dec(\PPP, \SK, c)  }:$] The decryption algorithm takes $(\PK, C)$, it tries to decrypt the ciphertext if it can not then outputs $\bot$, 
+      otherwise it outputs the decryption result $m$ which is in the message space $\mathcal{M}$.
+    \item[$\boldmath{\Rerand(\PPP, \PK, c)  }:$] is a probabilistic  re-randomization algorithm. It takes as input $(\PK,c)$   and outputs a new ciphertext $c'$.
+    \end{description}
+
+
+    Ccorrectness is generalized as follows.   For all $\PPP \gets \Setup(\lambda)$, $(\PK, \SK) \gets \KeyGen(\PPP)$,  the following two conditions must  hold: 
+    \begin{enumerate}
+    \item[ ]  $~$ 
+		%\smallskip \smallskip 
+      \begin{enumerate}
+      \item For any message $m$, $m=\Dec(\PPP, \SK, \Enc(\PPP, \PK, m ))  $.
+      \item For any    $m$, $\Dec(\PPP, \SK, \Rerand(\PPP, \PK, c)) = \Dec(\PPP, \SK, c)$.
+      \end{enumerate}
+   % \item (Structure-preserving) The message, the ciphertext and the public keys produced by the encryption scheme are all group elements.
+   %   And there is not hash function in the scheme.
+     \end{enumerate}
+  \end{definition}
+\smallskip \smallskip 
+
+  \begin{definition} \label{def:RCCA}
+    We say that a \emph{re-randomizable encryption} PKE scheme $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec, \Rerand)$ is secure against the \emph{replayable chosen-ciphertext attack} (RCCA) if no PPT adversary has non-negligible advantage in the experiment below
+    
+    \begin{align*}
+      \Adv_{\A, \mathcal{E}}^{RCCA} (\lambda) := \Pr \left[
+      \beta = \beta'
+      \middle|
+      \begin{array}{l}
+        \PPP \gets \Setup(\lambda)\\
+        (\PK, \SK) \gets \KeyGen(\PPP)\\
+        (m_0, m_1) \gets \A^{\Dec^1(\SK, \cdot)}(\PPP, \PK)\\
+        \beta \sample \{0,1\}\\
+        c^\star \gets \Enc(\PK, m_b )\\
+        \beta ' \gets \A^{\Dec^2_{m_0, m_1}(\SK, \cdot)}(\PPP, \PK, c^\star)
+      \end{array}
+      \right] - \frac{1}{2}
+    \end{align*}
+      In the experiment, $\Dec^1(\SK, \cdot)$ is an oracle which can decrypt any ciphertext and $\Dec^2_{m_0, m_1}(\SK, \cdot)$ is a restricted oracle which allows the adversary to decrypt any ciphertext $c$, except when $\Dec(\SK, c) = m_0$ or $\Dec(\SK, c) = m_1$. In these two cases, the oracle returns \emph{Replay}.
+  \end{definition}
+  
+  We also define the unlinkability of the re-randomizable encryption scheme which was first proposed by Prabhakaran and Rosulek~\cite{DBLP:conf/crypto/PrabhakaranR07} and re-used by Chase {\it et al.} \cite{DBLP:conf/eurocrypt/ChaseKLM12}. It intuitively captures that, for any ciphertext 
+	$c$ in the support of the encryption algorithm, a re-randomization of $c$ is identically distributed to a fresh encryption of $\Dec(\PPP,\SK,c)$.
+	
+  \begin{definition}\label{def:unlikability} We say that a \emph{re-randomizable encryption} PKE scheme $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec, \Rerand)$ is \emph{unlinkable} if no PPT adversary $\A$ has noticeable  advantage in the experiment below.
+    \begin{multline*}
+      \Adv_{\A, \mathcal{E}}^{\mathrm{unlink}} (\lambda) \\ := \Pr \left[
+      \beta = \beta '
+      \middle|
+      \begin{array}{l}
+        \PPP \gets \Setup(\lambda)\\
+        (\PK, \SK) \gets \KeyGen(\PPP)\\
+        c \gets \A (\PPP, \PK)\\
+				\beta \sample \{0,1\}\\
+				if 	~	\Dec(\PPP, \SK, c)=\perp\\ 
+				\qquad \quad ~then~output~(\beta,\beta')~with~\beta' \sample \{0,1\} \\
+        if~ \beta = 1\\ \qquad \quad ~ then~ c^\star \leftarrow \Enc(\PPP, \PK, \Dec(\PPP, \SK, c))\\
+        else~c^\star \leftarrow \Rerand(\PPP,\PK, c )\\
+        \beta' \gets \A (\PPP, \PK, c^\star) \\
+				output~(\beta,\beta')
+      \end{array}
+      \right] - \frac{1}{2}
+    \end{multline*}
+    %is negligible against all PPT adversary $\A$.  %Here $\Dec^1(\SK, \cdot)$ is an oracle which can decrypt any ciphertext.
+  \end{definition}
+  
+In the above definition, if the adversary chooses an invalid ciphertext $c$, we replace its output $\beta'$ by a random bit so as to annihilate 
+its advantage: namely, re-randomized ciphertexts are only required to be satistically indistinguishable from fresh ciphertexts when the 
+re-randomization is applied to  valid ciphertexts.
+
+Like  Prabhakaran and Rosulek~\cite{DBLP:conf/crypto/PrabhakaranR07} and   Chase {\it et al.} \cite{DBLP:conf/eurocrypt/ChaseKLM12}, 
+we will consider statistical unlikability, i.e. statistical re-randomizability
+of adversarially computed valid ciphetext. 
+
+
+
+
+\end{document}
+
+
+
+
