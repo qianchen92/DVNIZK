@@ -153,9 +153,20 @@ We need to give a less efficient variant of Ring-GSW~\cite{DBLP:journals/tc/Khed
         Instead of encrypt message by computing $\mat{C} = \mat{A} \mat{R} + m \cdot \mat{G}_{2\times m}$, we sampel $\mat{B} \sample \R_q^{2 \times m}$ from uniformly random distribution.
         The indistinguishability of $\textbf{Game} 2$ from $\textbf{Game} 1$ can be proved using a variant of leftover hash lemma given in lemma~\ref{LHL}.
       \end{description}
-      \begin{lemma}\label{LHL}{(\textbf{Leftover Hash Lemma}~\cite{DBLP:conf/stoc/ImpagliazzoLL89}\cite{DBLP:journals/jacm/Regev09})}
+
+      \begin{definition}{Generalized Knapsack Function Family}{\cite{DBLP:conf/focs/Micciancio02}}
+        For any ring $\mathcal{R}$, its subset $\mathcal{S} \subset \mathcal{R}$ and integer $m \leq 1$, for all $\vec{a} \in \mathcal{R}^m$ and $\vec{x} \in \mathcal{S}^m$, we define the generalized knapsack function family $\mathcal{H}(\mathcal{R}, \mathcal{S}, m) = \{f_{\vec{a}} : \mathcal{S}^m \to \mathcal{R}\}$ is defined by
+        \begin{align*}
+          f_{\vec{a}}(\vec{x}) &= \sum_{i=1}^m x_i \cdot a_i
+        \end{align*}
+      \end{definition}
+      
+      \begin{lemma}\label{LHL}{(\textbf{Leftover Hash Lemma}~\cite{DBLP:conf/stoc/ImpagliazzoLL89}\cite{DBLP:conf/focs/Micciancio02})}
+        For a finite field $\mathcal{F}$, its subset $\mathcal{S} \in \mathcal{F}$ and two integers $n, m$, the hash function family $\mathcal{H}(\mathcal{F}^n, \mathcal{S}^n, m) = \{f_{\vec{x}} : (\mathcal{S}^n)^m \to \}$ defined as
+        
       \end{lemma}
     \end{proof}
+    {\todo[inline]{We cannot directly use the lemma in the original paper.... so need a sketch proof for it.}}
   \end{paragraph}
   
 \end{subsection}
