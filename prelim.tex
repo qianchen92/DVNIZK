@@ -1,47 +1,47 @@
-\begin{subsection}{$\Sigma$-protocol revisited~\cite{DBLP:conf/pkc/ChaidosG15}}
- 
-    This $\Sigma$-protocol can prove the ciphertext of $0$ or $1$.
- 
-    \begin{description}
-    \item[$\KeyGen(1^\lambda, 1^L)$]:
-      \begin{enumerate}
-      \item Choose a modulus $q$ prime of $\kappa = \kappa(\lambda, L)$ bits, the lattice dimension parameter $n = n(\lambda, L)$ and the error distribution $\chi = \chi(\lambda, L)$ to ensure at least $\lambda$ bits security against the LWE problem.
-      \item Compute $m = m(\lambda, L) = O(n~log~q)$, $\ell = \floor{q}+1$ and $N = (n+1) \cdot \ell$.
-      \item Sample $\vec{t} \sample \mathbb{Z}_q^m$ and set $\vec{s} = (1, -t_1, \dots, -t_n) \in \mathbb{Z}_q^{n+1}$.
-      \item Sample a uniformaly random matrix $B \gets \mathbb{Z}_q^{m \times n}$ and a noise vector $\vec{e} \gets \chi^m$.
-      \item Compute $\vec{b} = B \cdot \vec{t} + \vec{e}$.
-      \item Set the matrix $A = [\vec{b}|B] \in \mathbb{Z}_q^{m \times (n+1)}$, remark that $A \cdot \vec{s} = \vec{e}$.
-      \item Output $\PPP = (n, q, \chi, m)$, $\SK = \vec{s} \in \mathbb{Z}_q^{n+1}$ and $\PK = A \in \mathbb{Z}_q^{m \times (n+1)}$.
-      \end{enumerate}
-    \item[$\Com((\PK, C), (\mu, R))$]:
-      \begin{enumerate}
-      \item Choose $m_a \gets \{1\}||\{0,1\}^{\ell-2} \cap \mathbb{Z}_q$, $R_a \gets \{0,1\}^{N \times m}$ and $R_b \gets \{0,1\}^{N \times m}$.
-      \item Compute
-        \begin{align*}
-          C_a &= A\cdot R_a + m_a \cdot G \in \mathbb{Z}_q^{N \times N}\\
-          C_b &= A\cdot R_b - \mu \cdot m_a \cdot G \in \mathbb{Z}_q^{N \times N}          
-        \end{align*}
-      \item Ouput $C_a, C_b$.
-      \end{enumerate}
- 
-    \item[$\Prove(\PK, C, m, R, f, m_a, R_a, m_b, R_b, e \in \mathbb{Z}_q)$]:
-      \begin{enumerate}
-      \item Compute $f = em +m_a$.
-      \item Compute $Z_a = R \cdot G^{-1}(e \cdot G) + R_a$.
-      \item Compute $Z_b = R \cdot G^{-1}((f-e) \cdot G) + R_b$.
-      \item Output $(f, Z_a, Z_b)$.
-      \end{enumerate}
-      
-    \item[$\Verif(\PK, c, C_a, Z_a, C_b, Z_b, e, f)$]:
-      \begin{enumerate}
-      \item Verify that $(C_a, C_b, f, Z_a, Z_b) \in (\{0,1\}^{(\ell-1) \cdot N})^2 \times \mathbb{Z}_q \times (\{0,1\}^{(\ell-1)\cdot m})^2$.
-      \item Verify that
-        \begin{align*}
-          {\mathsf{MultConst}}(C, e)+C_a &= FHE.\Enc(f; Z_a) & {\mathsf{MultConst}}(C, f-e) + C_b &= FHE.\Enc(0; Z_b)
-        \end{align*}
-      \end{enumerate}
-    \end{description}
-  \end{subsection}
+%\begin{subsection}{$\Sigma$-protocol revisited~\cite{DBLP:conf/pkc/ChaidosG15}}
+% 
+%    This $\Sigma$-protocol can prove the ciphertext of $0$ or $1$.
+% 
+%    \begin{description}
+%    \item[$\KeyGen(1^\lambda, 1^L)$]:
+%      \begin{enumerate}
+%      \item Choose a modulus $q$ prime of $\kappa = \kappa(\lambda, L)$ bits, the lattice dimension parameter $n = n(\lambda, L)$ and the error %distribution $\chi = \chi(\lambda, L)$ to ensure at least $\lambda$ bits security against the LWE problem.
+%      \item Compute $m = m(\lambda, L) = O(n~log~q)$, $\ell = \floor{q}+1$ and $N = (n+1) \cdot \ell$.
+%      \item Sample $\vec{t} \sample \mathbb{Z}_q^m$ and set $\vec{s} = (1, -t_1, \dots, -t_n) \in \mathbb{Z}_q^{n+1}$.
+%      \item Sample a uniformaly random matrix $B \gets \mathbb{Z}_q^{m \times n}$ and a noise vector $\vec{e} \gets \chi^m$.
+%      \item Compute $\vec{b} = B \cdot \vec{t} + \vec{e}$.
+%      \item Set the matrix $A = [\vec{b}|B] \in \mathbb{Z}_q^{m \times (n+1)}$, remark that $A \cdot \vec{s} = \vec{e}$.
+%      \item Output $\PPP = (n, q, \chi, m)$, $\SK = \vec{s} \in \mathbb{Z}_q^{n+1}$ and $\PK = A \in \mathbb{Z}_q^{m \times (n+1)}$.
+%      \end{enumerate}
+%    \item[$\Com((\PK, C), (\mu, R))$]:
+%      \begin{enumerate}
+%      \item Choose $m_a \gets \{1\}||\{0,1\}^{\ell-2} \cap \mathbb{Z}_q$, $R_a \gets \{0,1\}^{N \times m}$ and $R_b \gets \{0,1\}^{N \times m}$.
+%      \item Compute
+%        \begin{align*}
+%          C_a &= A\cdot R_a + m_a \cdot G \in \mathbb{Z}_q^{N \times N}\\
+%          C_b &= A\cdot R_b - \mu \cdot m_a \cdot G \in \mathbb{Z}_q^{N \times N}          
+%        \end{align*}
+%      \item Ouput $C_a, C_b$.
+%      \end{enumerate}
+% 
+%    \item[$\Prove(\PK, C, m, R, f, m_a, R_a, m_b, R_b, e \in \mathbb{Z}_q)$]:
+%      \begin{enumerate}
+%      \item Compute $f = em +m_a$.
+%      \item Compute $Z_a = R \cdot G^{-1}(e \cdot G) + R_a$.
+%      \item Compute $Z_b = R \cdot G^{-1}((f-e) \cdot G) + R_b$.
+%      \item Output $(f, Z_a, Z_b)$.
+%      \end{enumerate}
+%      
+%    \item[$\Verif(\PK, c, C_a, Z_a, C_b, Z_b, e, f)$]:
+%      \begin{enumerate}
+%      \item Verify that $(C_a, C_b, f, Z_a, Z_b) \in (\{0,1\}^{(\ell-1) \cdot N})^2 \times \mathbb{Z}_q \times (\{0,1\}^{(\ell-1)\cdot m})^2$.
+%      \item Verify that
+%        \begin{align*}
+%          {\mathsf{MultConst}}(C, e)+C_a &= FHE.\Enc(f; Z_a) & {\mathsf{MultConst}}(C, f-e) + C_b &= FHE.\Enc(0; Z_b)
+%        \end{align*}
+%      \end{enumerate}
+%    \end{description}
+%  \end{subsection}
  
  
   \begin{subsection}{Matrix Fully Homomorphic Encryption~\cite{DBLP:conf/pkc/HiromasaAO15}}

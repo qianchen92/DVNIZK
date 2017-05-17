@@ -20,27 +20,27 @@
         \end{enumerate}
       \item Generate keys for the underlying Matrix-FHE scheme:
         \begin{enumerate}
-        \item Choose a noise matrix $\mat{E}_{MFHE} \sample \chi^{r \times m}$.
-        \item Let $\mat{S}_{MFHE}:= [\mat{I}_r || - \mat{S}_{MFHE}'] \in \mathbb{Z}_q^{r \times (n+r)}$.
+        \item Choose a noise matrix $\mat{E}_{MFHE} \sample \chi^{N \times m}$.
+        \item Let $\mat{S}_{MFHE}:= [\mat{I}_N || - \mat{S}_{MFHE}'] \in \mathbb{Z}_q^{N \times (n+N)}$.
         \item Set the matrix:
           \begin{align*}
-            \mat{A}_{MFHE} &:= \begin{bmatrix}\mat{S}_{MFHE}'\mat{B}_{MFHE} + \mat{E}_{MFHE} \\ \mat{B}_{MFHE}\end{bmatrix} \in \mathbb{Z}_q^{(n+r) \times m}
+            \mat{A}_{MFHE} &:= \begin{bmatrix}\mat{S}_{MFHE}'\mat{B}_{MFHE} + \mat{E}_{MFHE} \\ \mat{B}_{MFHE}\end{bmatrix} \in \mathbb{Z}_q^{(n+N) \times m}
           \end{align*}
-        \item Denote $\mat{E}_{i,j} \in \{0, 1\}^{r\times r}$ with $(i,j) \in \{1, \dots ,r\}^2$.
+        \item Denote $\mat{E}_{i,j} \in \{0, 1\}^{N\times N}$ with $(i,j) \in \{1, \dots ,N\}^2$.
         \item Sample $\mat{R}_{i,j} \sample \{0,1\}^{m \times N}$ and
           \begin{align*}
-            \mat{P}_{i,j} &:= \mat{A}_{MFHE} \mat{R}_{i,j} + \begin{bmatrix}\mat{M}_{i,j}\mat{S}_{MFHE}\\ \mat{0}\end{bmatrix}\cdot  \mat{G}_{MFHE} \in \mathbb{Z}_q^{(n+r) \times N}.
+            \mat{P}_{i,j} &:= \mat{A}_{MFHE} \mat{R}_{i,j} + \begin{bmatrix}\mat{M}_{i,j}\mat{S}_{MFHE}\\ \mat{0}\end{bmatrix}\cdot  \mat{G}_{MFHE} \in \mathbb{Z}_q^{(n+N) \times N}.
           \end{align*}
         \item Set $\PK_{MFHE} := (\{\mat{P}_{i,j \in [r]}, \mat{A}_{MFHE}\})$ and $\SK_{MFHE} = \mat{S}_{MFHE}$.
         \end{enumerate}
       \item Generate the encryption of the challenge:
         \begin{enumerate}
-        \item Choose a random element $d \in \mathbb{Z}_{q}$ and set $\mat{D} = d \cdot \mat{I}_r$.
+        \item Choose a random element $d \in \mathbb{Z}_{q}$ and set $\mat{D} = \mat{G}^{-1}(d \cdot \mat{G})$.
         \item Draw random matrix $\mat{R}_d \sample \{0,1\}^{m \times N}$ and $\mat{R}_{\mat{D}} \sample \{m \times N\}$.
         \item Compute
           \begin{align*}
             \mat{C}_d &= \mat{A}_V \mat{R}_d + d \cdot \mat{G}\\
-            \mat{C}_{\mat{D}} &= \mat{A}_{MFHE} \mat{R}_{\mat{D}} + \sum_{i,j \in [r]: D[i,j] = 1} \mat{P}_{i,j} \in \mathbb{Z}_q^{(n+1) \times N}
+            \mat{C}_{\mat{D}} &= \mat{A}_{MFHE} \mat{R}_{\mat{D}} + \sum_{i,j \in [r]: D[i,j] = 1} \mat{P}_{i,j} \in \mathbb{Z}_q^{(n+N) \times N}
           \end{align*}
         \end{enumerate}
       \item Output $\PPP = (n, q, \chi, m)$, $\SK = \vec{s} \in \mathbb{Z}_q^{n+1}$ and $\PK = \mat{A} \in \mathbb{Z}_q^{m \times (n+1)}$.
@@ -51,24 +51,34 @@
     \item[$\Prove((\PK, \mat{C}), (m, \mat{R}))$]:
       We want to prove the following fact:
       \begin{enumerate}
-      \item $\PK = \mat{A}_p \in \mathbb{Z}_q^{}$
+      \item For $\PK = \mat{A}_P \in \mathbb{Z}_q^{(n+1)\times m}$, there exists a matrix $\mat{R}_P \in \mathbb{Z}_q^{m \times N}$ and a message $\mu \in \{0,1\}$.
+      \item Such that the ciphertext
+      \begin{align*} 
+      \mat{C}_P &= \mat{A}_P \mat{R}_P + \mu \cdot \mat{G}
+      \end{align*}
       \end{enumerate}
+      In order to prove the previous statement, we proceed as follows.
       \begin{enumerate}
       \item Choose $m_a \gets \{1\}||\{0,1\}^{\ell-2} \cap \mathbb{Z}_q$, $\mat{R}_a \gets \{0,1\}^{m \times N}$ and $\mat{R}_b \gets \{0,1\}^{m \times N}$.
+      \item Choose $h, h\rq{} \in \mathbb{Z}_q$, compute $\mat{H} = \mat{G}^{-1}(h \cdot \mat{G})$ and $\mat{H}\rq{} = \mat{G}^{-1}(h\rq{} \cdot \mat{G})$, uniformly choose two random matrices $\mat{R}_{\mat{H}} \sample \{m \times N\}$ and $\mat{R}_{\mat{H}\rq{}} \sample \{m \times N\}$
+      \begin{align*}
+       \mat{C}_{\mat{H}} &= \mat{A}_{MFHE} \mat{R}_{\mat{H}} + \sum_{i,j \in [r]: H[i,j] = 1} \mat{P}_{i,j} \in \mathbb{Z}_q^{(n+1) \times N}\\
+       \mat{C}_{\mat{H}\rq{}} &= \mat{A}_{MFHE} \mat{R}_{\mat{H}\rq{}} + \sum_{i,j \in [r]: H\rq{}[i,j] = 1} \mat{P}_{i,j} \in \mathbb{Z}_q^{(n+1) \times N}
+      \end{align*}
       \item Compute
         \begin{align*}
-          \mat{C}_a &= \mat{A}_P \cdot \mat{R}_a + m_a \cdot \mat{G} \in \mathbb{Z}_q^{n \times N}\\
-          \mat{C}_b &= \mat{A}_P \cdot \mat{R}_b - \mu \cdot m_a \cdot \mat{G} \in \mathbb{Z}_q^{n \times N}          
+          \mat{C}_a &= \mat{A}_P \cdot \mat{R}_a \cdot \mat{G}^{-1}(\mat{C}_{\mat{H}}) + m_a \cdot \mat{G} \in \mathbb{Z}_q^{n \times N}\\
+          \mat{C}_b &= \mat{A}_P \cdot \mat{R}_b \cdot \mat{G}^{-1}(\mat{C}_{\mat{H}\rq{}})- \mu \cdot m_a \cdot \mat{G} \in \mathbb{Z}_q^{n \times N}          
         \end{align*}
       \item Sample $\mat{R}_{\mat{Z}_a}, \mat{R}_{\mat{Z}_b}  \sample \{0,1\}^{N\times N}$ 
       \item Compute
         \begin{align*}
           \mat{C}_f &= \mat{C}_d \cdot \mat{G}^{-1}(m \cdot \mat{G}) + \mat{G}^{-1}(m_a \cdot \mat{G})\\
           \mat{Z}_a &= (\mat{A}_{MFHE} \mat{R}_{\mat{Z}_a}  + \sum_{i,j\in [r]: \mat{R}[i,j] = 1} \mat{P}_{(i,j)}) \cdot \mat{G}^{-1}(\mat{C}_{\mat{D}}) \\
-          &+ \sum_{i,j \in [r]: \mat{R}_a[i,j]= 1}\mat{P}_{(i,j)}\\
-          \mat{Z}_b &= (\mat{A}_{MFHE} \mat{R}_{\mat{Z}_b}  + \sum_{i,j\in [r]: \mat{R}[i,j] = 1} \mat{P}_{(i,j)}) \cdot \mat{G}^{-1}(\sum_{i,j\in [r]: \mat{G}^{-1}(d \cdot \mat{G})[i,j] = 1} \mat{P}_{(i,j)})\\
+          &+ \sum_{i,j \in [r]: \mat{R}_a[i,j]= 1}\mat{P}_{(i,j)} \cdot \mat{G}^{-1}(\mat{C}_{\mat{H}})\\
+          \mat{Z}_b &= (\mat{A}_{MFHE} \mat{R}_{\mat{Z}_b}  + \sum_{i,j\in [r]: \mat{R}[i,j] = 1} \mat{P}_{(i,j)}) \cdot \mat{G}^{-1}(\sum_{i,j\in [r]: \mat{G}^{-1}(\mat{C}_f)[i,j] = 1} \mat{P}_{(i,j)})\\
           &- \sum_{i,j\in [r]: \mat{R}[i,j] = 1} \mat{P}_{(i,j)} \cdot \mat{G}^{-1}(\mat{C}_{\mat{D}}) \\
-          &+ \sum_{i,j \in [r]: \mat{R}_b[i,j]= 1}\mat{P}_{(i,j)}\\
+          &+ \sum_{i,j \in [r]: \mat{R}_b[i,j]= 1}\mat{P}_{(i,j)} \cdot \mat{G}^{-1}(\mat{C}_{\mat{H}\rq{}})\\
         \end{align*}
       \item Output $(\mat{C}_f, \mat{Z}_a, \mat{Z}_b)$.
       \end{enumerate}
