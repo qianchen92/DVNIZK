@@ -1,10 +1,94 @@
-In this section, we will present two constructions of fully homomorphic encryption based on Ring-LWE assumption.
+In this section, we will present two constructions of homomorphic encryption based on Ring-LWE assumption.
+
 
 \begin{subsection}{Ring-GSW encryption scheme~\cite{DBLP:journals/tc/KhedrGV16}}
-
+  \begin{description}
+  \item[$\Setup(1^\lambda)$]: where $\lambda$ is the security parameter of the encryption scheme
+    \begin{enumerate}
+    \item Sample a polynomial $t_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k,RGSW)}}$
+      \todo{Precisely define somewhere the deviation of the Gaussian distribution used here and same for the other deviation}
+    \item Uniformly sample $a_{RGSW} \sample \R_q$ and a noise polynomial $e_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k, RGSW)}}$.
+    \item Compute $b_{RGSW} = t_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
+    \item Set secret key and public key of the encryption scheme:
+      \begin{align*}
+        \SK &= \mat{S}_{RGSW} =\begin{bmatrix} 1 & -t \end{bmatrix}  & \PK &= \mat{A}_{RGSW} =  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
+      \end{align*}
+      Note that we have the following relation:
+      \begin{align*}
+        \mat{S}_{RGSW} \cdot \mat{A}_{RGSW} &= \begin{bmatrix} 1 & -t_{RGSW} \end{bmatrix} \cdot \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix} = \begin{bmatrix} e_{RGSW} \end{bmatrix}
+      \end{align*}
+    \end{enumerate}
+  \item[$\Enc(\PK, \mu)$]: The message $\mu$ is in the message space $\R_q$
+    \begin{enumerate}
+    \item Parse the public key $\PK = \mat{A}_{RGSW}$
+    \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample (\R_q \cap\{0,1\})^{N \times 1}$.
+    \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample (\mathcal{D}_{\R_q^{N \times 2}, \sigma_{c, RGSW}})$.
+    \item Compute $C_{RGSW}$ the ciphertext of $\mu \in \R_q$:
+      \begin{align*}
+        \mat{C}_{RGSW} &= \mu \cdot \mat{G} + \mat{A}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RGSW}
+      \end{align*}
+    \end{enumerate}
+  \item[$\Dec(\SK, \mat{C}_{RGSW})$]:
+    \begin{enumerate}
+    \item Parse the secret key $\SK = \mat{S}_{RGSW}$.
+    \item Compute the plain text as follows:
+      \begin{align*}
+        \mat{S}_{GSW} \cdot \mat{C}_{GSW} &= \mu \cdot \mat{S}_{RGSW} \cdot \mat{G} + error 
+      \end{align*}
+    
+    \end{enumerate}
+  \end{description}
   
 \end{subsection}
 
-\begin{subsection}{BV-FHE based on Ring-LWE~\cite{DBLP:conf/crypto/BrakerskiV11}}
+\begin{subsection}{BV-SHE based on Ring-LWE~\cite{DBLP:conf/crypto/BrakerskiV11}}
 
+  Here we will present a somewhat homomorphic encryption BV-SHE proposed by~\cite{DBLP:conf/crypto/BrakerskiV11}.
+  In this BV-SHE, we need to give the multiplication level in the setup procedure.
+  It is sufficiant in our construction.
+  In fact we only need its linearly homomorphism.
+  
+  \begin{description}
+  \item[$\Setup(1^\lambda, D)$]: where $\lambda$ is the security parameter and $D$ is the multiplication level predefined for the somewhat encryption scheme.
+    \begin{enumerate}
+    \item Sample a polynomail $s \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$, $a_0 \sample \R_q$ and $e_0 \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$.
+    \item Set $b_0 = a_0 s + 2 e_0$.
+    \item Set secret key and public key
+      \begin{align*}
+        \SK &= \begin{bmatrix} 1 & s & s^2 & \dots & s^D\end{bmatrix}^T & \PK &= \begin{bmatrix} a_0 & b_0\end{bmatrix}^T
+      \end{align*}
+    \end{enumerate}
+  \item[$\Enc(\PK, \mu)$]: where the message $\mu$ is a polynomial in $\R_2$.
+    \begin{enumerate}
+    \item Sample polynomails $v,e' \sample \mathcal{D}_{(R_q, \sigma_{BV})}$ and $e'' \sample  \mathcal{D}_{(R_q, \sigma_{BV}')}$.
+    \item Compute two polynomials $(a, b) \in \R_q^2$
+      \begin{align*}
+        a &= a_0 v + 2 e' & b &= b_0 v +2 e'' 
+      \end{align*}
+    \item Compute the ciphertext $\vec{c} = \begin{bmatrix} c_0 \\ c_1\end{bmatrix}$
+      \begin{align*}
+        c_0 &= b + \mu & c_1 &= -a
+      \end{align*}
+    \end{enumerate}
+  \item[$\Dec(\SK, \vec{c})$]:
+    \begin{enumerate}
+      \item Parse the secret key $\SK = \vec{s}$
+      \item Compute the plaintext $\mu = \round{\langle \vec{s}, \vec{c}\rangle}_2$
+    \end{enumerate}
+  \end{description}
+\end{subsection}
+
+
+
+\begin{subsection}{Designed-Verifier Non-Interactive Zero-Knowledge proof (DV-NIZK)}
+
+  \begin{definition}{(DV-NIZK)} A DV-NIZK is a triple of algorithm $(\Setup, \Prove, \Verif)$ which verify the following specifications:
+    \begin{description}
+    \item[$\Setup$]:
+
+    \item[$\Prove$]:
+    \item[$\Verif$]:
+    \end{description}
+  \end{definition}
+  
 \end{subsection}
