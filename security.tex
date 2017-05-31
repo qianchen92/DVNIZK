@@ -1,0 +1,41 @@
+\begin{theorem}
+  The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system
+\end{theorem}
+
+\begin{proof}
+  We will prove the correctness and the zero-knowledge of a such protocol.
+  \begin{description}
+  \item[\textsf{Correctness}]: The correctness of this proof is omitted for the moment.
+    \todo{Give a formal proof, i know it's really easy}
+  \item[\textsf{Zero-Knowledge}]:
+    The simulator $\mathcal{S}_{\Setup}$ does exactly the same as the setup algorithm $\Setup$ except that $\mathcal{S}_{\Setup}$ also output $d$ as the simulation key $\SK_{sim}$.
+
+    The simulator of the proof generation algorithm $\mathcal{S}_{\Prove}$ works as follows:
+    \begin{description}
+    \item[$\mathcal{S}_{\Prove}(\PPP, \vec{c}, \SK_{sim})$]:
+      \begin{enumerate}
+      \item Parse $\SK_{sim} = d$.
+      \item Sample random polynomials $f \sample \R_2$, $v,v_a, v_b, e, e_a, e_b \sample \mathcal{D}_{(\R_q, \sigma_{BV}')}$ and $e'', e_a'', e_b'' \sample \mathcal{D}_{(\R_q, \sigma_{BV}'')}$.
+      \item Compute
+        \begin{align*}
+          v_f &= v \cdot d + v_a & e_f' &= e' \cdot d + e_a' & e_f'' &= e'' \cdot d + e_a''\\
+          v_0 &= v \cdot d + v_b & e_0' &= e' \cdot d + e_b' & e_0'' &= e'' \cdot d + e_b''\\
+          \vec{c}_a &= RLWE.\Enc(f, (v_f, e_f', e_f'')) - \vec{c} \cdot d \\
+          \vec{c}_b &= RLWE.\Enc(0, (v_0, e_0', e_0'')) - \vec{c} \cdot (f - d)
+        \end{align*}
+      \item Similarly compute the ciphertexts for the randomness
+        \begin{align*}
+          \mat{C}_{r_f^0} &= \mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(v \cdot \mat{G}) + v_a \cdot \mat{G} \\
+          \mat{C}_{r_f^1} &= \mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(e' \cdot \mat{G}) + e_a' \cdot \mat{G} \\
+          \mat{C}_{r_f^2} &= \mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(e'' \cdot \mat{G}) + e_a'' \cdot \mat{G} \\
+          \mat{C}_{r_0^0} &= (\mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(\mu \cdot \mat{G}) + \mu_a \cdot \mat{G} - \mat{C}_d^{RGSW}) \cdot \mat{G}^{-1}(v \cdot \mat{G}) + v_b \cdot \mat{G} \\
+          \mat{C}_{r_0^1} &= (\mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(\mu \cdot \mat{G}) + \mu_a \cdot \mat{G} - \mat{C}_d^{RGSW}) \cdot \mat{G}^{-1}(e' \cdot \mat{G}) + e_b' \cdot \mat{G} \\
+          \mat{C}_{r_0^2} &= (\mat{C}_d^{RGSW} \cdot \mat{G}^{-1}(\mu \cdot \mat{G}) + \mu_a \cdot \mat{G} - \mat{C}_d^{RGSW}) \cdot \mat{G}^{-1}(e'' \cdot \mat{G}) + e_b'' \cdot \mat{G}
+        \end{align*}
+      \item Output the simulated proof $\pi_{sim} = (\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$
+      \end{enumerate}
+    \end{description}
+
+    It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable.
+  \end{description}
+\end{proof}

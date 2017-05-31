@@ -100,16 +100,16 @@ We will prove an encryption is an encryption of $0$ or $1$.
     \begin{align*}
       v_f & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^0}) \leq B \\
       e_f' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^1}) \leq B \\
-      e_f'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^2}) \leq B \\
+      e_f'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^2}) \leq B' \\
       v_0 & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^0}) \leq B \\
       e_0' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^1}) \leq B \\
-      e_0'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^2}) \leq B \\
+      e_0'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^2}) \leq B' \\
     \end{align*}
     \todo[inline]{The security analysis need to be done for the exact value of B}
   \item Verify the following equations:
     \begin{align*}
-      d \cdot \vec{c} + \vec{c}_a &= RLWE.\Enc(\PK^p = \vec{a^p}, f; (v_f, e_f', e_f''))\\
-      (f-d) \cdot \vec{c} + \vec{c}_b &= RLWE.\Enc(\PK^P= \vec{a^p}, 0; (v_f, e_f', e_f''))
+      d \cdot \vec{c} + \vec{c}_a &= RLWE.\Enc(\PK^P = \vec{a}^P, f; (v_f, e_f', e_f''))\\
+      (f-d) \cdot \vec{c} + \vec{c}_b &= RLWE.\Enc(\PK^P= \vec{a}^P, 0; (v_f, e_f', e_f''))
     \end{align*}
   \item If the proof $\pi$ verifies all the equations then the algorithm returns $\True$, otherwise it returns $\False$.
   \end{enumerate}

@@ -72,8 +72,8 @@ In this section, we will present two constructions of homomorphic encryption bas
     \end{enumerate}
   \item[$\Dec(\SK, \vec{c})$]:
     \begin{enumerate}
-      \item Parse the secret key $\SK = \vec{s}$
-      \item Compute the plaintext $\mu = \round{\langle \vec{s}, \vec{c}\rangle}_2$
+    \item Parse the secret key $\SK = \vec{s}$
+    \item Compute the plaintext $\mu = \round{\langle \vec{s}, \vec{c}\rangle}_2$
     \end{enumerate}
   \end{description}
 \end{subsection}
@@ -82,13 +82,34 @@ In this section, we will present two constructions of homomorphic encryption bas
 
 \begin{subsection}{Designed-Verifier Non-Interactive Zero-Knowledge proof (DV-NIZK)}
 
-  \begin{definition}{(DV-NIZK)} A DV-NIZK is a triple of algorithm $(\Setup, \Prove, \Verif)$ which verify the following specifications:
+  \begin{definition}{(DV-NIZK)} A Designed-Verifier Non-Interactive Zero-Knowledge proof system is a triple of algorithm $(\Setup, \Prove, \Verif)$ which verify the following specifications:
     \begin{description}
-    \item[$\Setup$]:
-
-    \item[$\Prove$]:
-    \item[$\Verif$]:
+    \item[$\Setup(1^\lambda) \to (\PPP, \SK)$]: The $\Setup$ algorithm takes the security parameter $\lambda$ and outputs the public parameter $\PPP$ and a secret verification key.
+    \item[$\Prove(\PPP, (x, w)) \to \pi$]: The prover use the public parameter $\PPP$ to prove the fact that
+      \begin{align*}
+        x &\in_w \mathcal{L}
+      \end{align*}
+      which means $w$ is the witness of the fact that $x$ is in the language $\mathcal{L}$.
+    \item[$\Verif(\PPP, \SK, x, \pi) \to \{\True, \False\}$]: The verifier use the secret verification key $\SK$ to verify that $x \in \mathcal{L}$. 
     \end{description}
   \end{definition}
+
+  \begin{definition}{(Zero-Knowledge)}
+    A DV-NIZK proof system $(\Setup, \Prove, \Verif)$ is zero-knowledge if there exists two probabilistic polynomial time (PPT) algorithms $\mathcal{S}_{\Setup}, \mathcal{S}_{\Prove}$ such that for any PPT adversary $\Adv$:
+    \begin{align*}
+      &\Pr[(x, w) \gets \Adv; (\PPP,\SK) \gets \Setup(1^\lambda); \pi \gets \Prove(\PPP, (x,w)) | \Adv(\pi, \SK) = 1]\\
+      \approx &\Pr[(x, w) \gets \Adv; (\PPP,\SK, \SK_{sim}) \gets \mathcal{S}_{\Setup}(1^\lambda); \pi \gets \mathcal{S}_{\Prove}(\PPP, x, \SK_{sim}) | \Adv(\pi, \SK) = 1]
+    \end{align*}
+  \end{definition}
+
+
+
+  \begin{definition}{(Adaptive culpable soundness)}
+    A DV-NIZK proof system $(\Setup, \Prove, \Verif)$ is culpably sound with respect to the relation $\mathcal{R}_{guilt}$ if for all PPT adversary $\Adv$:
+    \begin{align*}
+      \Pr[(\PPP, \SK) \gets \Setup(1^{\lambda}), (x, \pi, w_{guilt}) \gets \Adv(\PPP) | (x, w_{guilt}) \in \mathcal{R}_{guilt} \wedge \Verif(\SK, x, \pi) = \True] \approx 0
+    \end{align*}
+  \end{definition}
+
   
 \end{subsection}
