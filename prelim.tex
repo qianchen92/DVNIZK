@@ -107,7 +107,7 @@ In this section, we will present two constructions of homomorphic encryption bas
   \begin{definition}{(Adaptive culpable soundness)}
     A DV-NIZK proof system $(\Setup, \Prove, \Verif)$ is culpably sound with respect to the relation $\mathcal{R}_{guilt}$ if for all PPT adversary $\Adv$:
     \begin{align*}
-      \Pr[(\PPP, \SK) \gets \Setup(1^{\lambda}), (x, \pi, w_{guilt}) \gets \Adv(\PPP) | (x, w_{guilt}) \in \mathcal{R}_{guilt} \wedge \Verif(\SK, x, \pi) = \True] \approx 0
+      \Pr[(\PPP, \SK) \gets \Setup(1^{\lambda}); (x, \pi, w_{guilt}) \gets \Adv(\PPP) | (x, w_{guilt}) \in \mathcal{R}_{guilt} \wedge \Verif(\SK, x, \pi) = \True] \approx 0
     \end{align*}
   \end{definition}
 

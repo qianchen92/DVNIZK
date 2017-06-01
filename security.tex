@@ -1,5 +1,5 @@
 \begin{theorem}
-  The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system
+  The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system which verifies adaptive culpable soundness.
 \end{theorem}
 
 \begin{proof}
@@ -37,5 +37,26 @@
     \end{description}
 
     It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable.
+    
+  \item[\textsf{Adaptive culpable soundness}]:
+    We can prove our constructioin is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
+    \begin{align*}
+      \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK \st \Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
+    \end{align*}
+
+    We intantiate the definition of the culpable soundness of the construction:
+    \begin{align*}
+      \Pr[(\PPP, \SK) \gets \Setup(1^{\lambda}); (\vec{c}, \pi) \gets \Adv(\PPP) | (\PK, \vec{c}) \in \mathcal{R}_{guilt} \wedge \Verif(\SK, x, \pi) = \True]
+    \end{align*}
+
+    Suppose there exists a PPT adversary $\Adv$ can have a non-negligible advantage, which means it can compute $(\vec{c}, \pi)$ verifies that:
+    \begin{enumerate}
+    \item Parse $\pi$ as $(\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
+    \item By the binding property the adversary $\Adv$ can gets $m_a, m_b, f, \vec{r}_f, \vec{r}_0$ 
+    \end{enumerate}
+
+    
   \end{description}
+
 \end{proof}
+
