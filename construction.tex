@@ -7,37 +7,37 @@ We will prove an encryption is an encryption of $0$ or $1$.
   \begin{enumerate}
     \item Generate the parameters for the underlying encryption scheme.
       \begin{enumerate}
-      \item Sample a polynomial $t_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k,RGSW)}}$
+      \item Sample a polynomial $s_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k,RGSW)}}$
         \todo[inline]{Precisely define somewhere the deviation of the Gaussian distribution used here and same for the other deviation}
       \item Uniformly sample $a_{RGSW} \sample \R_q$ and a noise polynomial $e_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k, RGSW)}}$.
-      \item Compute $b_{RGSW} = t_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
+      \item Compute $b_{RGSW} = s_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
       \item Set secret key and public key of the underlying Ring-GSW encryption scheme:
         \begin{align*}
-          \SK_{RGSW} &= \mat{S}_{RGSW} =\begin{bmatrix} 1 & -t \end{bmatrix}  & \PK_{RGSW} &= \mat{A}_{RGSW} =  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
+          \vec{s}_{RGSW} &= \begin{bmatrix} 1 \\ -s_{RGSW} \end{bmatrix}  & \vec{a}_{RGSW} &=  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
         \end{align*}
       \item Sample a polynomial $s_0 \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$, $a_0 \sample \R_q$ and $e_0 \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$.
       \item Set $b_0 = a_0 s_0 + 2 e_0$.
       \item Set secret key and public key of the underlying Ring-LWE encryption scheme:
         \begin{align*}
-          \vec{s} &= \begin{bmatrix} 1 \\ s_0\end{bmatrix} & \vec{a} &= \begin{bmatrix} a_0 \\ b_0\end{bmatrix}
+          \vec{s} &= \begin{bmatrix} 1 \\ -s_0\end{bmatrix} & \vec{a} &= \begin{bmatrix} a_0 \\ b_0\end{bmatrix}
         \end{align*}
       \end{enumerate}
     \item Sample a uniformly random polynomial $d \sample \R_2$.
     \item Encrypt the message with the two underlying encryption schemes:
       \begin{enumerate}
       \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample (\R_q \cap\{0,1\})^{N \times 1}$.
-      \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{c, RGSW})}$.
+      \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{(c, RGSW)})}$.
       \item Sample polynomials $v,e' \sample \mathcal{D}_{(R_q, \sigma_{BV})}$ and $e'' \sample  \mathcal{D}_{(R_q, \sigma_{BV}')}$.
       \item Compute two polynomials $(a, b) \in \R_q^2$
       \item Compute the following ciphertexts
         \begin{align*}
-          \mat{C}_d^{RGSW} &= \mat{A}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &
+          \mat{C}_d^{RGSW} &= \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &
           \vec{c}_d &= \begin{bmatrix} b + \mu \\ -a \end{bmatrix}
         \end{align*}
       \end{enumerate}
     \item Set the public parameter and the secret verification key as follows:
       \begin{align*}
-        \PPP &= (\mat{A}_{RGSW}, \vec{a}, \vec{c}_d, \mat{C}_d^{GSW}) & \SK &= (\mat{S}_{RGSW}, \vec{s})
+        \PPP &= (\vec{a}_{RGSW}, \vec{a}, \vec{c}_d, \mat{C}_d^{GSW}) & \SK &= (\vec{s}_{RGSW}, \vec{s})
       \end{align*}
   \end{enumerate}
 
@@ -88,22 +88,22 @@ We will prove an encryption is an encryption of $0$ or $1$.
 \item[$\Verif(\PPP, \SK, \pi)$]: The verifier use the secret key to verify the encryption is an encryption of a bit.
   \begin{enumerate}
   \item Parse the public parameter $\PPP = (\mat{A}_{RGSW}, \vec{a}, \vec{c}_d, \mat{C}_d^{GSW})$
-  \item Parse the secret key $\SK = (\mat{S}_{RGSW}, \vec{s})$.
+  \item Parse the secret key $\SK = (\vec{s}_{RGSW}, \vec{s})$.
   \item Parse the prove $\pi = (\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
   \item Decrypt $\vec{c}_d$ and $\mat{C}_d^{RGSW}$.
-    If $RLWE.\Dec(\vec{s}, \vec{c}_d) \neq RGSW.\Dec(\mat{S}_{RGSW}, \mat{C}_d^{RGSW})$ then return $\False$, else set $d = RLWE.\Dec(\vec{s}, \vec{c}_d)$.
+    If $RLWE.\Dec(\vec{s}, \vec{c}_d) \neq RGSW.\Dec(\vec{s}_{RGSW}, \mat{C}_d^{RGSW})$ then return $\False$, else set $d = RLWE.\Dec(\vec{s}, \vec{c}_d)$.
   \item Decrypt the ciphertext and set:
     \begin{align*}
       f &= RLWE.\Dec(\vec{s}, \vec{c}_f)
     \end{align*}
   \item Decrypt the ciphertexts of the randomness and verify that they are all small:
     \begin{align*}
-      v_f & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^0}) \leq B \\
-      e_f' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^1}) \leq B \\
-      e_f'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_f^2}) \leq B' \\
-      v_0 & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^0}) \leq B \\
-      e_0' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^1}) \leq B \\
-      e_0'' & = RGSW.\Dec(\mat{S}_{GSW}, \mat{C}_{r_0^2}) \leq B' \\
+      v_f & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_f^0}) \leq B \\
+      e_f' & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_f^1}) \leq B \\
+      e_f'' & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_f^2}) \leq B' \\
+      v_0 & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_0^0}) \leq B \\
+      e_0' & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_0^1}) \leq B \\
+      e_0'' & = RGSW.\Dec(\vec{s}_{GSW}, \mat{C}_{r_0^2}) \leq B' \\
     \end{align*}
     \todo[inline]{The security analysis need to be done for the exact value of B}
   \item Verify the following equations:

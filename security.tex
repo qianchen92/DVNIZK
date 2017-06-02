@@ -1,5 +1,9 @@
 \begin{theorem}
-  The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system which verifies adaptive culpable soundness.
+  The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system
+  which verifies adaptive culpable soundness \wrt the guilt relation $\mathcal{R}_{guilt}$
+  \begin{align*}
+    \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK~\st~\Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
+  \end{align*}
 \end{theorem}
 
 \begin{proof}
@@ -36,12 +40,12 @@
       \end{enumerate}
     \end{description}
 
-    It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable.
+    It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable and such a proof simulated will accepted by the verifier.
     
   \item[\textsf{Adaptive culpable soundness}]:
     We can prove our constructioin is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
     \begin{align*}
-      \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK \st \Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
+      \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK~\st~\Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
     \end{align*}
 
     We intantiate the definition of the culpable soundness of the construction:
@@ -49,11 +53,58 @@
       \Pr[(\PPP, \SK) \gets \Setup(1^{\lambda}); (\vec{c}, \pi) \gets \Adv(\PPP) | (\PK, \vec{c}) \in \mathcal{R}_{guilt} \wedge \Verif(\SK, x, \pi) = \True]
     \end{align*}
 
-    Suppose there exists a PPT adversary $\Adv$ can have a non-negligible advantage, which means it can compute $(\vec{c}, \pi)$ verifies that:
-    \begin{enumerate}
-    \item Parse $\pi$ as $(\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
-    \item By the binding property the adversary $\Adv$ can gets $m_a, m_b, f, \vec{r}_f, \vec{r}_0$ 
-    \end{enumerate}
+    We provide a game based proof:
+    \begin{description}
+    \item[\textsf{Game} $0$]: The security in this game is the original security game of the definition of culpable soundness.
+      \begin{enumerate}
+      \item Parse $\pi$ as $(\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
+      \item If the proof can verifies all the equations, it means that if we note
+        \begin{align*}
+          \mu_a &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_a) & \mu_b &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_b) \\
+          f &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_f)
+        \end{align*}
+        the underlying plaintext verifies the following equations:
+        \begin{align*}
+          f &= d \cdot \mu + \mu_a & (f - d) \cdot \mu + \mu_b = 0
+        \end{align*}
+      \item Thus we have $\mu_b = - d \cdot \mu^2 + d \cdot \mu - \mu_a \cdot \mu$.
+      \item We note $Adv_0(\Adv)$ the advantage of adversary in this game.
+      \end{enumerate}
+
+    \item[\textsf{Game} $1$]: In this game, we do the same things as in the previous game except that:
+      \begin{enumerate}
+      \item We uniformaly sample $\R_2$-polynomial $\tilde{d} \sample \R_2$.
+      \item In the $\Setup$ algorithm, we replace $\vec{c}_d$ and $\mat{C}_d^{RGSW}$ by encryptions $\vec{c}_{\tilde{d}}$ and $\mat{C}_{\tilde{d}}$ of $\tilde{d}$.
+        This operation is
+      \item As pointed out in the previous game, we have similarly $\mu_b = - \tilde{d} \cdot \mu^2 + \tilde{d} \cdot \mu - \mu_a \cdot \mu$.
+      \item Since the only difference from the previous game is the change of the plaintext inside of an encryption IND-CPA.
+        The advantage of $Adv_1(\Adv)$ adversary in \textsf{Game} $1$ verifies:
+        \begin{align*}
+          Adv_0(\Adv) &\leq Adv_1(\Adv) + \varepsilon_{IND-CPA}
+        \end{align*}
+      \end{enumerate}
+    \end{description}
+
+    \begin{lemma}
+      The advantage $Adv_1(\Adv)$ in \textsf{Game} $1$ is at most $2^{-n}$.
+    \end{lemma}
+    \begin{proof}
+      As showed in \textsf{Game} $0$, in order to verifier all the equations we have
+      \begin{align*}
+        \mu_b &= - d \cdot \mu^2 + d \cdot \mu - \mu_a \cdot \mu & \mu \not \in \{0,1\}
+      \end{align*}
+      This relation should remains true for $\tilde{d}$ in \textsf{Game} $1$ if the adversary win in \textsf{Game} 1:
+      \begin{align*}
+        \mu_b &= - \tilde{d} \cdot \mu^2 + \tilde{d} \cdot \mu - \mu_a \cdot \mu &\mu \not \in \{0,1\}
+      \end{align*}
+      which means $d = \tilde{d}$.
+      But $\tilde{d}$ is uniformly chosen from $\R_2$, thus the advantage of the adversary is bounded by:
+      \begin{align*}
+        Adv_1(\Adv) &\leq \frac{1}{|\R_2|}\\
+        &= 2^{-n}
+      \end{align*}
+      
+    \end{proof}
 
     
   \end{description}
