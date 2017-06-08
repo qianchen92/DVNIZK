@@ -1,6 +1,6 @@
 In this section, we give the construction of the DV-NIZK scheme.
 This can be seen as an instantiation of the DV-NIZK proposed in~\cite{DBLP:conf/pkc/ChaidosG15}
-We will prove an encryption is an encryption of $0$ or $1$.
+We will prove an encryption is an encryption of $0$ or $1$ under the RLWE encryption scheme.
 
 \begin{description}
 \item[$\Setup(1^\lambda)$]: where $\lambda$ is the security parameter.
@@ -43,9 +43,9 @@ We will prove an encryption is an encryption of $0$ or $1$.
 
 
 
-\item[$\Prove(\PPP, \vec{c}, \mu, \vec{r}, \PK^P)$]: This algorithm produce a DV-NIZK proof of the following instance:
+\item[$\Prove(\PPP, \vec{c}, \mu, \vec{r}, \PK^P)$]: This algorithm produces a DV-NIZK proof of the following instance:
   \begin{align*}
-    \vec{c} &= RLWE.\Enc(\PK^P, \mu; \vec{r}) \wedge \mu \in \{0,1\}\cap \R_2
+    \vec{c} &= RLWE.\Enc(\PK^P, \mu; \vec{r}) \wedge \mu \in \{0,1\}
   \end{align*}
   \begin{enumerate}
   \item Parse $\PK^P, \vec{r}, \vec{c}$ as follows:
@@ -85,7 +85,7 @@ We will prove an encryption is an encryption of $0$ or $1$.
     \end{align*}
   \end{enumerate}
 
-\item[$\Verif(\PPP, \SK, \pi)$]: The verifier use the secret key to verify the encryption is an encryption of a bit.
+\item[$\Verif(\PPP, \SK, \pi)$]: The verifier uses the secret key to verify the encryption is an encryption of a bit.
   \begin{enumerate}
   \item Parse the public parameter $\PPP = (\mat{A}_{RGSW}, \vec{a}, \vec{c}_d, \mat{C}_d^{GSW})$
   \item Parse the secret key $\SK = (\vec{s}_{RGSW}, \vec{s})$.

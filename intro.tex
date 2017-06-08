@@ -1,13 +1,26 @@
+\begin{subsection}{Technical overview}
+
+  Our construction follows the idea of the general transmission form $\Sigma$-protocol to DVNIZK proposed by~\cite{DBLP:conf/pkc/ChaidosG15},
+  try using the different RLWE based encryption scheme to instantiate their scheme.
+  
+\end{subsection}
+
+
+
+
 \begin{subsection}{Notations}
   For a distribution $\mathcal{D}$ over a finite set $\mathcal{S}$,
   we denote $d \sample \mathcal{D}$ for the fact that $d$ is chosen from the distribution $\mathcal{D}$ and
-  $d \sample \mathcal{S}$ for the fact that $d$ is chosen from the uniform distribution over the finite set $\mathcal{S}$.\
+  $d \sample \mathcal{S}$ for the fact that $d$ is chosen from the uniform distribution over the finite set $\mathcal{S}$.
+  We note also $\mathcal{D}_{\mathcal{S}, r}$ a discrete Gaussian distribution over the set $\mathcal{S}$ with deviation $r$.
 
   We denote the ring of polynomials over the integers by $\mathbb{Z}[x]$.
   For a degree $n$ irreducible polynomial $f(x)$, we note the quotient ring $\R = \mathbb{Z}[x]/\langle f(x) \rangle$.
   Especially for a prime number $q$, we denote the ring of polynomial over the finite field $\mathbb{Z}_q$ by $\mathbb{Z}_q[x]$
   and the quotient ring by a degree $n$ polynomial $f(x)$ by $\R_q = \mathbb{Z}_q[x]/\langle f(x) \rangle$.
   We denote also $\R_q\cap \{0,1\}$ a subset of the finite field $\R_q$ consists of polynomials with coefficients only in $ \{0,1\}$.
+
+  
 
   \todo{Need several more definition, discrete Gaussian distribution, vector, matrix \etc}
 \end{subsection}

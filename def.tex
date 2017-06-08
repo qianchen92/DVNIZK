@@ -1,17 +1,17 @@
-\begin{definition}{(Polynomial Learning with Errors (PLWE) assumption - Hermite Normal Form)}
+\begin{definition}{(Ring Learning with Errors (RLWE) assumption - Hermite Normal Form)}
   For the security parameter $\lambda \in \mathbb{N}$, set a degree parameter $n = n(\lambda)$, choose a degree $n$ irreducible polynomial $f(x)$ and a prime integer $q = q(\lambda) \in \mathbb{Z}$, let the ring $\R$ be $\mathbb{Z}[x]/\langle x \rangle$, a quotient ring  $\R_q = \R/ q\R$ and $\mathcal{D}$ a distribution over the ring $\R$.
 
-  The polynomail leanring with errors assumption $PLWE_{\R_q, \mathcal{D}}$ states that for any $\ell = poly(\lambda)$ we have:
+  The polynomial learning with errors assumption $RLWE_{\R_q, \mathcal{D}}$ states that for any $\ell = poly(\lambda)$ we have:
   \begin{align*}
     \{(a_i, a_i \cdot s + e_i)\}_{i \in [\ell]} &\approx_c \{(a_i, u_i)\}_{i \in [\ell]}
   \end{align*}
-  where $a_i$ and $u_i$ are sampled uniformaly from $\R_q$, $s$ and $e_i$ are sampled from the error distribution $\mathcal{D}$.
+  where $a_i$ and $u_i$ are sampled uniformly from $\R_q$, $s$ and $e_i$ are sampled from the error distribution $\mathcal{D}$.
 
 \end{definition}
 
-\begin{lemma}
-  For an PLWE instance $PLWE_{\R_q, \mathcal{D}_{\mathbb{Z}^n, r}}$ and another distribution $\mathcal{D}_{\mathbb{Z}^n},r'$ with $r' \geq 2^{\omega(log~n)} \cdot r$.
-  Then under the $PLWE_{\R_q, \mathcal{D}_{\mathbb{Z}^n, r}}$ assumption, for $s, v, e, e' \sample \mathcal{D}_{\mathbb{Z}^n,r}$, $a, a' \sample \R_q$, $e'' \sample \mathcal{D}_{\mathbb{Z}^n, r'}$ and $b = as + 2e$,
+\begin{lemma}~\cite{DBLP:conf/crypto/BrakerskiV11}
+  For an RLWE instance $RLWE_{\R_q, \mathcal{D}_{\mathbb{Z}^n, r}}$ and another distribution $\mathcal{D}_{\mathbb{Z}^n},r'$ with $r' \geq 2^{\omega(log~n)} \cdot r$.
+  Then under the $RLWE_{\R_q, \mathcal{D}_{\mathbb{Z}^n, r}}$ assumption, for $s, v, e, e' \sample \mathcal{D}_{\mathbb{Z}^n,r}$, $a, a' \sample \R_q$, $e'' \sample \mathcal{D}_{\mathbb{Z}^n, r'}$ and $b = as + 2e$,
   we have:
   \begin{align*}
     (s, (a, b), (av + 2e', bv + 2e'')) &\approx_c (s, (a,b), (a', a's+2e''))

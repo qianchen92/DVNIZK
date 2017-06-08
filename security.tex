@@ -2,7 +2,7 @@
   The algorithm $(\Setup, \Prove, \Verif)$ specified in the previous section is a Designed-Verifier Non-Interactive Zero-Knowledge proof system
   which verifies adaptive culpable soundness \wrt the guilt relation $\mathcal{R}_{guilt}$
   \begin{align*}
-    \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK~\st~\Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
+    \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK~\st~\Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}.
   \end{align*}
 \end{theorem}
 
@@ -43,7 +43,7 @@
     It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable and such a proof simulated will accepted by the verifier.
     
   \item[\textsf{Adaptive culpable soundness}]:
-    We can prove our constructioin is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
+    We can prove our construction is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
     \begin{align*}
       \mathcal{R}_{guilt} &= \{(\vec{c}, \PK) | \exists \SK~\st~\Dec(\SK, \vec{c}) \not \in \{0,1\}  \wedge {\mathsf{VerifyKey}}(\PK, \SK)  = \True\}
     \end{align*}
@@ -73,7 +73,7 @@
 
     \item[\textsf{Game} $1$]: In this game, we do the same things as in the previous game except that:
       \begin{enumerate}
-      \item We uniformaly sample $\R_2$-polynomial $\tilde{d} \sample \R_2$.
+      \item We uniformly sample $\R_2$-polynomial $\tilde{d} \sample \R_2$.
       \item In the $\Setup$ algorithm, we replace $\vec{c}_d$ and $\mat{C}_d^{RGSW}$ by encryptions $\vec{c}_{\tilde{d}}$ and $\mat{C}_{\tilde{d}}$ of $\tilde{d}$.
         This operation is
       \item As pointed out in the previous game, we have similarly $\mu_b = - \tilde{d} \cdot \mu^2 + \tilde{d} \cdot \mu - \mu_a \cdot \mu$.
