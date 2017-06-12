@@ -1,0 +1,19 @@
+\paragraph{DV-NIZK}
+From the introduction of non-interactive zero-knowledge proof system by Blum, Feldman and Mical~\cite{DBLP:conf/stoc/BlumFM88},
+many efforts had been investigated into its efficiency.
+The breakthrough of pairing based efficient NIZK~\cite{DBLP:conf/eurocrypt/GrothS08} bring this primitive to the practicaly construction in the pairing based protocols.
+
+Despite the efficiency, GS proof system can only prove pairing based system, it is very hard to construct NIZK based on other assumptions.
+Existing NIZK proof systems are rely on the Fiat-Shamir transformation with random oracle model which is not very efficient.
+On the other hand, when we consider the interactive proof system,
+there are many very efficient $\Sigma$-protocol (a particular type of 3-move honest verifier zero-knowledge proof) based on various assumptions~\cite{DBLP:journals/iacr/BaumDOP16}\cite{DBLP:conf/crypto/BaumDLN16}.
+
+In a special family of NIZK, designed-verifier non-interactive zero-knowledge proof system is a proof system which can only be verified by with a secret verification key
+and the soundness of the proof system holds only for the adversary who doesn't have the secret verification key.
+DV-NIZK had many applications in the construction of tightly CCA encryption schemes~\cite{DBLP:conf/eurocrypt/GayHKW16} and in the electronic voting system~\cite{DBLP:conf/pkc/ChaidosG15}.
+
+
+Damg\r{a}rd, Fazio and Nicolosi (DFN)~\cite{DBLP:conf/tcc/DamgardFN06} firstly established the connection between $\Sigma$-protocol and DV-NIZK via homomorphic encryption schemes,
+this technique is later on developed by Chaidos and Groth~\cite{DBLP:conf/pkc/ChaidosG15}.
+They use this idea to construct an efficient designed-verifier zero-knowledge proof system based on Okamoto-Uchiyama encryption scheme~\cite{DBLP:conf/eurocrypt/OkamotoU98}.
+The main open problem was how to extend their idea to construct more DV-NIZK based on other assumptions.

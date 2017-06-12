@@ -1,12 +1,36 @@
-\begin{section}{$Sigma$-protocol to prove an encryption of $0$ or $1$~\cite{DBLP:conf/pkc/ChaidosG15}}
+\begin{section}{$\Sigma$-protocol to prove an encryption of $0$ or $1$~\cite{DBLP:conf/pkc/ChaidosG15}~\label{sigma}}
 
   Here we recall the construction proposed by~\cite{DBLP:conf/pkc/ChaidosG15} to prove that an encryption $\Enc(\PK,\mu; r)$ encrypts the message $\mu \in \{0,1\}$.
+  We denote $\mathcal{M}$ the plaintext space, $\mathcal{C}$ the challenge space and $\mathcal{Q}$ the randomness space.
+  For an encryption scheme $\Pi = (\Setup, \Enc, \Dec)$,
+  in order to prove the fact that $c$ is a ciphertext of the plaintext $m$ \wrt the randomness $r \in \mathcal{Q}$ and $m \in \{0,1\}$,
+  we use the following $\Sigma$-protocol.
   
   \begin{description}
-  \item[$\Setup(1^{\lambda})$]:
+  \item[$\Prove((\PK, c), (m, r))$]:
     \begin{enumerate}
-    \item Uniformly choose a message $\mu_a$ 
+    \item Uniformly choose a message $\mu_a \in \mathcal{M} \{0\}$, randomnesses $r_a, r_b \in \mathcal{Q}$.
+    \item Compute the encryptions $c_a \gets \Enc(\PK, m_a, r_a)$ and $c_b \gets \Enc(\PK, m_b, r_b)$.
+    \item Submit the ciphertexts $c_a, c_b$, the prover receives the challenge $d \in \mathcal{C}$.
+    \item Compute the ciphertext of $f = d \cdot m + m_a$.
+    \item Compute the linear combination of the corresponded randomness
+      \begin{align*}
+        z_a &= d r + r_a  & z_b &= (f-d) \cdot r + r_b.
+      \end{align*}
+    \end{enumerate}
+  \item[$\Verif(c)$]
+    \begin{enumerate}
+    \item After receiving $(c_a, c_b)$, randomly sample a challenge $ d \sample \mathcal{C}$ and send $d$ to the prover.
+    \item Verify that $z_a, z_b$ are all in the randomness space.
+    \item Verify that $f$ is in the message space.
+    \item Verify the following two equations:
+      \begin{align*}
+        f \cdot c + c_a &= \Enc(\PK, f; z_a) &  (f-d) \cdot c + c_b &= \Enc(\PK, 0; z_b)
+      \end{align*}
     \end{enumerate}
   \end{description}
 
+
+  
 \end{section}
+

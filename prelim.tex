@@ -8,9 +8,9 @@ the second RLWE encryption scheme has the advantage that the message space is la
   \begin{description}
   \item[$\Setup(1^\lambda)$]: where $\lambda$ is the security parameter of the encryption scheme
     \begin{enumerate}
-    \item Sample a polynomial $t_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k,RGSW)}}$
+    \item Sample a polynomial $t_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{RGSW}}$
       \todo{Precisely define somewhere the deviation of the Gaussian distribution used here and same for the other deviation}
-    \item Uniformly sample $a_{RGSW} \sample \R_q$ and a noise polynomial $e_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k, RGSW)}}$.
+    \item Uniformly sample $a_{RGSW} \sample \R_q$ and a noise polynomial $e_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{RGSW}}$.
     \item Compute $b_{RGSW} = s_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
     \item Set secret key and public key of the encryption scheme:
       \begin{align*}
@@ -24,8 +24,8 @@ the second RLWE encryption scheme has the advantage that the message space is la
   \item[$\Enc(\PK, \mu)$]: The message $\mu$ is in the message space $\R_q$
     \begin{enumerate}
     \item Parse the public key $\PK = \vec{a}_{RGSW}$
-    \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample (\R_q \cap\{0,1\})^{N \times 1}$.
-    \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample (\mathcal{D}_{\R_q^{N \times 2}, \sigma_{c, RGSW}})$.
+    \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample \mathcal{S}_q^{N \times 1}$.
+    \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{RGSW'})}$.
     \item Compute $C_{RGSW}$ the ciphertext of $\mu \in \R_q$:
       \begin{align*}
         \mat{C}_{RGSW} &= \mu \cdot \mat{G} + \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RGSW}
