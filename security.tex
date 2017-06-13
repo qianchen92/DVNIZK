@@ -24,8 +24,8 @@
         \begin{align*}
           v_f &= v \cdot d + v_a & e_f' &= e' \cdot d + e_a' & e_f'' &= e'' \cdot d + e_a''\\
           v_0 &= v \cdot d + v_b & e_0' &= e' \cdot d + e_b' & e_0'' &= e'' \cdot d + e_b''\\
-          \vec{c}_a &= RLWE.\Enc(f, (v_f, e_f', e_f'')) - \vec{c} \cdot d \\
-          \vec{c}_b &= RLWE.\Enc(0, (v_0, e_0', e_0'')) - \vec{c} \cdot (f - d)
+          \vec{c}_a &= PLWE.\Enc(f, (v_f, e_f', e_f'')) - \vec{c} \cdot d \\
+          \vec{c}_b &= PLWE.\Enc(0, (v_0, e_0', e_0'')) - \vec{c} \cdot (f - d)
         \end{align*}
       \item Similarly compute the ciphertexts for the randomness
         \begin{align*}
@@ -40,7 +40,9 @@
       \end{enumerate}
     \end{description}
 
-    It is clear that the distribution of $\pi_{sim}$ and honestly generated proof are statistically indistinguishable and such a proof simulated will accepted by the verifier.
+    Since for an honestly generated proof $f = d \cdot \mu + \mu_a$ where $\mu, \mu_a \sample \R_2$, $f$ is uniformly distributed in $\R_2$,
+    the $f$ in the simulated proof has the same distribution and the randoness used in the encryptions are sampled from exactly the same distribution as in the original proof.
+    Thus the distribution of $\pi_{sim}$ and honestly generated proof are perfectly indistinguishable and such a proof simulated will accepted by the verifier.
     
   \item[\textsf{Adaptive culpable soundness}]:
     We can prove our construction is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
@@ -60,8 +62,8 @@
       \item Parse $\pi$ as $(\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
       \item If the proof can verifies all the equations, it means that if we note
         \begin{align*}
-          \mu_a &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_a) & \mu_b &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_b) \\
-          f &= RLWE.\Dec(\SK_{RLWE}, \vec{c}_f)
+          \mu_a &= PLWE.\Dec(\SK_{PLWE}, \vec{c}_a) & \mu_b &= PLWE.\Dec(\SK_{PLWE}, \vec{c}_b) \\
+          f &= PLWE.\Dec(\SK_{PLWE}, \vec{c}_f)
         \end{align*}
         the underlying plaintext verifies the following equations:
         \begin{align*}

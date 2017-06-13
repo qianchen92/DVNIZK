@@ -1,6 +1,6 @@
 In this section, we give the construction of the DV-NIZK scheme.
 This can be seen as an instantiation of the DV-NIZK proposed in~\cite{DBLP:conf/pkc/ChaidosG15}
-We will prove an encryption is an encryption of $0$ or $1$ under the RLWE encryption scheme.
+We will prove an encryption is an encryption of $0$ or $1$ under the PLWE encryption scheme.
 
 \begin{description}
 \item[$\Setup(1^\lambda)$]: where $\lambda$ is the security parameter.
@@ -45,7 +45,7 @@ We will prove an encryption is an encryption of $0$ or $1$ under the RLWE encryp
 
 \item[$\Prove(\PPP, \vec{c}, \mu, \vec{r}, \PK^P)$]: This algorithm produces a DV-NIZK proof of the following instance:
   \begin{align*}
-    \vec{c} &= RLWE.\Enc(\PK^P, \mu; \vec{r}) \wedge \mu \in \{0,1\}
+    \vec{c} &= PLWE.\Enc(\PK^P, \mu; \vec{r}) \wedge \mu \in \{0,1\}
   \end{align*}
   \begin{enumerate}
   \item Parse $\PK^P, \vec{r}, \vec{c}$ as follows:
@@ -91,10 +91,10 @@ We will prove an encryption is an encryption of $0$ or $1$ under the RLWE encryp
   \item Parse the secret key $\SK = (\vec{s}_{RGSW}, \vec{s})$.
   \item Parse the prove $\pi = (\vec{c}_a, \vec{c}_b, \vec{c}_f, \mat{C}_{r_f^0}, \mat{C}_{r_f^1}, \mat{C}_{r_f^2}, \mat{C}_{r_0^0}, \mat{C}_{r_0^1}, \mat{C}_{r_0^2})$.
   \item Decrypt $\vec{c}_d$ and $\mat{C}_d^{RGSW}$.
-    If $RLWE.\Dec(\vec{s}, \vec{c}_d) \neq RGSW.\Dec(\vec{s}_{RGSW}, \mat{C}_d^{RGSW})$ then return $\False$, else set $d = RLWE.\Dec(\vec{s}, \vec{c}_d)$.
+    If $PLWE.\Dec(\vec{s}, \vec{c}_d) \neq RGSW.\Dec(\vec{s}_{RGSW}, \mat{C}_d^{RGSW})$ then return $\False$, else set $d = PLWE.\Dec(\vec{s}, \vec{c}_d)$.
   \item Decrypt the ciphertext and set:
     \begin{align*}
-      f &= RLWE.\Dec(\vec{s}, \vec{c}_f)
+      f &= PLWE.\Dec(\vec{s}, \vec{c}_f)
     \end{align*}
   \item Decrypt the ciphertexts of the randomness and verify that they are all small:
     \begin{align*}
@@ -108,8 +108,8 @@ We will prove an encryption is an encryption of $0$ or $1$ under the RLWE encryp
     \todo[inline]{The security analysis need to be done for the exact value of B}
   \item Verify the following equations:
     \begin{align*}
-      d \cdot \vec{c} + \vec{c}_a &= RLWE.\Enc(\PK^P = \vec{a}^P, f; (v_f, e_f', e_f''))\\
-      (f-d) \cdot \vec{c} + \vec{c}_b &= RLWE.\Enc(\PK^P= \vec{a}^P, 0; (v_f, e_f', e_f''))
+      d \cdot \vec{c} + \vec{c}_a &= PLWE.\Enc(\PK^P = \vec{a}^P, f; (v_f, e_f', e_f''))\\
+      (f-d) \cdot \vec{c} + \vec{c}_b &= PLWE.\Enc(\PK^P= \vec{a}^P, 0; (v_f, e_f', e_f''))
     \end{align*}
   \item If the proof $\pi$ verifies all the equations then the algorithm returns $\True$, otherwise it returns $\False$.
   \end{enumerate}
