@@ -8,7 +8,7 @@ Existing NIZK proof systems are rely on the Fiat-Shamir transformation with rand
 On the other hand, when we consider the interactive proof system,
 there are many very efficient $\Sigma$-protocol (a particular type of 3-move honest verifier zero-knowledge proof) based on various assumptions~\cite{DBLP:journals/iacr/BaumDOP16}\cite{DBLP:conf/crypto/BaumDLN16}.
 
-In a special family of NIZK, designed-verifier non-interactive zero-knowledge proof system is a proof system which can only be verified with a secret verification key
+In a special family of NIZK, designated-verifier non-interactive zero-knowledge proof system is a proof system which can only be verified with a secret verification key
 and the soundness of the proof system holds only for the adversary who doesn't have the secret verification key.
 DV-NIZK has many applications in the construction of more complex cryptographic protocols such as
 tightly CCA encryption schemes~\cite{DBLP:conf/eurocrypt/GayHKW16} and in the electronic voting system~\cite{DBLP:conf/pkc/ChaidosG15}.
@@ -16,5 +16,5 @@ tightly CCA encryption schemes~\cite{DBLP:conf/eurocrypt/GayHKW16} and in the el
 
 Damg\r{a}rd, Fazio and Nicolosi (DFN)~\cite{DBLP:conf/tcc/DamgardFN06} firstly established the connection between $\Sigma$-protocol and DV-NIZK via homomorphic encryption schemes,
 this technique is later on developed by Chaidos and Groth~\cite{DBLP:conf/pkc/ChaidosG15}.
-They use this idea to construct an efficient designed-verifier zero-knowledge proof system based on Okamoto-Uchiyama encryption scheme~\cite{DBLP:conf/eurocrypt/OkamotoU98}.
+They use this idea to construct an efficient designated-verifier zero-knowledge proof system based on Okamoto-Uchiyama encryption scheme~\cite{DBLP:conf/eurocrypt/OkamotoU98}.
 The main open problem was how to extend their idea to construct more DV-NIZK based on other assumptions.
