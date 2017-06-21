@@ -17,7 +17,7 @@ We will prove an encryption is an encryption of $0$ or $1$ under the PLWE encryp
         \end{align*}
       \item Sample a polynomial $s_0 \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$, $a_0 \sample \R_q$ and $e_0 \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$.
       \item Set $b_0 = a_0 s_0 + 2 e_0$.
-      \item Set secret key and public key of the underlying Ring-LWE encryption scheme:
+      \item Set secret key and public key of the underlying PLWE encryption scheme:
         \begin{align*}
           \vec{s} &= \begin{bmatrix} 1 \\ -s_0\end{bmatrix} & \vec{a} &= \begin{bmatrix} a_0 \\ b_0\end{bmatrix}
         \end{align*}
@@ -28,7 +28,7 @@ We will prove an encryption is an encryption of $0$ or $1$ under the PLWE encryp
       \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample (\R_q \cap\{0,1\})^{N \times 1}$.
       \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{(c, RGSW)})}$.
       \item Sample polynomials $v,e' \sample \mathcal{D}_{(R_q, \sigma_{BV})}$ and $e'' \sample  \mathcal{D}_{(R_q, \sigma_{BV}')}$.
-      \item Compute two polynomials $(a, b) \in \R_q^2$
+      \item Uniformly sample two polynomials $(a, b) \sample \R_q^2$
       \item Compute the following ciphertexts
         \begin{align*}
           \mat{C}_d^{RGSW} &= \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &

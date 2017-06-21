@@ -42,7 +42,7 @@
 
     Since for an honestly generated proof $f = d \cdot \mu + \mu_a$ where $\mu, \mu_a \sample \R_2$, $f$ is uniformly distributed in $\R_2$,
     the $f$ in the simulated proof has the same distribution and the randoness used in the encryptions are sampled from exactly the same distribution as in the original proof.
-    Thus the distribution of $\pi_{sim}$ and honestly generated proof are perfectly indistinguishable and such a proof simulated will accepted by the verifier.
+    Thus the distributions of $\pi_{sim}$ and an honestly generated proof are perfectly indistinguishable and such a proof simulated will be accepted by the verifier.
     
   \item[\textsf{Adaptive culpable soundness}]:
     We can prove our construction is culpable sound \wrt the relation $\mathcal{R}_{guilt}$ as follows
@@ -76,8 +76,8 @@
     \item[\textsf{Game} $1$]: In this game, we do the same things as in the previous game except that:
       \begin{enumerate}
       \item We uniformly sample $\R_2$-polynomial $\tilde{d} \sample \R_2$.
-      \item In the $\Setup$ algorithm, we replace $\vec{c}_d$ and $\mat{C}_d^{RGSW}$ by encryptions $\vec{c}_{\tilde{d}}$ and $\mat{C}_{\tilde{d}}$ of $\tilde{d}$.
-        This operation is
+      \item In the $\Setup$ algorithm, we replace $\vec{c}_d$ and $\mat{C}_d^{RGSW}$ by the encryptions $\vec{c}_{\tilde{d}}$ and $\mat{C}_{\tilde{d}}$ of $\tilde{d}$.
+        This change is indistinguishable for the adversary since the distributions of $d$ and $\tilde{d}$ are exactly the same.
       \item As pointed out in the previous game, we have similarly $\mu_b = - \tilde{d} \cdot \mu^2 + \tilde{d} \cdot \mu - \mu_a \cdot \mu$.
       \item Since the only difference from the previous game is the change of the plaintext inside of an encryption IND-CPA.
         The advantage of $Adv_1(\Adv)$ adversary in \textsf{Game} $1$ verifies:

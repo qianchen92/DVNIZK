@@ -1,7 +1,7 @@
 In this section, we will present two constructions of encryption scheme based on Ring-LWE assumption.
 
-The advantage of the first encryption scheme is the message space $\R_q$ is very large which allows to encrypt the noise polynomials of an PLWE encryption used in the $\Sigma$-protocol,
-the second PLWE encryption scheme has the advantage that the message space is large $\R_2$ and the ciphertexts are linearly homomorphic with constants in $\R_2$.
+The advantage of the first encryption scheme is that the message space $\R_q$ is very large, which allows to encrypt the noise polynomials of an PLWE encryption used in the $\Sigma$-protocol.
+The second PLWE encryption scheme has the advantage that the message space $\R_2$ is large and the ciphertexts are linearly homomorphic with constants in $\R_2$.
 
 
 \begin{subsection}{Ring-GSW encryption scheme~\cite{DBLP:journals/tc/KhedrGV16}}
@@ -14,7 +14,7 @@ the second PLWE encryption scheme has the advantage that the message space is la
     \item Compute $b_{RGSW} = s_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
     \item Set secret key and public key of the encryption scheme:
       \begin{align*}
-        \SK &= \vec{S}_{RGSW} =\begin{bmatrix} 1 \\ -s_{RGSW} \end{bmatrix}  & \PK &= \vec{a}_{RGSW} =  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
+        \SK &= \vec{s}_{RGSW} =\begin{bmatrix} 1 \\ -s_{RGSW} \end{bmatrix}  & \PK &= \vec{a}_{RGSW} =  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
       \end{align*}
       Note that we have the following relation:
       \begin{align*}
@@ -26,17 +26,18 @@ the second PLWE encryption scheme has the advantage that the message space is la
     \item Parse the public key $\PK = \vec{a}_{RGSW}$
     \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample \mathcal{S}_q^{N \times 1}$.
     \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{RGSW'})}$.
-    \item Compute $C_{RGSW}$ the ciphertext of $\mu \in \R_q$:
+    \item Compute $\mat{C}_{RGSW}$ the ciphertext of $\mu \in \R_q$:
       \begin{align*}
         \mat{C}_{RGSW} &= \mu \cdot \mat{G} + \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RGSW}
       \end{align*}
     \end{enumerate}
   \item[$\Dec(\SK, \mat{C}_{RGSW})$]:
     \begin{enumerate}
-    \item Parse the secret key $\SK = \mat{S}_{RGSW}$.
+    \item Parse the secret key $\SK = \mat{s}_{RGSW}$.
     \item Compute the plaintext as follows:
       \begin{align*}
-        \vec{s}_{GSW}^T \cdot \mat{C}_{GSW} &= \mu \cdot \vec{s}_{RGSW}^T \cdot \mat{G} + error 
+        \vec{s}_{GSW}^T \cdot \mat{C}_{GSW} &= \mu \cdot \vec{s}_{RGSW}^T \cdot \mat{G} + \vec{s}_{RGSW}^T \cdot \vec{a}_{RGSW} \cdot \mat{R}_{GSW} + \vec{s}_{RGSW}^T \cdot \mat{E}_{RGSW}\\
+        &= \mu \cdot \vec{s}_{RGSW}^T \cdot \mat{G} + error
       \end{align*}
     
     \end{enumerate}
@@ -44,9 +45,9 @@ the second PLWE encryption scheme has the advantage that the message space is la
   
 \end{subsection}
 
-\begin{subsection}{Ring-LWE encryption scheme~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}}
+\begin{subsection}{PLWE encryption scheme~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}}
 
-  Here we will present compact encryption scheme based on Ring-LWE assumption~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}.
+  Here we will present compact encryption scheme based on PLWE assumption~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}.
   It is a linearly homomorphic encryption scheme.
   
   \begin{description}
