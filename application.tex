@@ -1,4 +1,4 @@
-\begin{section}{Ring-signature}
+\begin{section}{Application: Ring-signature}
   From the PLWE based sigma-protocol and
   the similar techniques used in~\cite{DBLP:conf/eurocrypt/GrothK15}.
   We construct the new ring signature.
@@ -9,7 +9,7 @@
   we need to prove the following statement.
 
   \begin{align*}
-    \mathcal{R} &= \{(\ck, (c_1, \dots c_{N-1}), (\ell, r)) | \forall i. c_i \in \mathcal{C}_\ck and c_\ell = \Com(0; r)\}
+    \mathcal{R} &= \{(\ck, (c_1, \dots c_{N-1}), (\ell, r)) | \forall i. c_i \in \mathcal{C}_\ck \wedge c_\ell = \Com(0; r)\}
   \end{align*}
 
 
@@ -18,38 +18,105 @@
   and the ring signature.
   Notice that this is basically the PLWE encryption scheme as we presented in the section~\ref{PLWE}
   \begin{description}
-    \item [$\Setup(1^\lambda)$]
-  \end{description}
-
-  \begin{subsection}{$\Sigma$-protocol}
-  We start with the construction of a such $\Sigma$-protocol,
-    we denote $\Sigma_0$ the $\Sigma$-protocol construct in the previous section,
-    which allows us to prove that a commitment is committed to $0$ or $1$.
-    \begin{description}
-      \item[$\Setup$]: where $\lambda$ is the security parameter.
-        \begin{enumerate}
-          \item $\PPP \gets \Sigma_0.\Setup(1^\lambda)$.
-        \end{enumerate}
-        \item[$\Prove(\PPP, (c_1, c_2 \cdots c_N), (\ell, r))$]:
-        Recall that we need to prove that $\forall i. c_i \in \mathcal{C}_\ck and c_\ell = \Com(0; r)$
-        \begin{enumerate}
-          \item We denote $\ell_j$ the $j$-th bit $\ell$. We begin to commit $c_{\ell_1}, \dots, c_{\ell_n}$ of $\ell_1, \dots, \ell_n$.
-          \item We use $\Sigma_0$ to produce in parallel $\pi_{\ell_1}, \dots, \pi_{\ell_n}$ the proofs of the fact $\ell_1, \dots, \ell_n$ are bits.
-          \item For $j = 1 \dots n$
-          \begin{enumerate}
-          \item
-          \end{enumerate}
-
-        \end{enumerate}
-
-    \end{description}
-  \end{subsection}
-  \begin{description}
-    \item[$\Setup(1^{\lambda})$]:
+    \item [$\Setup(1^\lambda) \to \ck$]:
     \begin{enumerate}
-      \item
+      \item Generate two uniformly random polynomials $a_0, b_0 \sample \R_q$.
+      \item Output $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
+    \end{enumerate}
+    \item [$\Com(\ck, \mu)$]: The message space of the commitment scheme is $\R_2$
+    \begin{enumerate}
+      \item Parse the commitment key $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
+      \item Sample polynomials following the Gaussian distribution
+      $v,e' \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$ and $e'' \sample \mathcal{D}_{(\R_q, \sigma'_{BV})}$.
+      \item Compute
+      \begin{align*}
+        a &= a_0 v + 2e' & b &= b_0v +2 e''
+      \end{align*}
+      \item Set $\com = \begin{bmatrix}  b+ \mu \\  -a \end{bmatrix}$ and $\open = (v, e', e'')$.
+    \end{enumerate}
+    \item [$\Verif(\ck, \mu, \open)$]:
+    \begin{enumerate}
+      \item Parse the commitment key $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
+      \item Parse the commitment $\com = \begin{bmatrix} c_0 \\ c_1 \end{bmatrix}$
+      and the opening information $\open = (v, e', e'')$.
+      \item Verify that
+      \begin{enumerate}
+        \item $v \leq B_{BV}$
+        \item $e' \leq B_{BV}$
+        \item $e'' \leq B'_{BV}$
+      \end{enumerate}
+      \item Verify that
+      \begin{align*}
+        c_1 &= a_0 v + 2e' & c_0 &= b_0v +2 e'' + \mu
+      \end{align*}
     \end{enumerate}
   \end{description}
+
+  This commitment is perfectly hiding and computational binding.\todo[inline]{need to find a reference of it or a proof}
+
+  \begin{subsection}{$\Sigma$-protocol}
+    For the following construction, we consider the public parameter $\PPP$ be the commitment key $\ck$ of the underlying commitment scheme.
+    \begin{description}
+
+
+      \item[$\Prove_1(\PPP, (c_1, \dots, c_N), (l, r))$]:
+      Recall that we want prove the fact that
+      \begin{align*}
+        \forall i. c_i \in \mathcal{C}_\ck \wedge c_\ell = \Com(0; r).
+      \end{align*}
+      \begin{enumerate}
+        \item We denote the $j$-th bit of $\ell$ by $\ell_j$,
+        $Random$ the random space of the underlying commitment scheme (in our case it will be $\R_q^3$)
+          and $n = \ceil{log~N}$.
+          \item For $j \in \{1, \dots, n\}$
+          \begin{enumerate}
+            \item Generate the randomness for the commitments
+            $r_j, r^a_j, r^b_j \sample Random$. Remark that the sampling algorithm use the corresponded Gaussian distribution for each component.
+            \item Uniformly generate a random polynomial for the $\Sigma$-protocol $a_j \sample R_2$.
+            \item $c_{\ell_j} \gets \Com(\ck, \ell_j; r_j)$.
+            \item $c_{a_j} \gets \Com(\ck, a_j; r^a_j)$.
+            \item $c_{b_j} \gets \Com(\ck, \ell_j a_j; r^b_j)$.
+            \item Set polynomials of $x$, $f_{j,0}(x) = (1 - \ell_j) x + a_j$ and $f_{j,1} = \ell_j x+a_j$
+          \end{enumerate}
+          \item Note $i_j$ the $j$-th bit of $i$. Compute coefficients $p_{i,k}$ of the polynomial for every $i \in \{1, \dots N\}$
+          \begin{align*}
+            p_i(x) &= \prod_{j=1}^{n} (f_{j,i_j} \cdot x + a_j)\\
+            &= \delta_{l,i} x^n + \sum_{k = 1}^{n-1} p_{i,k} x^k
+          \end{align*}
+
+          \item For $k \in \{0, \dots, n-1\}$ generate the randomness $s_k \sample random$
+          compute the commitments
+          \begin{align*}
+            c_{d_k} &= \sum_{i = 0}^{N-1} p_{i,k} \cdot c_i + \com(\ck, 0; s_k)
+          \end{align*}
+          \item Send $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^n, \{c_{a_j}\}_{j = 1}^n,\{c_{b_j}\}_{j = 1}^n,\{c_{d_k}\}_{k = 0}^{n-1})$ to the verifier.
+        \end{enumerate}
+
+
+
+
+
+        \item[$\Prove_2(\PPP, (c_1, \dots, c_N), (l, r), d)$]: This algorithm is the second part of the prove procedure, the prover received the challenge $d$ from the verifier.
+        \begin{enumerate}
+          \item For $i \in \{1, \dots, n\}$
+          \begin{enumerate}
+            \item $f_j = \ell_j \cdot d + a_j$.
+            \item $z_{a_j} = r_j \cdot d + r^a_j$. Notice that the operation on the randomness are component wise operation.
+            \item $z_{b_j} = r_j \cdot (f_j - d) + r^b_j$.
+          \end{enumerate}
+          \item Compute $z_d = r \cdot d^n - \sum_{k = 0}^{n-1}s_k x^k$
+          \item Send $\pi_2 = (\{f_j\}_{j = 1}^n, \{z_{a_j}\}_{j = 1}^n, \{z_{b_j}\}_{j = 1}^n, z_d)$.
+        \end{enumerate}
+
+
+
+        \item [$\Verif(\PPP, \pi_1, \pi_2) \to \{\True, \False\}$]:
+        \begin{enumerate}
+          \item Parse $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^n, \{c_{a_j}\}_{j = 1}^n,\{c_{b_j}\}_{j = 1}^n,\{c_{d_k}\}_{k = 0}^{n-1})$.
+          \item Parse $\pi_2 = (\{f_j\}_{j = 1}^n, \{z_{a_j}\}_{j = 1}^n, \{z_{b_j}\}_{j = 1}^n, z_d)$.
+        \end{enumerate}
+    \end{description}
+  \end{subsection}
 \end{section}
 
 \begin{section}{Electronic voting system}
