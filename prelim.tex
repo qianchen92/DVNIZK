@@ -39,17 +39,17 @@ The second PLWE encryption scheme has the advantage that the message space $\R_2
         \vec{s}_{GSW}^T \cdot \mat{C}_{GSW} &= \mu \cdot \vec{s}_{RGSW}^T \cdot \mat{G} + \vec{s}_{RGSW}^T \cdot \vec{a}_{RGSW} \cdot \mat{R}_{GSW} + \vec{s}_{RGSW}^T \cdot \mat{E}_{RGSW}\\
         &= \mu \cdot \vec{s}_{RGSW}^T \cdot \mat{G} + error
       \end{align*}
-    
+
     \end{enumerate}
   \end{description}
-  
+
 \end{subsection}
 
-\begin{subsection}{PLWE encryption scheme~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}}
+\begin{subsection}{PLWE encryption scheme~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}\label{PLWE}}
 
   Here we will present compact encryption scheme based on PLWE assumption~\cite{DBLP:conf/eurocrypt/LyubashevskyPR13}.
   It is a linearly homomorphic encryption scheme.
-  
+
   \begin{description}
   \item[$\Setup(1^\lambda)$]: where $\lambda$ is the security parameter.
     \begin{enumerate}
@@ -65,7 +65,7 @@ The second PLWE encryption scheme has the advantage that the message space $\R_2
     \item Sample polynomials $v,e' \sample \mathcal{D}_{(\R_q, \sigma_{BV})}$ and $e'' \sample  \mathcal{D}_{(\R_q, \sigma_{BV}')}$.
     \item Compute two polynomials $(a, b) \in \R_q^2$
       \begin{align*}
-        a &= a_0 v + 2 e' & b &= b_0 v +2 e'' 
+        a &= a_0 v + 2 e' & b &= b_0 v +2 e''
       \end{align*}
     \item Compute the ciphertext $\vec{c} = \begin{bmatrix} c_0 \\ c_1\end{bmatrix}$
       \begin{align*}
@@ -92,7 +92,7 @@ The second PLWE encryption scheme has the advantage that the message space $\R_2
         x &\in_w \mathcal{L}
       \end{align*}
       which means $w$ is the witness of the fact that $x$ is in the language $\mathcal{L}$.
-    \item[$\Verif(\PPP, \SK, x, \pi) \to \{\True, \False\}$]: The verifier uses the secret verification key $\SK$ and the proof $\pi$ to verify that $x \in \mathcal{L}$. 
+    \item[$\Verif(\PPP, \SK, x, \pi) \to \{\True, \False\}$]: The verifier uses the secret verification key $\SK$ and the proof $\pi$ to verify that $x \in \mathcal{L}$.
     \end{description}
 
     The proof system needs the following two properties
@@ -114,10 +114,10 @@ The second PLWE encryption scheme has the advantage that the message space $\R_2
       \end{align*}
     \end{property}
 
-    
-    
+
+
   \end{definition}
 
 
-  
+
 \end{subsection}

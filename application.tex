@@ -1,4 +1,4 @@
-\begin{subsection}{Ring-signature}
+\begin{section}{Ring-signature}
   From the PLWE based sigma-protocol and
   the similar techniques used in~\cite{DBLP:conf/eurocrypt/GrothK15}.
   We construct the new ring signature.
@@ -13,15 +13,16 @@
   \end{align*}
 
 
-  \paragraph{Commitment}
+  \subsection{Commitment}
   We present the underlying commitment used in the construction of the $\Sigma$-protocol
   and the ring signature.
+  Notice that this is basically the PLWE encryption scheme as we presented in the section~\ref{PLWE}
   \begin{description}
-    \item [$\Setup(1^\lambda)$] 
+    \item [$\Setup(1^\lambda)$]
   \end{description}
 
-  \begin{paragraph}{$\Sigma$-protocol}
-    We start with the construction of a such $\Sigma$-protocol,
+  \begin{subsection}{$\Sigma$-protocol}
+  We start with the construction of a such $\Sigma$-protocol,
     we denote $\Sigma_0$ the $\Sigma$-protocol construct in the previous section,
     which allows us to prove that a commitment is committed to $0$ or $1$.
     \begin{description}
@@ -36,25 +37,25 @@
           \item We use $\Sigma_0$ to produce in parallel $\pi_{\ell_1}, \dots, \pi_{\ell_n}$ the proofs of the fact $\ell_1, \dots, \ell_n$ are bits.
           \item For $j = 1 \dots n$
           \begin{enumerate}
-            \item
+          \item
           \end{enumerate}
 
         \end{enumerate}
 
     \end{description}
-  \end{paragraph}
+  \end{subsection}
   \begin{description}
     \item[$\Setup(1^{\lambda})$]:
     \begin{enumerate}
       \item
     \end{enumerate}
   \end{description}
-\end{subsection}
+\end{section}
 
-\begin{subsection}{Electronic voting system}
-\end{subsection}
+\begin{section}{Electronic voting system}
+\end{section}
 
-\begin{subsection}{New Cramer-Shoup type lattice based CCA encryption}
+\begin{section}{New Cramer-Shoup type lattice based CCA encryption}
   \todo{this one maybe impossible because this is hash proof system approach which
   use the statistic argument}
-\end{subsection}
+\end{section}
