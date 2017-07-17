@@ -5,15 +5,19 @@
   For an encryption scheme $\Pi = (\Setup, \Enc, \Dec)$,
   in order to prove the fact that $c$ is a ciphertext of the plaintext $m$ \wrt the randomness $r \in \mathcal{Q}$ and $m \in \{0,1\}$,
   we use the following $\Sigma$-protocol.
-  
+
   \begin{description}
-  \item[$\Prove((\PK, c), (m, r))$]:
+    \item[$\Prove_1((\PK, c), (m, r))$]:
     \begin{enumerate}
-    \item Uniformly choose a message $\mu_a \in \mathcal{M} \{0\}$, randomnesses $r_a, r_b \in \mathcal{Q}$.
-    \item Compute the encryptions $c_a \gets \Enc(\PK, m_a, r_a)$ and $c_b \gets \Enc(\PK, m_b, r_b)$.
-    \item Submit the ciphertexts $c_a, c_b$, the prover receives the challenge $d \in \mathcal{C}$.
-    \item Compute the ciphertext of $f = d \cdot m + m_a$.
-    \item Compute the linear combination of the corresponded randomness
+      \item Uniformly choose a message $\mu_a \in \mathcal{M} \{0\}$, randomnesses $r_a, r_b \in \mathcal{Q}$.
+      \item Compute the encryptions $c_a \gets \Enc(\PK, m_a, r_a)$ and $c_b \gets \Enc(\PK, m_b, r_b)$.
+      \item Send the ciphertexts $c_a, c_b$ to the verifier.
+    \end{enumerate}
+    \item[$\Prove_1((\PK, c), (m, r), d)$]:
+    \begin{enumerate}
+      \item The prover receive the challenge $d$ from the verifier.
+      \item Compute the ciphertext of $f = d \cdot m + m_a$.
+      \item Compute the linear combination of the corresponded randomness
       \begin{align*}
         z_a &= d r + r_a  & z_b &= (f-d) \cdot r + r_b.
       \end{align*}
@@ -31,13 +35,13 @@
   \end{description}
 
 
-  
+
 \end{section}
 
 
 \begin{section}{Ring-LWE based ring-signature}
 
-  In this section, we give an application of the 
-  
+  In this section, we give an application of the
+
 
 \end{section}
