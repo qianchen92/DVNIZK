@@ -115,12 +115,56 @@
           \item Parse $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^m, \{c_{a_j}\}_{j = 1}^m,\{c_{b_j}\}_{j = 1}^m,\{c_{d_k}\}_{k = 0}^{m-1})$.
           \item Parse $\pi_2 = (\{f_j\}_{j = 1}^m, \{z_{a_j}\}_{j = 1}^m, \{z_{b_j}\}_{j = 1}^m, z_d)$.
           \item Denote $B_{BV}$ and $B_{BV}'$ respectively the $B$-bound of the Gaussian distribution $\mathcal{D}_{(R_q, \sigma_{BV})}$ and $\mathcal{D}_{(R_q, \sigma'_{BV})}$ and $n$ be the degree of the ring $\R_q$.
-          \item Verify that $\forall j$:
+          \item Recall that $z_{a_j} = (v_{a_j}, e'_{a_j}, e''_{a_j})$ and $z_{b_j} = (v_{b_j}, e'_{b_j}, e''_{b_j})$.
+          \item Verify that for all $j \in \{1, \dots m\}$:
           \begin{align*}
-            |z_{a_j}| &\leq (n+1) \cdot B & |z_{a_j}| &\leq (n+1) \cdot B
+            v_{a_j} &\leq (n+1) B & e'_{a_j} &\leq (n+1) B & e''_{a_j} &\leq (n+1) B'\\
+            v_{b_j} &\leq (2n+1) B & e'_{b_j} &\leq (2n+1) B & e''_{b_j} &\leq (2n+1) B'
+          \end{align*}
+          \item Then we prove that every for all $j \in \{1, \dots, m\}$, $c_{\ell_j}$ is committed to one bit:
+          \begin{align*}
+            d \cdot c_{\ell_j} + c_{a_j} &= \Com(\ck, f_j ; z_{a_j})\\
+            (d-f_{j}) \cdot c_{\ell_j} + c_{b_j} &= \Com(\ck, 0; z_{b_j})\\
+            \sum_{i = 0}^{M-1}(\prod_{j = 1}^{m} (f_{j,i_j})) - \sum_{k = 0}^{m-1} d^{k} \cdot c_{d_{k}} & = \Com(\ck, 0; z_d)
           \end{align*}
         \end{enumerate}
     \end{description}
+  \end{subsection}
+
+  \begin{subsection}{Construction of the ring signature}
+
+    This construction of the ring signature is direct as mentioned in~\cite{DBLP:conf/eurocrypt/GrothK15} using the Fiat-Shamir transformation to obtain a NIZK from the previous $\Sigma$-protocol.
+    \begin{description}
+      \item [$\Setup(1^\lambda)$]:
+      \begin{enumerate}
+        \item Generate the commitment key $\ck \gets \Com.\Setup(1^\lambda)$.
+        \item Generate the hash function $H \gets \mathcal{H}(1^\lambda)$.
+        \item Output $\PPP = (\ck, H)$.
+      \end{enumerate}
+      \item [$\KeyGen(\PPP)$]:
+      \begin{enumerate}
+        \item Generate the randomness used in the underlying commitment scheme $\r \gets Random$.
+        \item Compute the commitment $c = \com(\ck, 0; r)$.
+        \item Output $(\vk, \sk) = (c, r)$.
+      \end{enumerate}
+      \item [$\Sign(\PPP, \sk, \mu, R)$]: The sign algorithm takes the public parameter $\PPP$, the signing key $\sk$, the message $\mu$ and the group ring $R$.
+      \begin{enumerate}
+        \item Parse $R = (c_0, \dots, c_{M-1})$ and $\sk = r$.
+        \item Using the signing key $\sk = r$ to identify a commitment $c_{\ell} = \Com(\ck, 0; r)$ with $\ell \in \{0, \dots, M-1\}$.
+        \item Generate the first part of the proof of the $\Sigma$-protocol, $\pi_1 = \Prove(\ck, (c_0, \dots, c_{M-1}), (\ell, \sk))$.
+        \item Compute the hash $d = H(\ck, \mu, R, \pi_1) \in \R_2$.
+        \item Using the hash $d$ as the challenge of the $\Sigma$-protocol to produce $\pi_2 \gets \Prove_2(\PPP, (c_1, \dots, c_M), (l, r), d)$.
+        \item Output $\sigma = (\pi_1, \pi_2)$.
+      \end{enumerate}
+      \item [$\Verif(\PPP, \mu, R, \sigma)$]:
+      \begin{enumerate}
+        \item Parse $R = (c_0, dots, c_{M-1})$.
+        \item Parse $\sigma = (\pi, \pi_2)$.
+        \item Compute the hash $d = H(\ck, \mu, R, \pi_1)$.
+        \item Output $\Verif (\ck, (c_0, \dots, c_{M-1}), \pi_1, d, \pi_2)$.
+      \end{enumerate}
+    \end{description}
+
   \end{subsection}
 \end{section}
 
