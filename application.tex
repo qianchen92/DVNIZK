@@ -9,7 +9,7 @@
   we need to prove the following statement.
 
   \begin{align*}
-    \mathcal{R} &= \{(\ck, (c_1, \dots c_{N-1}), (\ell, r)) | \forall i. c_i \in \mathcal{C}_\ck \wedge c_\ell = \Com(0; r)\}
+    \mathcal{R} &= \{(\ck, (c_1, \dots c_{M-1}), (\ell, r)) | \forall i. c_i \in \mathcal{C}_\ck \wedge c_\ell = \Com(0; r)\}
   \end{align*}
 
 
@@ -59,7 +59,7 @@
     \begin{description}
 
 
-      \item[$\Prove_1(\PPP, (c_1, \dots, c_N), (l, r))$]:
+      \item[$\Prove_1(\PPP, (c_1, \dots, c_M), (\ell, r))$]:
       Recall that we want prove the fact that
       \begin{align*}
         \forall i. c_i \in \mathcal{C}_\ck \wedge c_\ell = \Com(0; r).
@@ -67,8 +67,8 @@
       \begin{enumerate}
         \item We denote the $j$-th bit of $\ell$ by $\ell_j$,
         $Random$ the random space of the underlying commitment scheme (in our case it will be $\R_q^3$)
-          and $n = \ceil{log~N}$.
-          \item For $j \in \{1, \dots, n\}$
+          and $m = \ceil{log~M}$.
+          \item For $j \in \{1, \dots, m\}$
           \begin{enumerate}
             \item Generate the randomness for the commitments
             $r_j, r^a_j, r^b_j \sample Random$. Remark that the sampling algorithm use the corresponded Gaussian distribution for each component.
@@ -78,42 +78,47 @@
             \item $c_{b_j} \gets \Com(\ck, \ell_j a_j; r^b_j)$.
             \item Set polynomials of $x$, $f_{j,0}(x) = (1 - \ell_j) x + a_j$ and $f_{j,1} = \ell_j x+a_j$
           \end{enumerate}
-          \item Note $i_j$ the $j$-th bit of $i$. Compute coefficients $p_{i,k}$ of the polynomial for every $i \in \{1, \dots N\}$
+          \item Note $i_j$ the $j$-th bit of $i$. Compute coefficients $p_{i,k}$ of the polynomial for every $i \in \{1, \dots M\}$
           \begin{align*}
-            p_i(x) &= \prod_{j=1}^{n} (f_{j,i_j} \cdot x + a_j)\\
-            &= \delta_{l,i} x^n + \sum_{k = 1}^{n-1} p_{i,k} x^k
+            p_i(x) &= \prod_{j=1}^{m} (f_{j,i_j} \cdot x + a_j)\\
+            &= \delta_{l,i} x^m + \sum_{k = 1}^{m-1} p_{i,k} x^k
           \end{align*}
 
           \item For $k \in \{0, \dots, n-1\}$ generate the randomness $s_k \sample random$
           compute the commitments
           \begin{align*}
-            c_{d_k} &= \sum_{i = 0}^{N-1} p_{i,k} \cdot c_i + \com(\ck, 0; s_k)
+            c_{d_k} &= \sum_{i = 0}^{M-1} p_{i,k} \cdot c_i + \com(\ck, 0; s_k)
           \end{align*}
-          \item Send $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^n, \{c_{a_j}\}_{j = 1}^n,\{c_{b_j}\}_{j = 1}^n,\{c_{d_k}\}_{k = 0}^{n-1})$ to the verifier.
+          \item Send $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^m, \{c_{a_j}\}_{j = 1}^m,\{c_{b_j}\}_{j = 1}^m,\{c_{d_k}\}_{k = 0}^{m-1})$ to the verifier.
         \end{enumerate}
 
 
 
 
 
-        \item[$\Prove_2(\PPP, (c_1, \dots, c_N), (l, r), d)$]: This algorithm is the second part of the prove procedure, the prover received the challenge $d$ from the verifier.
+        \item[$\Prove_2(\PPP, (c_1, \dots, c_M), (l, r), d)$]: This algorithm is the second part of the prove procedure, the prover received the challenge $d \in \R_2$ from the verifier.
         \begin{enumerate}
-          \item For $i \in \{1, \dots, n\}$
+          \item For $i \in \{1, \dots, m\}$
           \begin{enumerate}
-            \item $f_j = \ell_j \cdot d + a_j$.
+            \item $f_j = \ell_j \cdot d + a_j$. Notice that $f_j$ are all elements in $\R_2$.
             \item $z_{a_j} = r_j \cdot d + r^a_j$. Notice that the operation on the randomness are component wise operation.
-            \item $z_{b_j} = r_j \cdot (f_j - d) + r^b_j$.
+            \item $z_{b_j} = r_j \cdot (f_j - d) + r^b_j$. Remark that this is operations in $\R_q$.
           \end{enumerate}
-          \item Compute $z_d = r \cdot d^n - \sum_{k = 0}^{n-1}s_k x^k$
-          \item Send $\pi_2 = (\{f_j\}_{j = 1}^n, \{z_{a_j}\}_{j = 1}^n, \{z_{b_j}\}_{j = 1}^n, z_d)$.
+          \item Compute $z_d = r \cdot d^m - \sum_{k = 0}^{m-1}s_k x^k$
+          \item Send $\pi_2 = (\{f_j\}_{j = 1}^m, \{z_{a_j}\}_{j = 1}^m, \{z_{b_j}\}_{j = 1}^m, z_d)$.
         \end{enumerate}
 
 
 
         \item [$\Verif(\PPP, \pi_1, \pi_2) \to \{\True, \False\}$]:
         \begin{enumerate}
-          \item Parse $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^n, \{c_{a_j}\}_{j = 1}^n,\{c_{b_j}\}_{j = 1}^n,\{c_{d_k}\}_{k = 0}^{n-1})$.
-          \item Parse $\pi_2 = (\{f_j\}_{j = 1}^n, \{z_{a_j}\}_{j = 1}^n, \{z_{b_j}\}_{j = 1}^n, z_d)$.
+          \item Parse $\pi_1 = (\{c_{\ell_j}\}_{j = 1}^m, \{c_{a_j}\}_{j = 1}^m,\{c_{b_j}\}_{j = 1}^m,\{c_{d_k}\}_{k = 0}^{m-1})$.
+          \item Parse $\pi_2 = (\{f_j\}_{j = 1}^m, \{z_{a_j}\}_{j = 1}^m, \{z_{b_j}\}_{j = 1}^m, z_d)$.
+          \item Denote $B_{BV}$ and $B_{BV}'$ respectively the $B$-bound of the Gaussian distribution $\mathcal{D}_{(R_q, \sigma_{BV})}$ and $\mathcal{D}_{(R_q, \sigma'_{BV})}$ and $n$ be the degree of the ring $\R_q$.
+          \item Verify that $\forall j$:
+          \begin{align*}
+            |z_{a_j}| &\leq (n+1) \cdot B & |z_{a_j}| &\leq (n+1) \cdot B
+          \end{align*}
         \end{enumerate}
     \end{description}
   \end{subsection}
