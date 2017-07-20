@@ -143,11 +143,11 @@
       \end{enumerate}
       \item [$\KeyGen(\PPP)$]:
       \begin{enumerate}
-        \item Generate the randomness used in the underlying commitment scheme $\r \gets Random$.
+        \item Generate the randomness used in the underlying commitment scheme $r \gets Random$.
         \item Compute the commitment $c = \com(\ck, 0; r)$.
         \item Output $(\vk, \sk) = (c, r)$.
       \end{enumerate}
-      \item [$\Sign(\PPP, \sk, \mu, R)$]: The sign algorithm takes the public parameter $\PPP$, the signing key $\sk$, the message $\mu$ and the group ring $R$.
+      \item [$\Sig(\PPP, \sk, \mu, R)$]: The sign algorithm takes the public parameter $\PPP$, the signing key $\sk$, the message $\mu$ and the group ring $R$.
       \begin{enumerate}
         \item Parse $R = (c_0, \dots, c_{M-1})$ and $\sk = r$.
         \item Using the signing key $\sk = r$ to identify a commitment $c_{\ell} = \Com(\ck, 0; r)$ with $\ell \in \{0, \dots, M-1\}$.
@@ -169,8 +169,47 @@
 \end{section}
 
 \begin{section}{Applicaion: Electronic voting system}
-  In this section, we introduce the electronic voting system which use our DV-NIZK.
-  
+  In this section, we introduce the lattice based electronic voting system which use our DV-NIZK.
+  This is an instantiation of the voting scheme introduced in~\cite{DBLP:conf/pkc/ChaidosG15}.
+
+  \begin{definition}{Voting Scheme}
+    A voting scheme $\mathcal{V}$ consists of five algorithm $(\mathsf{Setup}, \mathsf{Vote}, \mathsf{SubmitBallot}, \mathsf{ChechBoard}, \mathsf{Tally})$.
+    \todo{Add more specific description of the voting scheme}
+  \end{definition}
+
+
+  \begin{description}
+    \item[$\mathsf{Setup}(1^\lambda) \to ( \PPP, \SK, \VK)$]:
+    \begin{enumerate}
+      \item Generate the keys for the underlying PLWE encryption scheme $(\PK_{PLWE}, \SK_{PLWE}) \gets PLWE.\KeyGen(1^\lambda)$.
+      \item Generate the keys for the underlying DV-NIZK scheme $(\PK_{DV}, \VK_{DV})$.
+      \item Initiate the bulletin board $BB$.
+      \item Set
+      \begin{align*}
+        \PPP &= (\PK_{PLWE}, \PK_{DV}) & \SK &= \SK_{PLWE} & \VK &= \VK_{DV}
+      \end{align*}
+    \end{enumerate}
+    \item[$\mathsf{Vote}(\PPP, m) \to B$]:
+    \begin{enumerate}
+      \item Parse $\PPP = (\PK_{PLWE}, \PK_{DV})$.
+      \item Sample random polynomials $r \gets Random$ \wrt the PLWE encryption scheme.
+      \item Compute $c = PLWE.\Enc(\PK_{PLWE}, m; r)$.
+      \item Generate a DV-NIZK proof $\pi \gets \Prove(\PK_{DV}, ((\PK_{PLWE}, c), (m, r)))$ of the fact that $m \in \{0,1\}$ and $c = PLWE.\Enc(\PK_{PLWE}, m; r)$.
+      \item Output the ballot $B = (c, \pi)$
+    \end{enumerate}
+    \item[$\mathsf{SubmitBallot}(B. BB)$]: $BB \gets (BB, B)$.
+    \item[$\mathsf{CheckBoard}(BB, \VK_{DV})$]:
+    \begin{enumerate}
+      \item Use the private verification key $\VK_{DV}$ to check all the ballot in the bulletin board $BB$.
+      \item Remove all the ballot invalid.
+    \end{enumerate}
+    \item[$\mathsf{Tally}(BB, \SK)$]:
+    \begin{enumerate}
+      \item Using the additive homomorphic property of the PLWE encryption. We compute $c_{final} = \sum_{i = 1}^k c_i$.
+      \item Submit the final ciphertext $c_{final}$ to the decryption party.
+      \item The decryption party use $\SK = \SK_{PLWE}$ to get the result $result = PLWE.\Dec(\SK_{PLWE}, c_{final})$.
+    \end{enumerate}
+  \end{description}
 \end{section}
 
 \begin{section}{New Cramer-Shoup type lattice based CCA encryption}
