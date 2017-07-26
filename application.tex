@@ -23,7 +23,7 @@
       \item Generate two uniformly random polynomials $a_0, b_0 \sample \R_q$.
       \item Output $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
     \end{enumerate}
-    \item [$\Com(\ck, \mu)$]: The message space of the commitment scheme is $\R_2$
+    \item [$\Com(\ck, \mu) \to \com$]: The message space of the commitment scheme is $\R_2$
     \begin{enumerate}
       \item Parse the commitment key $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
       \item Sample polynomials following the Gaussian distribution
@@ -34,7 +34,7 @@
       \end{align*}
       \item Set $\com = \begin{bmatrix}  b+ \mu \\  -a \end{bmatrix}$ and $\open = (v, e', e'')$.
     \end{enumerate}
-    \item [$\Verif(\ck, \mu, \open)$]:
+    \item [$\Verif(\ck, \mu, \open) \to \{\True, \False\}$]:
     \begin{enumerate}
       \item Parse the commitment key $\ck = \begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$.
       \item Parse the commitment $\com = \begin{bmatrix} c_0 \\ c_1 \end{bmatrix}$
@@ -125,7 +125,7 @@
           \begin{align*}
             d \cdot c_{\ell_j} + c_{a_j} &= \Com(\ck, f_j ; z_{a_j})\\
             (d-f_{j}) \cdot c_{\ell_j} + c_{b_j} &= \Com(\ck, 0; z_{b_j})\\
-            \sum_{i = 0}^{M-1}(\prod_{j = 1}^{m} (f_{j,i_j})) - \sum_{k = 0}^{m-1} d^{k} \cdot c_{d_{k}} & = \Com(\ck, 0; z_d)
+            \sum_{i = 0}^{M-1}(\prod_{j = 1}^{m} f_{j,i_j} \cdot c_i) - \sum_{k = 0}^{m-1} d^{k} \cdot c_{d_{k}} & = \Com(\ck, 0; z_d)
           \end{align*}
         \end{enumerate}
     \end{description}
