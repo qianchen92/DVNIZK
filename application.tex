@@ -55,7 +55,7 @@
   This commitment is perfectly hiding and computational binding.\todo[inline]{need to find a reference of it or a proof}
 
   \begin{subsection}{$\Sigma$-protocol}
-    We give the general idea behind the construction of $\Sigma$-protocol.
+    We give the general idea behind the construction of $\Sigma$
 
 
     For the following construction, we consider the public parameter $\PPP$ be the commitment key $\ck$ of the underlying commitment scheme.
@@ -215,7 +215,29 @@
   \end{description}
 \end{section}
 
-\begin{section}{New Cramer-Shoup type lattice based CCA encryption}
-  \todo{this one maybe impossible because this is hash proof system approach which
-  use the statistic argument}
+\begin{section}{CCA1 additively homomorphic encryption scheme from Naor-Yung}
+  The main idea of the construction is followed by the Naor-Yung transformation,
+  since our DV-NIZK is
+  \todo{Use the Naor-Yung transformation}
+  \begin{description}
+    \item [$\Setup(1^\lambda)$]:
+    \begin{enumerate}
+      \item $\PPP \gets DVNIZK.\Setup(1^\lambda)$.
+    \end{enumerate}
+    \item[$\Enc(\PPP, m)$]: This algorithm produce an encryption of the message $m$.
+    \begin{enumerate}
+      \item Use the polynomial ring encryption scheme as presented before to encrypt the message.
+      \begin{align*}
+        C_1 &= PLWE.\Enc(\PPP, m; r_1) & C_2 &= PLWE.\Enc(\PPP, m; r_2)
+      \end{align*}
+      where $r_1, r_2 \in Random$ generated from the randomness distribution of the underlying PLWE encryption scheme.
+      \item Compute $C_0 = C_1 - C_2$ and $r_0 = r_1 - r_2$.
+      \item Use the DVNIZK of the fact that $C_0$ is an encryption of $0$.
+    \end{enumerate}
+  \end{description}
+
+  \begin{subsection}{}
+
+
+  \end{subsection}
 \end{section}

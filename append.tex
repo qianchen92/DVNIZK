@@ -7,13 +7,13 @@
   we use the following $\Sigma$-protocol.
 
   \begin{description}
-    \item[$\Prove_1((\PK, c), (m, r))$]:
+    \item[$\Prove_1((\PK, c), (\mu, r))$]:
     \begin{enumerate}
       \item Uniformly choose a message $\mu_a \in \mathcal{M} \{0\}$, randomnesses $r_a, r_b \in \mathcal{Q}$.
-      \item Compute the encryptions $c_a \gets \Enc(\PK, m_a, r_a)$ and $c_b \gets \Enc(\PK, m_b, r_b)$.
+      \item Compute the encryptions $c_a \gets \Enc(\PK, \mu_a, r_a)$ and $c_b \gets \Enc(\PK, \mu_b, r_b)$.
       \item Send the ciphertexts $c_a, c_b$ to the verifier.
     \end{enumerate}
-    \item[$\Prove_1((\PK, c), (m, r), d)$]:
+    \item[$\Prove_1((\PK, c), (\mu, r), d)$]:
     \begin{enumerate}
       \item The prover receive the challenge $d$ from the verifier.
       \item Compute the ciphertext of $f = d \cdot m + m_a$.
@@ -30,6 +30,44 @@
     \item Verify the following two equations:
       \begin{align*}
         f \cdot c + c_a &= \Enc(\PK, f; z_a) &  (f-d) \cdot c + c_b &= \Enc(\PK, 0; z_b)
+      \end{align*}
+    \end{enumerate}
+  \end{description}
+
+
+
+\end{section}
+
+\begin{section}{$\Sigma$-protocol to prove an encryption of $0$~\cite{DBLP:conf/pkc/ChaidosG15}~\label{sigma0}}
+  Here we want to prove a ciphertext is an encryption of $0$.
+  For an encryption scheme $\Pi = (\Setup, \Enc, \Dec)$,
+  in order to prove the fact that $c$ is a ciphertext of the plaintext $m$ \wrt the randomness $r \in \mathcal{Q}$ and $m  = 0$,
+  we use the following $\Sigma$-protocol.
+
+  \begin{description}
+    \item[$\Prove_1((\PK, c), (\mu, r))$]:
+    \begin{enumerate}
+      \item Uniformly choose a message $\mu_a \in \mathcal{M} \{0\}$, randomnesses $r_a, r_b \in \mathcal{Q}$.
+      \item Compute the encryptions $c_a \gets \Enc(\PK, \mu_a, r_a)$ and $c_b \gets \Enc(\PK, \mu_b, r_b)$.
+      \item Send the ciphertexts $c_a, c_b$ to the verifier.
+    \end{enumerate}
+    \item[$\Prove_1((\PK, c), (\mu, r), d)$]:
+    \begin{enumerate}
+      \item The prover receive the challenge $d$ from the verifier.
+      \item Compute the ciphertext of $f = d \cdot \mu + \mu_a$.
+      \item Compute the linear combination of the corresponded randomness
+      \begin{align*}
+        z_a &= d r + r_a  & z_b &= f \cdot r + r_b.
+      \end{align*}
+    \end{enumerate}
+  \item[$\Verif(c)$]
+    \begin{enumerate}
+    \item After receiving $(c_a, c_b)$, randomly sample a challenge $ d \sample \mathcal{C}$ and send $d$ to the prover.
+    \item Verify that $z_a, z_b$ are all in the randomness space.
+    \item Verify that $f$ is in the message space.
+    \item Verify the following two equations:
+      \begin{align*}
+        f \cdot c + c_a &= \Enc(\PK, f; z_a) &  f \cdot c + c_b &= \Enc(\PK, 0; z_b)
       \end{align*}
     \end{enumerate}
   \end{description}
