@@ -77,6 +77,79 @@
 \end{section}
 
 
+
+\begin{section}{$\Sigma$-protocol to prove two ciphertexts have the same plaintext}
+  We will give a $\Sigma$-protocol in order to prove the two ciphertexts using two
+  different keys $(\SK_1, \PK_1)$ and $(\SK_2, \PK_2)$ have the same plaintext.
+
+  For two pairs of keys of the $PLWE$ encryption
+  \begin{align*}
+    \SK_1 &= s_1, & \PK_1 &= \begin{bmatrix} a_1 \\ b_1\end{bmatrix} & \SK_2 &= s_2,  & \PK_2 &= \begin{bmatrix} a_2 \\ b_2\end{bmatrix},
+  \end{align*}
+  the following $\Sigma$-protocol prove the fact that $ C_1 = PLWE.\Enc(\PK_1, m; r_1)$ and $C_2 = PLWE.\Enc(\PK_2, m; r_2)$
+  for the same message $m$.
+
+  \begin{description}
+    \item [$\Setup(1^\lambda)$]:
+    \begin{enumerate}
+      \item Generate the public parameter for the underlying PLWE and RGSW encryption scheme
+      \begin{enumerate}
+        \item Sample a polynomial $s_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k,RGSW)}}$
+        \item Uniformly sample $a_{RGSW} \sample \R_q$ and a noise polynomial $e_{RGSW} \sample \mathcal{D}_{\R_q, \sigma_{(k, RGSW)}}$.
+        \item Compute $b_{RGSW} = s_{RGSW} \cdot a_{RGSW} + e_{RGSW} \in \R_q$
+        \item Set secret key and public key of the underlying Ring-GSW encryption scheme:
+          \begin{align*}
+            \vec{s}_{RGSW} &= \begin{bmatrix} 1 \\ -s_{RGSW} \end{bmatrix}  & \vec{a}_{RGSW} &=  \begin{bmatrix} b_{RGSW} \\ a_{RGSW}\end{bmatrix}
+          \end{align*}
+        \item Uniformly sample $a_d \sample \R_q$.
+        \item Sample from the discrete Gaussian distribution $s_d \sample \mathcal{D}_{R_q, \sigma_{PLWE}}$ and $e_d \sample \mathcal{D}_{R_q, \sigma_{PLWE}}$.
+        \item Compute the public key and secret key of the underlying PLWE encryption scheme.
+        \begin{align*}
+          \SK_{PLWE} &= s_d & \PK_{PLWE} &= (a_d, b_d = a_d s_d + e_d)
+        \end{align*}
+      \end{enumerate}
+      \item Encrypt the message with the two underlying encryption schemes:
+        \begin{enumerate}
+        \item Sample a $(N \times 1)-$matrix $\mat{R}_{RGSW} \sample (\R_q \cap\{0,1\})^{N \times 1}$.
+        \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{(c, RGSW)})}$.
+        \item Sample polynomials $v,e' \sample \mathcal{D}_{R_q, \sigma_{BV}}$ and $e'' \sample  \mathcal{D}_{R_q, \sigma_{BV}'}$.
+        \item Compute the following ciphertexts
+          \begin{align*}
+            \mat{C}_d^{RGSW} &= \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &
+            \vec{c}_d &= \begin{bmatrix} b_d v + 2e'' + \mu \\ -a_d v + 2e' \end{bmatrix}
+          \end{align*}
+        \end{enumerate}
+        \item Output the public parameter and the secrete verification key of the DVNIZK proof system
+        \begin{align*}
+          \PPP &= (\vec{a}_{RGSW}, a_d, \vec{c}_d, \vec{C}_d^{RGSW}) & \SK &= (\vec{s}_{RGSW}, s_d)
+        \end{align*}
+      \end{enumerate}
+      \item [$\Prove(\PPP, \vec{C}_1, \vec{C_2}, \vec{r}_1, \vec{r}_2, m, \PK_1, \PK_2)$]:
+      This algorithm proves that $\vec{C}_1$ and $\vec{C}_2$ are PLWE ciphertext of the same message $m$
+      \wrt the different public keys:
+      \begin{align*}
+        \vec{C}_1 &= PLWE.\Enc(\PK_1, m; \vec{r}_1) &  \vec{C}_2 &= PLWE.\Enc(\PK_2, m; \vec{r}_2)
+      \end{align*}
+      \begin{enumerate}
+        \item Parse the public keys and the randomness used in the PLWE ciphertext.
+        \begin{align*}
+          \PK_1 &= (a_1, b_1) \in \R_q^2 & \PK_2 &= (a_2, b_2) \in \R_q^2 \\
+          \vec{r}_1 &= (v_1, e_1', e_1'') \in R_q^3 & \vec{r}_2 &= (v_2, e_2', e_2'') \in \R_q^3
+        \end{align*}
+        \item niformly sample a random message $m_a \sample \R_2$.
+        \item Sample the randomnesses
+        \begin{align*}
+          (v_{a,1}, e_{a,1}', e_{a,1}'') &\sample \mathcal{D}^2_{\R_q, \sigma_{DV'}} \times \mathcal{D}_{\R_q, \sigma_{DV''}}\\
+          (v_{a,2}, e_{a,2}', e_{a,2}'') &\sample \mathcal{D}_{\R_q, \sigma_{DV'}}^2 \times \mathcal{D}_{\R_q, \sigma_{DV''}}
+        \end{align*}
+        \item Encrypt $m_a$ using the public key $\PK_1$ and $\PK_2$
+        \begin{align*}
+          \vec{C}_{a}^{1} &=
+        \end{align*}
+      \end{enumerate}
+  \end{description}
+\end{section}
+
 \begin{section}{Ring-LWE based ring-signature}
 
   In this section, we give an application of the

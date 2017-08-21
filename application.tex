@@ -214,7 +214,6 @@
     \end{enumerate}
   \end{description}
 \end{section}
-<<<<<<< HEAD
 
 \begin{section}{CCA1 additively homomorphic encryption scheme from Naor-Yung}
   The main idea of the construction is followed by the Naor-Yung transformation,
@@ -233,7 +232,13 @@
       \end{align*}
       where $r_1, r_2 \in Random$ generated from the randomness distribution of the underlying PLWE encryption scheme.
       \item Compute $C_0 = C_1 - C_2$ and $r_0 = r_1 - r_2$.
-      \item Use the DVNIZK of the fact that $C_0$ is an encryption of $0$.
+      \item Use the DVNIZK proof $\pi_0$ of the fact that $C_0$ is an encryption of $0$.
+    \end{enumerate}
+    \item[$\Dec(\PPP, \SK, c)$]:
+    \begin{enumerate}
+      \item Parse the secret key $\SK$.
+      \item Verify the $\pi_0$ is $C_0$ an encryption of $0$.
+      \item
     \end{enumerate}
   \end{description}
 
@@ -242,5 +247,3 @@
 
   \end{subsection}
 \end{section}
-=======
->>>>>>> 25e36e97a97679b35ab56ac77010030082b7ffbe
