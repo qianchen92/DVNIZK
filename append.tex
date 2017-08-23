@@ -124,19 +124,27 @@
           \PPP &= (\vec{a}_{RGSW}, a_d, \vec{c}_d, \vec{C}_d^{RGSW}) & \SK &= (\vec{s}_{RGSW}, s_d)
         \end{align*}
       \end{enumerate}
-      \item [$\Prove(\PPP, \vec{C}_1, \vec{C_2}, \vec{r}_1, \vec{r}_2, m, \PK_1, \PK_2)$]:
-      This algorithm proves that $\vec{C}_1$ and $\vec{C}_2$ are PLWE ciphertext of the same message $m$
+
+
+
+      \item [$\Prove(\PPP, \vec{C}_1, \vec{C_2}, \vec{r}_1, \vec{r}_2, \mu, \PK_1, \PK_2)$]:
+      This algorithm proves that $\vec{C}_1$ and $\vec{C}_2$ are PLWE ciphertext of the same message $\mu$
       \wrt the different public keys:
       \begin{align*}
-        \vec{C}_1 &= PLWE.\Enc(\PK_1, m; \vec{r}_1) &  \vec{C}_2 &= PLWE.\Enc(\PK_2, m; \vec{r}_2)
+        \vec{C}_1 &= PLWE.\Enc(\PK_1, \mu; \vec{r}_1) &  \vec{C}_2 &= PLWE.\Enc(\PK_2, \mu; \vec{r}_2)
       \end{align*}
       \begin{enumerate}
-        \item Parse the public keys and the randomness used in the PLWE ciphertext.
+        \item Parse the ciphertexts, public keys and the randomness used in the PLWE ciphertext.
         \begin{align*}
+          \vec{C}_1 &= (c_{1,0}, c_{1,1}) & \vec{C}_2 &= (c_{2,0}, c_{2,1})\\
           \PK_1 &= (a_1, b_1) \in \R_q^2 & \PK_2 &= (a_2, b_2) \in \R_q^2 \\
           \vec{r}_1 &= (v_1, e_1', e_1'') \in R_q^3 & \vec{r}_2 &= (v_2, e_2', e_2'') \in \R_q^3
         \end{align*}
-        \item niformly sample a random message $\mu_a \sample \R_2$.
+        \item Parse the public parameter of the proof system
+        \begin{align*}
+          \PPP &= (\vec{a}_{RGSW}, a_d, \vec{c}_d, \vec{C}_{d}^{RGSW})
+        \end{align*}
+        \item Uniformly sample a random message $\mu_a \sample \R_2$.
         \item Sample the randomnesses
         \begin{align*}
           (v_{a,1}, e_{a,1}', e_{a,1}'') &\sample \mathcal{D}^2_{\R_q, \sigma_{DV'}} \times \mathcal{D}_{\R_q, \sigma_{DV''}}\\
@@ -152,7 +160,35 @@
         \end{align*}
         \item Homomorphically compute the following ciphertexts
         \begin{align*}
-          \vec{c}^1_f =  
+          \vec{c}_f &= \mu \cdot \vec{c}_d + \begin{bmatrix} 0 \\ \mu_a \end{bmatrix}\\
+        \end{align*}
+        \item We also homomorphically combine the randomness and $\vec{C}^{RGSW}_d$.
+        \begin{align*}
+          \vec{r}^1_f = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_1 \cdot \mat{G}) + v_{a,1} \cdot \mat{G}, \\
+          & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_1' \cdot \mat{G}) + e_{a,1}' \cdot \mat{G},\\
+          & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_1'' \cdot \mat{G}) + e_{a,1}'' \cdot \mat{G})\\
+          \vec{r}^2_f = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_2 \cdot \mat{G}) + v_{a,2} \cdot \mat{G}, \\
+          & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_2' \cdot \mat{G}) + e_{a,2}' \cdot \mat{G},\\
+          & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_2'' \cdot \mat{G}) + e_{a,2}'' \cdot \mat{G})\\
+        \end{align*}
+        \item Send $\pi = (\vec{C}^1_a, \vec{C}^2_a, \vec{c}_f, \vec{r}^1_f, \vec{r}^2_f)$ to the verifier.
+      \end{enumerate}
+
+
+
+
+      \item [$\Verif(\PPP, \SK, \pi)$]:
+      \begin{enumerate}
+        \item Parse the secret verifcation key $\SK = (\vec{s}_{RGSW}, s_d)$.
+        \item Parse the proof $\pi = (\vec{C}^1_a, \vec{C}^2_a, \vec{c}_f, \vec{r}^1_f, \vec{r}^2_f)$.
+        \item Use the secret key $s_d$ of the underlying $PLWE$ encryption scheme to decrypt $\vec{c}_f$
+        \begin{align*}
+          f &= PLWE.\Dec(s_d, \vec{c}_f)\\
+        \end{align*}
+        \item Us
+        \item Verify the following equations are true
+        \begin{align*}
+
         \end{align*}
       \end{enumerate}
   \end{description}
