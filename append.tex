@@ -116,7 +116,7 @@
         \item Compute the following ciphertexts
           \begin{align*}
             \mat{C}_d^{RGSW} &= \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &
-            \vec{c}_d &= \begin{bmatrix} b_d v + 2e'' + \mu \\ -a_d v + 2e' \end{bmatrix}
+            \vec{c}_d &= \begin{bmatrix} b_d v + 2e'' + \mu \\ a_d v + 2e' \end{bmatrix}
           \end{align*}
         \end{enumerate}
         \item Output the public parameter and the secrete verification key of the DVNIZK proof system
@@ -136,15 +136,23 @@
           \PK_1 &= (a_1, b_1) \in \R_q^2 & \PK_2 &= (a_2, b_2) \in \R_q^2 \\
           \vec{r}_1 &= (v_1, e_1', e_1'') \in R_q^3 & \vec{r}_2 &= (v_2, e_2', e_2'') \in \R_q^3
         \end{align*}
-        \item niformly sample a random message $m_a \sample \R_2$.
+        \item niformly sample a random message $\mu_a \sample \R_2$.
         \item Sample the randomnesses
         \begin{align*}
           (v_{a,1}, e_{a,1}', e_{a,1}'') &\sample \mathcal{D}^2_{\R_q, \sigma_{DV'}} \times \mathcal{D}_{\R_q, \sigma_{DV''}}\\
           (v_{a,2}, e_{a,2}', e_{a,2}'') &\sample \mathcal{D}_{\R_q, \sigma_{DV'}}^2 \times \mathcal{D}_{\R_q, \sigma_{DV''}}
         \end{align*}
-        \item Encrypt $m_a$ using the public key $\PK_1$ and $\PK_2$
+        \item Encrypt $\mu_a$ using the public key $\PK_1$ and $\PK_2$
         \begin{align*}
           \vec{C}_{a}^{1} &=
+          \begin{bmatrix} b_1 \cdot v_{a,1} + 2 e_{a,1}''+ \mu_a  \\
+            a_1 \cdot v_{a,1} + 2 \cdot e_{a,1}' \end{bmatrix} &
+            \vec{C}_{a}^{2} &= \begin{bmatrix} b_2 \cdot v_{a,2} + 2 e_{a,2}''+ \mu_a \\
+            a_2 \cdot v_{a,2} + 2 \cdot e_{a,2}' \end{bmatrix}
+        \end{align*}
+        \item Homomorphically compute the following ciphertexts
+        \begin{align*}
+          \vec{c}^1_f =  
         \end{align*}
       \end{enumerate}
   \end{description}
