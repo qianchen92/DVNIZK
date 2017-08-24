@@ -217,33 +217,56 @@
 
 \begin{section}{CCA1 additively homomorphic encryption scheme from Naor-Yung}
   The main idea of the construction is followed by the Naor-Yung transformation,
-  since our DV-NIZK is
+  since our DV-NIZK described in appendix~\ref{ProofSamePlaintext} and the PLWE encryption are both additively homomorphic.
+  Our CCA1 ciphertexts is also additively homomorphic.
+
   \todo{Use the Naor-Yung transformation}
   \begin{description}
     \item [$\Setup(1^\lambda)$]:
     \begin{enumerate}
-      \item $\PPP \gets DVNIZK.\Setup(1^\lambda)$.
+      \item Generate the public parameter and the secrete verification key for the DVNIZK proof system as described in the section~\ref{ProofSamePlaintext},
+      \begin{align*}
+        (\PPP,\SK_{DVNIZK}) \gets DVNIZK.\Setup(1^\lambda).
+      \end{align*}
+      \item Using the underlying $PLWE$ encryption's key generation algorithm to generate two pairs of keys
+      \begin{align*}
+        (\PK_1, \SK_1) &\gets PLWE.\Setup(1^\lambda) & (\PK_2, \SK_2) &\gets PLWE.\Setup(1^\lambda) \\
+      \end{align*}
+      \item Output the public key and secret key
+      \begin{align*}
+        \PK &= (\PPP, \PK_1, \PK_2) & \SK = (\SK_{DVNIZK}, \SK_1)
+      \end{align*}
     \end{enumerate}
-    \item[$\Enc(\PPP, m)$]: This algorithm produce an encryption of the message $m$.
+
+
+    \item[$\Enc(\PK, m)$]: This algorithm produce an encryption of the message $m$.
     \begin{enumerate}
+      \item Parse the public key for the encryption scheme $\PK = (\PPP, \PK_1, \PK_2)$.
       \item Use the polynomial ring encryption scheme as presented before to encrypt the message.
       \begin{align*}
-        C_1 &= PLWE.\Enc(\PPP, m; r_1) & C_2 &= PLWE.\Enc(\PPP, m; r_2)
+        \vec{C}_1 &= PLWE.\Enc(\PPP, m; \vec{r}_1) & \vec{C}_2 &= PLWE.\Enc(\PPP, m; \vec{r}_2)
       \end{align*}
-      where $r_1, r_2 \in Random$ generated from the randomness distribution of the underlying PLWE encryption scheme.
-      \item Compute $C_0 = C_1 - C_2$ and $r_0 = r_1 - r_2$.
-      \item Use the DVNIZK proof $\pi_0$ of the fact that $C_0$ is an encryption of $0$.
+      where $\vec{r}_1, \vec{r}_2 \in Random$ generated from the randomness distribution of the underlying PLWE encryption scheme.
+      \item Use the DVNIZK proof system as in the section~\ref{ProofSamePlaintext} to prove that $\vec{C}_1$ and $\vec{C}_2$ encrypt the same message.
+      \item Output the ciphertext
+      \begin{align*}
+        \vec{C} &= (\vec{C}_1, \vec{C}_2, \vec{\pi})
+      \end{align*}
     \end{enumerate}
-    \item[$\Dec(\PPP, \SK, c)$]:
+
+
+    \item[$\Dec(\PK, \SK, \vec{C})$]:
     \begin{enumerate}
-      \item Parse the secret key $\SK$.
-      \item Verify the $\pi_0$ is $C_0$ an encryption of $0$.
-      \item
+      \item Parse the public key and the secret key
+      \begin{align*}
+        \PK &= (\PPP, \PK_1, \PK_2) & \SK = (\SK_{DVNIZK}, \SK_1).
+      \end{align*}
+      \item Parse the ciphertext $\vec{C} = (\vec{C}_1, \vec{C}_2, \vec{\pi})$.
+      \item Using $\SK_{DVNIZK}$ to verify that $\vec{C}_1$ and $\vec{C}_2$ encrypt the same message.
+      If the proof can not be correctly verified then returns $\bot$.
+      \item Output the message $\mu \gets PLWE.\Dec(\SK_1, \vec{C}_1)$.
     \end{enumerate}
   \end{description}
 
-  \begin{subsection}{}
 
-
-  \end{subsection}
 \end{section}

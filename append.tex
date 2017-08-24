@@ -78,7 +78,7 @@
 
 
 
-\begin{section}{$\Sigma$-protocol to prove two ciphertexts have the same plaintext}
+\begin{section}{$\Sigma$-protocol to prove two ciphertexts have the same plaintext~\label{ProofSamePlaintext}}
   We will give a $\Sigma$-protocol in order to prove the two ciphertexts using two
   different keys $(\SK_1, \PK_1)$ and $(\SK_2, \PK_2)$ have the same plaintext.
 
@@ -86,7 +86,7 @@
   \begin{align*}
     \SK_1 &= s_1, & \PK_1 &= \begin{bmatrix} a_1 \\ b_1\end{bmatrix} & \SK_2 &= s_2,  & \PK_2 &= \begin{bmatrix} a_2 \\ b_2\end{bmatrix},
   \end{align*}
-  the following $\Sigma$-protocol prove the fact that $ C_1 = PLWE.\Enc(\PK_1, m; r_1)$ and $C_2 = PLWE.\Enc(\PK_2, m; r_2)$
+  the following $\Sigma$-protocol prove the fact that $\vec{C}_1 = PLWE.\Enc(\PK_1, m; r_1)$ and $\vec{C}_2 = PLWE.\Enc(\PK_2, m; r_2)$
   for the same message $m$.
 
   \begin{description}
@@ -114,7 +114,7 @@
         \item Sample a $(N \times 2)-$noise matrix $\mat{E}_{RGSW} \sample \mathcal{D}_{(\R_q^{N \times 2}, \sigma_{(c, RGSW)})}$.
         \item Sample polynomials $v,e' \sample \mathcal{D}_{R_q, \sigma_{BV}}$ and $e'' \sample  \mathcal{D}_{R_q, \sigma_{BV}'}$.
         \item Compute the following ciphertexts
-          \begin{align*}
+          \begin{align*}(\PK_1, \SK_1) &\gets PLWE.\Setup(1^\lambda) &
             \mat{C}_d^{RGSW} &= \vec{a}_{RGSW} \cdot \mat{R}_{RGSW} + \mat{E}_{RSGW} +  d \cdot \mat{G} &
             \vec{c}_d &= \begin{bmatrix} b_d v + 2e'' + \mu \\ a_d v + 2e' \end{bmatrix}
           \end{align*}
@@ -164,10 +164,10 @@
         \end{align*}
         \item We also homomorphically combine the randomness and $\vec{C}^{RGSW}_d$.
         \begin{align*}
-          \vec{r}^1_f = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_1 \cdot \mat{G}) + v_{a,1} \cdot \mat{G}, \\
+          \vec{C}^1_{r_f} = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_1 \cdot \mat{G}) + v_{a,1} \cdot \mat{G}, \\
           & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_1' \cdot \mat{G}) + e_{a,1}' \cdot \mat{G},\\
           & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_1'' \cdot \mat{G}) + e_{a,1}'' \cdot \mat{G})\\
-          \vec{r}^2_f = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_2 \cdot \mat{G}) + v_{a,2} \cdot \mat{G}, \\
+          \vec{C}^2_{r_f} = (&\vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(v_2 \cdot \mat{G}) + v_{a,2} \cdot \mat{G}, \\
           & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_2' \cdot \mat{G}) + e_{a,2}' \cdot \mat{G},\\
           & \vec{C}^{RGSW}_d \cdot \mat{G}^{-1}(e_2'' \cdot \mat{G}) + e_{a,2}'' \cdot \mat{G})\\
         \end{align*}
@@ -180,23 +180,40 @@
       \item [$\Verif(\PPP, \SK, \pi)$]:
       \begin{enumerate}
         \item Parse the secret verifcation key $\SK = (\vec{s}_{RGSW}, s_d)$.
-        \item Parse the proof $\pi = (\vec{C}^1_a, \vec{C}^2_a, \vec{c}_f, \vec{r}^1_f, \vec{r}^2_f)$.
+        \item Parse the proof $\pi = (\vec{C}^1_a, \vec{C}^2_a, \vec{c}_f, \vec{C}^1_{r_f}, \vec{C}^2_{r_f})$.
         \item Use the secret key $s_d$ of the underlying $PLWE$ encryption scheme to decrypt $\vec{c}_f$
         \begin{align*}
           f &= PLWE.\Dec(s_d, \vec{c}_f)\\
         \end{align*}
-        \item Us
-        \item Verify the following equations are true
+        \item Use the underlying $RGSW$ secret key $\vec{s}_{RGSW}$ to decrypt the randomness.
         \begin{align*}
-
+          \vec{r}^1_f &= RGSW.\Dec(\vec{s}_{RGSW}, \vec{C}^1_{r_f})\\
+          \vec{r}^2_f &= RGSW.\Dec(\vec{s}_{RGSW}, \vec{C}^2_{r_f})
         \end{align*}
+        \item Verify that the $\vec{r}_{f}^1 = (v_{f}^1, e'^{1}_{f}, e''^{1}_{f})$ and $\vec{r}_{f}^2 = (v_{f}^2, e'^2_{f}, e''^2_{f})$ are in the randomness space
+        \begin{align*}
+          |v_f^1| &\leq B &
+          |e'^1_f| &\leq B &
+          |e''^1_f| &\leq B'\\
+          |v_f^2| &\leq B &
+          |e'^2_f| &\leq B &
+          |e''^2_f| &\leq B'\\
+        \end{align*}
+        \item Verify the following equations
+        \begin{align*}
+          d \cdot \vec{C}_1 + \vec{C}^1_a &= PLWE.\Enc(\PK_1, f, \vec{r}_f^1) \\
+          d \cdot \vec{C}_2 + \vec{C}^2_a &= PLWE.\Enc(\PK_2, f, \vec{r}_f^2)
+        \end{align*}
+        \item If all the verification are true then return $\True$ otherwise return $\False$.
       \end{enumerate}
   \end{description}
-\end{section}
 
-\begin{section}{Ring-LWE based ring-signature}
-
-  In this section, we give an application of the
-
+  From the construction of this proof, we can see that the proof elements are all
+  ciphertexts of homomorphic encryption scheme. Especially this proof is additivly homomorphic,
+  which means if we have $\vec{\pi}_1, \vec{\pi}_2$ proofs of the fact that
+  $(\vec{C}^1_1, \vec{C}^1_2)$ encrypt the same message $\mu^1$ and
+  $(\vec{C}^2_1, \vec{C}^2_2)$ encrypt the same message $\mu^2$,
+  then $\vec{\pi}_1 + \vec{\pi}_2$ is a proof of the fact that
+  $(\vec{C}^1_1 + \vec{C}^2_1, \vec{C}^1_2+ \vec{C}^2_2)$ encrypt the same message $\mu^1+ \mu^2$.
 
 \end{section}
